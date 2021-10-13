@@ -1,0 +1,33 @@
+﻿@charset UTF-8;
+body 
+  {
+    margin-left: 0px;
+    margin-top: 0px;
+	background-color:#fff;
+	overflow:hidden;
+  }
+div#div_main
+  {
+    z-index:1;
+    margin:0px auto	 
+	position:absolute;
+	overflow:hidden;
+	width:768px;
+	height:1024px;
+  }
+div#wrap
+  {
+    margin:0px auto
+  }
+iframe#contents
+  {
+    z-index:0;
+	position:absolute;
+	left:0px;
+	top:0px;
+	width:100%;
+	height:auto;
+	border-style:none;
+	overflow:hidden;
+	background-color:#fff;
+  }

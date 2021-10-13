@@ -1,0 +1,92 @@
+html {
+    font-size: 10px;
+}
+
+.collapse {
+    visibility: collapse;
+    user-select:none;
+    pointer-events:none;
+    touch-action:none;
+}
+
+p {
+    align-items: baseline;
+    font-size: 1rem;
+    padding: 0rem;
+    margin: 0rem;
+}
+
+p:first-child {
+    margin-top: 0rem !important;
+}
+
+p:last-child {
+    margin-bottom: 0rem !important;
+}
+
+p > span:empty:after {
+    content: "\a";
+}
+
+span {
+    white-space: pre-wrap;
+    position: relative;
+}
+
+span > span:not(.TextElement) {
+    color: #000000;
+    font-weight: initial;
+}
+
+span > span.TextElement {
+    color: inherit;
+    font-weight: inherit;
+}
+
+span * {
+    display: inline;
+}
+
+p > span:not(:first-child) {
+    text-indent: 0px;
+}  
+
+x-textbox {
+    word-break: break-all;
+    pointer-events: auto;
+    overflow: auto;
+    /*letter-spacing: -0.61px*/ 
+}
+
+x-textbox > .contentsbox {
+    box-sizing: border-box;
+    overflow: hidden;
+    position: absolute;
+    left: 0px;
+    width: 100%;
+}
+
+.HtmlTextBox {
+    display: table;
+    position: absolute;
+    box-sizing: border-box;
+    word-break: break-all;
+    pointer-events: auto;
+    overflow: auto;
+}
+
+.HtmlTextBox > div {
+    position: absolute;
+}
+
+.HtmlTextBox > .border {
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    border-style:solid;
+}
+
+td > div {
+    overflow: hidden;
+}
