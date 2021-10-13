@@ -51,7 +51,7 @@ function changePageShowMode() {
 	var contents1Src = $("#contents").attr("src");
 	var arrContents1Src = contents1Src.split("-");
 	var contents2Src = null;
-	if (parseInt(arrContents1Src[0]) % 2 == 0) {
+	if (parseInt(arrContents1Src[0]) % 2 === 0) {
 		contents2Src = contents1Src;
 		contents1Src = parseInt(arrContents1Src[0]) - 1 + ".html";
 
@@ -60,7 +60,7 @@ function changePageShowMode() {
 		contents2Src = parseInt(arrContents1Src[0]) + 1 + ".html";
 	}
 
-	if (countPerPage == 1) {
+	if (countPerPage === 1) {
 		countPerPage = 2;
 		$("#contents").attr("src", contents1Src);
 		$("#contents2").attr("src", contents2Src);
@@ -80,10 +80,10 @@ function changePageShowMode() {
 }
 
 function shapeBlink(target) {
-    if (target == undefined) return;
+    if (target === undefined) return;
     var computedStyle = window.getComputedStyle(target, null);
     var opacity = parseFloat(computedStyle.getPropertyValue("opacity"));
-    if (jQuery.data(target, 'alpha') == undefined) {
+    if (jQuery.data(target, 'alpha') === undefined) {
         jQuery.data(target, 'alpha', opacity);
     }
     if (opacity > 0) {
@@ -96,7 +96,7 @@ function shapeBlink(target) {
 function stopShapeBlink(target, ShowAtFinish) {
     var blink_timer = jQuery.data(target, "blink_timer");
     clearInterval(blink_timer);
-    if (ShowAtFinish == 'Y') {
+    if (ShowAtFinish === 'Y') {
         $(target).fadeTo("fast", parseFloat(jQuery.data(target, 'alpha')));
     } else {
         $(target).fadeTo("fast", 0.0);
@@ -140,7 +140,7 @@ function contentsZoomOut() {
 
 function inputBoxKeyEvent() {
 	$("#currentPageCountBox").keyup(function(event) {
-		if (event.keyCode == 13) {
+		if (event.keyCode === 13) {
 			gotoPage({
 				goto: "Get Content"
 			});
@@ -151,7 +151,7 @@ function inputBoxKeyEvent() {
 function setTotalPageCountBox() {
 	$("#totalPageCountBox").val(totalPageCount);
 	/*
-     if(countPerPage == 2) {
+     if(countPerPage === 2) {
   
      $("#totalPageCountBox").val(Math.ceil(totalPageCount/2));
      }else{
@@ -164,11 +164,11 @@ function setCurrentPageCountBox() {
 	var currentPageNo = null;
 	var iframeSrc = null;
 	var isInnerFrame = false;
-	if (countPerPage == 2) {
+	if (countPerPage === 2) {
 		/*
          iframeSrc = $("#contents").attr('src');
     
-         if(iframeSrc == null) {
+         if(iframeSrc === null) {
          iframeSrc = $("#contents2", parent.document).attr('src');
          isInnerFrame = true;
          }
@@ -182,7 +182,7 @@ function setCurrentPageCountBox() {
          */
 		iframeSrc = $("#contents").attr("src");
 
-		if (iframeSrc == null) {
+		if (iframeSrc === null) {
 			iframeSrc = $("#contents", parent.document).attr("src");
 			isInnerFrame = true;
 		}
@@ -196,7 +196,7 @@ function setCurrentPageCountBox() {
 	} else {
 		iframeSrc = $("#contents").attr("src");
 
-		if (iframeSrc == null) {
+		if (iframeSrc === null) {
 			iframeSrc = $("#contents", parent.document).attr("src");
 			isInnerFrame = true;
 		}
@@ -288,10 +288,10 @@ function changeBy(params, s) {
 	setTimeout(function() {
 		for (var i = 0; i < params.target.length; i++) {
 			var tg = params.target[i];
-			if (tg == null) alert("null box");
-			if (params.actSubType == "Hide") {
+			if (tg === null) alert("null box");
+			if (params.actSubType === "Hide") {
                 $(params.obj).addClass("collapse");
-				if (videobox == tg) {
+				if (videobox === tg) {
 					videobox.pause();
 					videobox = null;
 				}
@@ -390,28 +390,28 @@ function distributeAction(touchedObject, touchID, rand, arrActions) {
     // } catch (err) {
 
     // }
-    if (arrActions == null) {
+    if (arrActions === null) {
         return;
     }
     var arrActionParams;
 
     try {
         if (touchedObject != null) {
-            if (touchID == "up") {
+            if (touchID === "up") {
                 //console.log("[up] previousObject : " + mTouchedObject)
                 console.log("[up] triggerObject : " + touchedObject)
                 //if (mTouchedObject != touchedObject) return;
-                if (jQuery.data($(touchedObject).get(0), "startedInRect") == 'Y') {
+                if (jQuery.data($(touchedObject).get(0), "startedInRect") === 'Y') {
                     return;
                 }
-                if (jQuery.data($(touchedObject).get(0), "actionUpIndex") == null) {
+                if (jQuery.data($(touchedObject).get(0), "actionUpIndex") === null) {
                     jQuery.data($(touchedObject).get(0), "actionUpIndex", -1);
                 }
 
                 jQuery.data($(touchedObject).get(0), "actionUpIndex", jQuery.data($(touchedObject).get(0), "actionUpIndex") + 1);
                 /*     alert("actionUpIndex" + "//" + (jQuery.data($(touchedObject).get(0), "actionUpIndex"))); */
 
-            } else if (touchID == "down") {
+            } else if (touchID === "down") {
                 // 2018-07-19 recoed
                 var contentsType;
                 try {
@@ -421,37 +421,37 @@ function distributeAction(touchedObject, touchID, rand, arrActions) {
                 }
                 console.log("[down] triggerObject : " + touchedObject)
                 //mTouchedObject = touchedObject;
-                if (jQuery.data($(touchedObject).get(0), "actionDownIndex") == null) {
+                if (jQuery.data($(touchedObject).get(0), "actionDownIndex") === null) {
                     jQuery.data($(touchedObject).get(0), "actionDownIndex", -1);
                 }
                 jQuery.data($(touchedObject).get(0), "actionDownIndex", jQuery.data($(touchedObject).get(0), "actionDownIndex") + 1);
-            } else if (touchID == "inRect") {
-                if (jQuery.data($(touchedObject).get(0), "actionInRectIndex") == null) {
+            } else if (touchID === "inRect") {
+                if (jQuery.data($(touchedObject).get(0), "actionInRectIndex") === null) {
                     jQuery.data($(touchedObject).get(0), "actionInRectIndex", -1);
                 }
                 jQuery.data($(touchedObject).get(0), "actionInRectIndex", jQuery.data($(touchedObject).get(0), "actionInRectIndex") + 1);
 
-            } else if (touchID == "Conditional") {
-                if (jQuery.data($(touchedObject).get(0), "actionConditionalIndex") == null) {
+            } else if (touchID === "Conditional") {
+                if (jQuery.data($(touchedObject).get(0), "actionConditionalIndex") === null) {
                     jQuery.data($(touchedObject).get(0), "actionConditionalIndex", -1);
                 }
                 jQuery.data($(touchedObject).get(0), "actionConditionalIndex", jQuery.data($(touchedObject).get(0), "actionConditionalIndex") + 1);
-            } else if (touchID == "ActionLibrary") {
-                if (jQuery.data($(touchedObject).get(0), "actionLibraryIndex") == null) {
+            } else if (touchID === "ActionLibrary") {
+                if (jQuery.data($(touchedObject).get(0), "actionLibraryIndex") === null) {
                     jQuery.data($(touchedObject).get(0), "actionLibraryIndex", -1);
                 }
                 jQuery.data($(touchedObject).get(0), "actionLibraryIndex", jQuery.data($(touchedObject).get(0), "actionLibraryIndex") + 1);
             }
 
 
-            if (touchID == "up") {
+            if (touchID === "up") {
                 if (jQuery.data($(touchedObject).get(0), "actionUpIndex") >= arrActions.length) {
                     jQuery.data($(touchedObject).get(0), "actionUpIndex", 0);
                 }
 
-                if (rand == "Y") {
+                if (rand === "Y") {
                     var beforeNo;
-                    if (jQuery.data($(touchedObject).get(0), "beforeRand") == null) {
+                    if (jQuery.data($(touchedObject).get(0), "beforeRand") === null) {
                         beforeNo = 0;
                     } else {
                         beforeNo = jQuery.data($(touchedObject).get(0), "beforeRand");
@@ -470,14 +470,14 @@ function distributeAction(touchedObject, touchID, rand, arrActions) {
                 }
 
 
-            } else if (touchID == "down") {
+            } else if (touchID === "down") {
                 if (jQuery.data($(touchedObject).get(0), "actionDownIndex") >= arrActions.length) {
                     jQuery.data($(touchedObject).get(0), "actionDownIndex", 0);
                 }
-                if (rand == "Y") {
+                if (rand === "Y") {
 
                     var beforeNo;
-                    if (jQuery.data($(touchedObject).get(0), "beforeRand") == null) {
+                    if (jQuery.data($(touchedObject).get(0), "beforeRand") === null) {
                         beforeNo = 0;
                     } else {
                         beforeNo = jQuery.data($(touchedObject).get(0), "beforeRand");
@@ -491,14 +491,14 @@ function distributeAction(touchedObject, touchID, rand, arrActions) {
                 } else {
                     arrActionParams = arrActions[(jQuery.data($(touchedObject).get(0), "actionDownIndex"))];
                 }
-            } else if (touchID == "inRect") {
+            } else if (touchID === "inRect") {
                 if (jQuery.data($(touchedObject).get(0), "actionInRectIndex") >= arrActions.length) {
                     jQuery.data($(touchedObject).get(0), "actionInRectIndex", 0);
                 }
-                if (rand == "Y") {
+                if (rand === "Y") {
 
                     var beforeNo;
-                    if (jQuery.data($(touchedObject).get(0), "beforeRand") == null) {
+                    if (jQuery.data($(touchedObject).get(0), "beforeRand") === null) {
                         beforeNo = 0;
                     } else {
                         beforeNo = jQuery.data($(touchedObject).get(0), "beforeRand");
@@ -512,14 +512,14 @@ function distributeAction(touchedObject, touchID, rand, arrActions) {
                 } else {
                     arrActionParams = arrActions[(jQuery.data($(touchedObject).get(0), "actionInRectIndex"))];
                 }
-            } else if (touchID == "Conditional") {
+            } else if (touchID === "Conditional") {
                 if (jQuery.data($(touchedObject).get(0), "actionConditionalIndex") >= arrActions.length) {
                     jQuery.data($(touchedObject).get(0), "actionConditionalIndex", 0);
                 }
-                if (rand == "Y") {
+                if (rand === "Y") {
 
                     var beforeNo;
-                    if (jQuery.data($(touchedObject).get(0), "beforeRand") == null) {
+                    if (jQuery.data($(touchedObject).get(0), "beforeRand") === null) {
                         beforeNo = 0;
                     } else {
                         beforeNo = jQuery.data($(touchedObject).get(0), "beforeRand");
@@ -533,14 +533,14 @@ function distributeAction(touchedObject, touchID, rand, arrActions) {
                 } else {
                     arrActionParams = arrActions[(jQuery.data($(touchedObject).get(0), "actionConditionalIndex"))];
                 }
-            } else if (touchID == "ActionLibrary") {
+            } else if (touchID === "ActionLibrary") {
                 if (jQuery.data($(touchedObject).get(0), "actionLibraryIndex") >= arrActions.length) {
                     jQuery.data($(touchedObject).get(0), "actionLibraryIndex", 0);
                 }
-                if (rand == "Y") {
+                if (rand === "Y") {
 
                     var beforeNo;
-                    if (jQuery.data($(touchedObject).get(0), "beforeRand") == null) {
+                    if (jQuery.data($(touchedObject).get(0), "beforeRand") === null) {
                         beforeNo = 0;
                     } else {
                         beforeNo = jQuery.data($(touchedObject).get(0), "beforeRand");
@@ -563,7 +563,7 @@ function distributeAction(touchedObject, touchID, rand, arrActions) {
         arrActionParams = arrActions[0];
     }
 
-    if (arrActionParams == null) {
+    if (arrActionParams === null) {
         return;
     }
 
@@ -598,13 +598,13 @@ function distributeAction(touchedObject, touchID, rand, arrActions) {
         //// 0 : none, 1 : child, 2 : group
         //var isGroup = IsGroup(params);
 
-        if (firstTarget == "Conditional") {
+        if (firstTarget === "Conditional") {
             startConditionalAction(params);
         }
-        if (firstTarget == "ActionLibrary") {
+        if (firstTarget === "ActionLibrary") {
             startLibraryAction(params);
         } else {
-            if (params == undefined || params.actType == undefined) return;
+            if (params === undefined || params.actType === undefined) return;
 
             switch (params.actType) {
                 case 0:
@@ -652,13 +652,13 @@ function distributeAction(touchedObject, touchID, rand, arrActions) {
                     startToggle(params);
                     break;
                 case 16: // setContent
-                    if (params.content == "getUserInfo") {
+                    if (params.content === "getUserInfo") {
                         getUserInfo();
                         return false;
                     }
-                    if (params.actSubType == "change mode") {
+                    if (params.actSubType === "change mode") {
                         changePageShowMode();
-                    } else if (params.actSubType == "replace") {
+                    } else if (params.actSubType === "replace") {
                         // 2018-07-19 recoed
                         var contentsType;
                         try {
@@ -667,12 +667,12 @@ function distributeAction(touchedObject, touchID, rand, arrActions) {
                             contentsType = "";
                         }
                         if (!(contentsType && contentsType.indexOf("recode") != -1 && !(navigator.getUserMedia || navigator.mediaDevices.getUserMedia))) { // ie 같이 userMedia가 없는 브라우저는 이렇게 처리
-                            if (contentsType == "recodestart" || contentsType == "recodeplay") {
+                            if (contentsType === "recodestart" || contentsType === "recodeplay") {
 
                                 var user_media;
                                 function startUserMedia_(stream) {
                                     startUserMedia(stream);
-                                    if (contentsType == "recodestart") window.pb_custom_recode.clear();
+                                    if (contentsType === "recodestart") window.pb_custom_recode.clear();
                                     window.pb_custom_recode.record();
                                     distributeNextAction(arrActions[0][0].nextAction);
                                 }
@@ -699,43 +699,43 @@ function distributeAction(touchedObject, touchID, rand, arrActions) {
                                     });
                                 }
 
-                            } else if (contentsType == "recodestop") {
+                            } else if (contentsType === "recodestop") {
                                 console.log("stop");
                                 window.pb_custom_recode.stop();
                                 distributeNextAction(arrActions[0][0].nextAction);
 
-                            } else if (contentsType == "recodeend") {
+                            } else if (contentsType === "recodeend") {
                                 window.pb_custom_recode.stop();
                                 distributeNextAction(arrActions[0][0].nextAction);
-                            } else if (contentsType == "recodelisten") {
+                            } else if (contentsType === "recodelisten") {
                                 //alert("url :: "+window.pb_custom_recode.url.substring(0,100));
                                 sound1 = new Audio(window.pb_custom_recode.url);
                                 sound1.play();
                                 distributeNextAction(arrActions[0][0].nextAction);
-                            } else if (contentsType == "recodelistenpause") {
+                            } else if (contentsType === "recodelistenpause") {
                                 try {
                                     sound1.pause();
                                     distributeNextAction(arrActions[0][0].nextAction);
                                 } catch (err) {
                                 }
-                            } else if (contentsType == "recodesistenpausecheck") {
+                            } else if (contentsType === "recodesistenpausecheck") {
                                 try {
                                     sound1.addEventListener('timeupdate', function () {
-                                        if (sound1.currentTime == sound1.duration) {
+                                        if (sound1.currentTime === sound1.duration) {
                                             arrActions[0][0].pauseCallback();
                                         }
                                     })
                                 } catch (err) {
                                 }
-                            } else if (contentsType == "recodesave") {
+                            } else if (contentsType === "recodesave") {
                                 window.pb_custom_recode.onsave();
                                 distributeNextAction(arrActions[0][0].nextAction);
                             }
                         }
-                        if (contentsType && contentsType.indexOf("@") != -1 && contentsType.split("@")[0] == "locationmove") {
+                        if (contentsType && contentsType.indexOf("@") != -1 && contentsType.split("@")[0] === "locationmove") {
                             window.location.assign(contentsType.split("@")[1]);
                         }
-                        if (contentsType == "pictureinsert") {
+                        if (contentsType === "pictureinsert") {
                             var input_item = $("<input id='PictureInsert' type='file' accept='image/*' capture />"); //capture='camera' accept='image/*'
                             var input_label = $("<label for='PictureInsert'></label>");
                             input_label.css({
@@ -785,7 +785,7 @@ function distributeAction(touchedObject, touchID, rand, arrActions) {
                             input_label.trigger("click");
                             return false;
                         }
-                        if (params.content == "backgroundcolor") {
+                        if (params.content === "backgroundcolor") {
                             var regex = /[?&]([^=#]+)=([^&#]*)/g,
                                 url = window.location.href,
                                 params = {},
@@ -803,7 +803,7 @@ function distributeAction(touchedObject, touchID, rand, arrActions) {
                             distributeNextAction(arrActions[0][0].nextAction);
                             return false;
                         }
-                        if (params.content == "game1" || params.content == "game2" || params.content == "game3" || params.content == "game4" || params.content == "game5") {
+                        if (params.content === "game1" || params.content === "game2" || params.content === "game3" || params.content === "game4" || params.content === "game5") {
                             var myid = $((jQuery.data(TargetTable, 'userid'))).val();
                             var loginstate = 'login_no';
                             var mycourse = $((jQuery.data(TargetTable, 'course'))).val();
@@ -815,19 +815,19 @@ function distributeAction(touchedObject, touchID, rand, arrActions) {
                             } else {
                                 gameURL = "./" + params.content + "/pb.html";
                             }
-                        } else if (params.content == 'savelogininfo') {
+                        } else if (params.content === 'savelogininfo') {
                             saveLoginInfo();
-                        } else if (params.content == 'deletelogininfo') {
+                        } else if (params.content === 'deletelogininfo') {
                             deleteLoginInfo();
-                        } else if (params.content == 'load data') {
+                        } else if (params.content === 'load data') {
                             startLoadData(params);
-                        } else if (params.content == 'change data') {
+                        } else if (params.content === 'change data') {
                             startChangeData(params);
                         } else {
                             replaceContent(params);
                         }
 
-                    } else if (params.actSubType == "loadData") {
+                    } else if (params.actSubType === "loadData") {
 
                     } else {
                         openWin(params.url);
@@ -888,9 +888,9 @@ function distributeAction(touchedObject, touchID, rand, arrActions) {
                     reload(params);
                     break;
                 case 41:
-                    if (params.actSubType == "Get Data") {
+                    if (params.actSubType === "Get Data") {
                         startLoadData(params);
-                    } else if (params.actSubType == "Select Next") {
+                    } else if (params.actSubType === "Select Next") {
                         startChangeData(params);
                     }
                     break;
@@ -909,7 +909,7 @@ function distributeAction(touchedObject, touchID, rand, arrActions) {
 }
 
 function distributeNextAction(arrActionParams) {
-	if (arrActionParams == null) {
+	if (arrActionParams === null) {
 		return;
 	}
 
@@ -932,10 +932,10 @@ function distributeNextAction(arrActionParams) {
 		if (params.target != null && params.target[0].parentElement != null) {
 		}
 
-		if (firstTarget == "Conditional") {
+		if (firstTarget === "Conditional") {
 			startConditionalAction(params);
 		}
-		if (firstTarget == "ActionLibrary") {
+		if (firstTarget === "ActionLibrary") {
 			startLibraryAction(params);
 		} else {
 			switch (params.actType) {
@@ -984,9 +984,9 @@ function distributeNextAction(arrActionParams) {
 					startToggle(params);
 					break;
 				case 16: // setContent
-					if (params.actSubType == "changemode") {
+					if (params.actSubType === "changemode") {
 						changePageShowMode();
-					} else if (params.actSubType == "replace") {
+					} else if (params.actSubType === "replace") {
 						// 2018-07-19 recoed
 						var contentsType;
 						try {
@@ -1002,7 +1002,7 @@ function distributeNextAction(arrActionParams) {
 							)
 						) {
 							// ie 같이 userMedia가 없는 브라우저는 이렇게 처리
-							if (contentsType == "recodestart") {
+							if (contentsType === "recodestart") {
 								var user_media;
 								function startUserMedia_(stream) {
 									startUserMedia(stream);
@@ -1046,32 +1046,32 @@ function distributeNextAction(arrActionParams) {
 										}
 									);
 								}
-							} else if (contentsType == "recodestop") {
+							} else if (contentsType === "recodestop") {
 								console.log("stop");
 								window.pb_custom_recode.stop();
 								distributeNextAction(arrActions[0][0].nextAction);
-							} else if (contentsType == "recodeend") {
+							} else if (contentsType === "recodeend") {
 								window.pb_custom_recode.stop();
 								distributeNextAction(arrActions[0][0].nextAction);
-							} else if (contentsType == "recodelisten") {
+							} else if (contentsType === "recodelisten") {
 								//alert("url :: "+window.pb_custom_recode.url.substring(0,100));
 								sound1 = new Audio(window.pb_custom_recode.url);
 								sound1.play();
 								distributeNextAction(arrActions[0][0].nextAction);
-							} else if (contentsType == "recodesistenpause") {
+							} else if (contentsType === "recodesistenpause") {
 								try {
 									sound1.pause();
 									distributeNextAction(arrActions[0][0].nextAction);
 								} catch (err) {}
-							} else if (contentsType == "recodelistenpausecheck") {
+							} else if (contentsType === "recodelistenpausecheck") {
 								try {
 									sound1.addEventListener("timeupdate", function() {
-										if (sound1.currentTime == sound1.duration) {
+										if (sound1.currentTime === sound1.duration) {
 											arrActions[0][0].pauseCallback();
 										}
 									});
 								} catch (err) {}
-							} else if (contentsType == "recodesave") {
+							} else if (contentsType === "recodesave") {
 								window.pb_custom_recode.onsave();
 								distributeNextAction(arrActions[0][0].nextAction);
 							}
@@ -1080,11 +1080,11 @@ function distributeNextAction(arrActionParams) {
 						if (
 							contentsType &&
 							contentsType.indexOf("@") != -1 &&
-							contentsType.split("@")[0] == "locationmove"
+							contentsType.split("@")[0] === "locationmove"
 						) {
 							window.location.assign(contentsType.split("@")[1]);
 						}
-						if (contentsType == "pictureinsert") {
+						if (contentsType === "pictureinsert") {
 							var input_item = $(
 								"<input id='PictureInsert' type='file' accept='image/*' capture />"
 							); //capture='camera' accept='image/*'
@@ -1148,7 +1148,7 @@ function distributeNextAction(arrActionParams) {
 							input_label.trigger("click");
 							return false;
 						}
-						if (params.content == "Background Color") {
+						if (params.content === "Background Color") {
 							var regex = /[?&]([^=#]+)=([^&#]*)/g,
 								url = window.location.href,
 								params = {},
@@ -1167,11 +1167,11 @@ function distributeNextAction(arrActionParams) {
 							return false;
 						}
 						if (
-							params.content == "game1" ||
-							params.content == "game2" ||
-							params.content == "game3" ||
-							params.content == "game4" ||
-							params.content == "game5"
+							params.content === "game1" ||
+							params.content === "game2" ||
+							params.content === "game3" ||
+							params.content === "game4" ||
+							params.content === "game5"
 						) {
 							var myid = $(jQuery.data(TargetTable, "userid")).val();
 							var loginstate = "login_no";
@@ -1196,13 +1196,13 @@ function distributeNextAction(arrActionParams) {
 							} else {
 								gameURL = "./" + params.content + "/pb.html";
 							}
-						} else if (params.content == "savelogininfo") {
+						} else if (params.content === "savelogininfo") {
 							saveLoginInfo();
-						} else if (params.content == "deletelogininfo") {
+						} else if (params.content === "deletelogininfo") {
 							deleteLoginInfo();
-						} else if (params.content == "loaddata") {
+						} else if (params.content === "loaddata") {
 							startLoadData(params);
-						} else if (params.content == "changedata") {
+						} else if (params.content === "changedata") {
 							startChangeData(params);
 						} else {
 							replaceContent(params);
@@ -1265,9 +1265,9 @@ function distributeNextAction(arrActionParams) {
 					reload(params);
 					break;
 				case 41:
-					if (params.actSubType == "Get Data") {
+					if (params.actSubType === "Get Data") {
 						startLoadData(params);
-					} else if (params.actSubType == "Select Next") {
+					} else if (params.actSubType === "Select Next") {
 						startChangeData(params);
 					}
 					break;
@@ -1354,7 +1354,7 @@ function pagingViewControl(params) {
 				else return;
 
 				if ($(tgArray[0]).is(":animated")) {
-					if (imageCnt == tgArray.length - 1) return;
+					if (imageCnt === tgArray.length - 1) return;
 
 					for (var i = 0; i < tgArray.length; i++) {
 						$(tgArray[i]).stop(true, true);
@@ -1370,7 +1370,7 @@ function pagingViewControl(params) {
 
 				//if(params.paramValue[0].Direction)
 				console.log("params.useAnimation :: " + params.useAnimation);
-				if (params.useAnimation == "Y") {
+				if (params.useAnimation === "Y") {
 					//Effect 분기처리-----------------------------------------------
 					switch (params.effect) {
 						// 덮어쓰기
@@ -1378,7 +1378,7 @@ function pagingViewControl(params) {
 							console.log("덮어쓰기 Next!!");
 
 							$(tg).css("pointerEvents", "none");
-							if (params.Direction == "Horiz") {
+							if (params.Direction === "Horiz") {
 								properties1 = {
 									left: $(tg).width() / 2,
 									opacity: 1
@@ -1482,7 +1482,7 @@ function pagingViewControl(params) {
 							console.log(
 								"fade================================================"
 							);
-							if (params.Direction == "Horiz") {
+							if (params.Direction === "Horiz") {
 								properties1 = {
 									opacity: 0
 								};
@@ -1528,7 +1528,7 @@ function pagingViewControl(params) {
 
 						// 밀기
 						case 2:
-							if (params.Direction == "Horiz") {
+							if (params.Direction === "Horiz") {
 								properties1 = {
 									left: -$(tg).width() / 2,
 									opacity: 1
@@ -1624,7 +1624,7 @@ function pagingViewControl(params) {
 
 						// 드러내기
 						case 3:
-							if (params.Direction == "Horiz") {
+							if (params.Direction === "Horiz") {
 								properties1 = {
 									left: -$(tg).width() / 2,
 									opacity: 1
@@ -1747,10 +1747,10 @@ function pagingViewControl(params) {
 				console.log(imageCnt);
 				if (0 <= imageCnt) imageCnt--;
 				else return;
-				if (imageCnt == -1) return;
+				if (imageCnt === -1) return;
 
 				if ($(tgArray[0]).is(":animated")) {
-					if (imageCnt == 0) return;
+					if (imageCnt === 0) return;
 					for (var i = 0; i < tgArray.length; i++) {
 						$(tgArray[i]).stop(true, true);
 					}
@@ -1761,13 +1761,13 @@ function pagingViewControl(params) {
 				isAnimated = true;
 				//$(tgArray[0]).css('pointerEvents','none');
 
-				if (params.useAnimation == "Y") {
+				if (params.useAnimation === "Y") {
 					//Effect 분기처리-----------------------------------------------
 					switch (params.effect) {
 						// 덮어쓰기
 						case 0:
 							$(tg).css("pointerEvents", "none");
-							if (params.Direction == "Horiz") {
+							if (params.Direction === "Horiz") {
 								properties1 = {
 									left: -$(tg).width() / 2,
 									opacity: 1
@@ -1841,7 +1841,7 @@ function pagingViewControl(params) {
 
 						// 페이드
 						case 1:
-							if (params.Direction == "Horiz") {
+							if (params.Direction === "Horiz") {
 								properties1 = {
 									opacity: 0
 								};
@@ -1884,7 +1884,7 @@ function pagingViewControl(params) {
 
 						// 밀기
 						case 2:
-							if (params.Direction == "Horiz") {
+							if (params.Direction === "Horiz") {
 								properties1 = {
 									left: $(tg).width() / 2,
 									opacity: 1
@@ -1974,7 +1974,7 @@ function pagingViewControl(params) {
 
 						// 드러내기
 						case 3:
-							if (params.Direction == "Horiz") {
+							if (params.Direction === "Horiz") {
 								properties1 = {
 									left: $(tg).width() / 2,
 									opacity: 1
@@ -2134,7 +2134,7 @@ function startHideShow(params) {
 	var startHideShowTimer;
 	for (var i = 0; i < params.target.length; i++) {
 		var tg = params.target[i];
-		if (tg == null) alert("null box");
+		if (tg === null) alert("null box");
 		try {
 			var blink_timer =
 				"clearInterval(" + replaceAll(tg.id, "cvs", "blink_timer") + ")";
@@ -2145,9 +2145,9 @@ function startHideShow(params) {
 			eval(blink_setTimer);
 		} catch (e) {}
 		startHideShowTimer = setTimeout(function() {
-			if (params.actSubType == "Hide") {
+			if (params.actSubType === "Hide") {
                 $(tg).addClass("collapse");
-				if (videobox == tg) {
+				if (videobox === tg) {
 					videobox.pause();
 					videobox = null;
 				}
@@ -2173,7 +2173,7 @@ function replaceContent(params) {
 		if (params.content.endsWith("mp4")) {
 			var target = params.target[0];
 			var videoSource = params.content;
-			if (params.actSubType == "Stop") {
+			if (params.actSubType === "Stop") {
 				//console.log("playMovie11");
 				target.pause();
 				videobox = null;
@@ -2192,7 +2192,7 @@ function replaceContent(params) {
 			target.location.href = params.content;
 		} else {
 			var element = params.target[0];
-			if (element == null || element == undefined) {
+			if (element === null || element === undefined) {
 				return;
 			}
 
@@ -2217,7 +2217,7 @@ if (typeof String.prototype.endsWith !== "function") {
 }
 
 function drawImage(ctx, image, x, y, w, h, r) {
-	if (r == 0) {
+	if (r === 0) {
 		ctx.drawImage(image, x, y, w, h);
 	} else {
 		ctx.save();
@@ -2244,24 +2244,24 @@ function startAppend(params) {
 
 			var toValue = null;
 			var fromValue = null;
-			if (ConditionTo == "0") {
+			if (ConditionTo === "0") {
 				toValue = jQuery.data($(tg).get(0), "tag");
 			} else {
 				toValue = jQuery.data($(tg).get(0), "text");
 			}
 			//console.log("toValue is " + toValue);
-			if (UserInput == null || UserInput == 0) {
-				if (ConditionAttribute == "Tag") {
+			if (UserInput === null || UserInput === 0) {
+				if (ConditionAttribute === "Tag") {
 					fromValue = jQuery.data($(ConditionTarget).get(0), "tag");
-				} else if (ConditionAttribute == "Tag Count") {
+				} else if (ConditionAttribute === "Tag Count") {
 					fromValue = jQuery.data($(ConditionTarget).get(0), "tag count");
-				} else if (ConditionAttribute == "Alpha") {
+				} else if (ConditionAttribute === "Alpha") {
 					fromValue = jQuery.data($(ConditionTarget).get(0), "alpha");
-				} else if (ConditionAttribute == "Hidden") {
+				} else if (ConditionAttribute === "Hidden") {
 					fromValue = jQuery.data($(ConditionTarget).get(0), "hidden");
-				} else if (ConditionAttribute == "Area") {
+				} else if (ConditionAttribute === "Area") {
 					fromValue = jQuery.data($(ConditionTarget).get(0), "area");
-				} else if (ConditionAttribute == "CurrentPage") {
+				} else if (ConditionAttribute === "CurrentPage") {
 					break;
 				} else {
 					fromValue = jQuery.data($(ConditionTarget).get(0), "text");
@@ -2274,7 +2274,7 @@ function startAppend(params) {
 				toValue = toValue.push(fromValue);
 			}
 
-			if (ConditionTo == "0") {
+			if (ConditionTo === "0") {
 				$(tg).data("tag", toValue);
 			} else {
 				changeDisplayedText(tg, toValue);
@@ -2302,14 +2302,14 @@ function startRemove(params) {
 
 			var toValue = null;
 			var fromValue = null;
-			if (ConditionTo == "0") {
+			if (ConditionTo === "0") {
 				toValue = jQuery.data($(tg).get(0), "tag");
 			} else {
 				toValue = jQuery.data($(tg).get(0), "text");
 			}
 			//console.log("toValue is " + toValue);
-			if (UserInput == null || UserInput == 0) {
-				if (ConditionAttribute == "Tag") {
+			if (UserInput === null || UserInput === 0) {
+				if (ConditionAttribute === "Tag") {
 					fromValue = jQuery.data($(ConditionTarget).get(0), "tag");
 				} else {
 					fromValue = jQuery.data($(ConditionTarget).get(0), "text");
@@ -2324,7 +2324,7 @@ function startRemove(params) {
 				toValue.remove(fromValue);
 			}
 
-			if (ConditionTo == "0") {
+			if (ConditionTo === "0") {
 				$(tg).data("tag", toValue);
 			} else {
 				changeDisplayedText(tg, toValue);
@@ -2341,7 +2341,7 @@ function startReplace(params) {
 	var tgType = params.targetType;
 
 	// targetType 0 : 그래픽  1 : 변수({pagenumber}.js 의 지역변수가 인자)  2 : 전역변수 (indexedDB에 키로 사용될 문자열)
-	if (tgType == 0) tg = params.target[0];
+	if (tgType === 0) tg = params.target[0];
 	else tg = params.target;
 
 	var ConditionAttribute = params.ConditionAttribute;
@@ -2352,13 +2352,13 @@ function startReplace(params) {
 	var InputValue = params.InputValue;
 	var ConditionTgType = params.ConditionTargetType;
 
-	if (UserInput == undefined || UserInput == null || UserInput == 0) {
+	if (UserInput === undefined || UserInput === null || UserInput === 0) {
 		// if conditionTarget is graphic or variable.
 
 		var conditionTargetValue = null; // ConditionTarget can be
-		if (ConditionTgType == 0) {
+		if (ConditionTgType === 0) {
 			// if condition target is graphic
-			if (ConditionAttribute == undefined || ConditionAttribute == "Tag") {
+			if (ConditionAttribute === undefined || ConditionAttribute === "Tag") {
 				conditionTargetValue = jQuery.data($(ConditionTarget).get(0), "tag");
 			} else {
 				//conditionTargetValue= $(ConditionTarget).get(0).textContent;
@@ -2366,11 +2366,11 @@ function startReplace(params) {
 				var contentDiv = $(tb).find("div.contentsbox")[0];
 				conditionTargetValue = getTextBoxText(contentDiv);
 			}
-		} else if (ConditionTgType == 1) {
+		} else if (ConditionTgType === 1) {
 			// 만약 condition target이 지역 변수면,
 
 			conditionTargetValue = this[ConditionTarget];
-		} else if (ConditionTgType == 2) {
+		} else if (ConditionTgType === 2) {
 			// 만약 condition target이 전역 변수면,
 
 			conditionTargetValue = sessionStorage.getItem(ConditionTarget);
@@ -2378,9 +2378,9 @@ function startReplace(params) {
 		// conditionTargetValue가 모든 경우에 대해 구해졌음
 
 		// conditionTargetValue를 주입하기
-		if (tgType == 0) {
+		if (tgType === 0) {
 			// if Target is Graphic
-			if (ConditionTo == "0") {
+			if (ConditionTo === "0") {
 				// graphic 속성 (Tag) 를 타겟할 경우
 				jQuery.data($(tg).get(0), "tag", conditionTargetValue);
 			} else {
@@ -2388,19 +2388,19 @@ function startReplace(params) {
 				var contentDiv = $(tb).find("div.contentsbox")[0];
 				setTextBoxText(contentDiv, conditionTargetValue);
 			}
-		} else if (tgType == 1) {
+		} else if (tgType === 1) {
 			// if Target is local variable
 			this[tg] = conditionTargetValue[0];
-		} else if (tgType == 2) {
+		} else if (tgType === 2) {
 			// if Target is global variable
 			sessionStorage.setItem(tg, conditionTargetValue);
 		}
 	} else {
 		// if userInput Exist then Isert UserInput
-		if (tgType == 0) {
+		if (tgType === 0) {
 			// if tgType is graphic
 
-			if (ConditionTo == "0") {
+			if (ConditionTo === "0") {
 				// tag
 				jQuery.data($(tg).get(0), "tag", InputValue);
 			} else {
@@ -2408,10 +2408,10 @@ function startReplace(params) {
 				var contentDiv = $(tb).find("div.contentsbox")[0];
 				setTextBoxText(contentDiv, InputValue);
 			}
-		} else if (tgType == 1) {
+		} else if (tgType === 1) {
 			//If Target Type is local variable.
 			this[tg] = InputValue;
-		} else if (tgType == 2) {
+		} else if (tgType === 2) {
 			//If Target Type is global variable.
 
 			sessionStorage.setItem(tg, InputValue);
@@ -2427,9 +2427,9 @@ function getTextBoxText(elem) {
 	for (var i = 0; i < elementList.length; i++) {
 		var element = elementList[i];
 		var name = element.tagName.toLowerCase();
-		if (name == "span") {
+		if (name === "span") {
 			result += element.innerText;
-		} else if (name == "p") {
+		} else if (name === "p") {
 			result += getTextBoxText(element) + "\\n";
 		} else {
 			result += getTextBoxText(element);
@@ -2468,8 +2468,8 @@ function setTextBoxText(elem, text) {
 	elem = elem.children[0];
 
 	var tmpString = "";
-	// text == "null" 인덱스드 디비가 null일 때 문자열 상수로 null 임
-	if (text == null || text == undefined || text.length == 0 || text == "null") {
+	// text === "null" 인덱스드 디비가 null일 때 문자열 상수로 null 임
+	if (text === null || text === undefined || text.length === 0 || text === "null") {
 		var pNode = document.createElement("P");
 		var spanNode = document.createElement("SPAN");
 		pNode.appendChild(spanNode);
@@ -2478,9 +2478,9 @@ function setTextBoxText(elem, text) {
 	}
 	for (var i = 0; i < text.length; i++) {
 		var cur = text[i];
-		if (cur == "\\") {
+		if (cur === "\\") {
 			if (i + 1 < text.length) {
-				if (text[i + 1] == "n") {
+				if (text[i + 1] === "n") {
 					i++;
 					var pNode = document.createElement("P");
 					var spanNode = document.createElement("SPAN");
@@ -2521,10 +2521,10 @@ function startRemoveAll(params) {
 	var tg = null;
 
 	// targetType이 graphic 이면
-	if (tgType == 0) {
+	if (tgType === 0) {
 		tg = params.target[0];
 
-		if (ConditionTo == "0") {
+		if (ConditionTo === "0") {
 			jQuery.data($(tg).get(0), "tag", []);
 		} else {
 			var tb = $(tg).get(0);
@@ -2532,10 +2532,10 @@ function startRemoveAll(params) {
 
 			setTextBoxText(contentDiv, "");
 		}
-	} else if (tgType == 1) {
+	} else if (tgType === 1) {
 		tg = params.target;
 		this[tg] = null;
-	} else if (tgType == 2) {
+	} else if (tgType === 2) {
 		tg = params.target;
 		sessionStorage.setItem(tg, null);
 	}
@@ -2558,18 +2558,18 @@ function startAdd(params) {
 
 			var toValue = null;
 			var fromValue = null;
-			if (ConditionTo == "0") {
+			if (ConditionTo === "0") {
 				toValue = jQuery.data($(tg).get(0), "tag");
 			} else {
 				toValue = jQuery.data($(tg).get(0), "text");
 				//toValue = $(tg).val();
 			}
-			if (toValue == null || toValue == undefined || toValue == "") {
+			if (toValue === null || toValue === undefined || toValue === "") {
 				toValue = 0;
 			}
 
-			if (UserInput == null || UserInput == 0) {
-				if (ConditionAttribute == "Tag") {
+			if (UserInput === null || UserInput === 0) {
+				if (ConditionAttribute === "Tag") {
 					fromValue = jQuery.data($(ConditionTarget).get(0), "tag");
 				} else {
 					fromValue = jQuery.data($(ConditionTarget).get(0), "text");
@@ -2584,21 +2584,21 @@ function startAdd(params) {
 			if (!isNaN(toValue)) {
 				a = parseInt(toValue);
 			}
-			if (a == null || a == "" || a == isNaN(a)) {
+			if (a === null || a === "" || a === isNaN(a)) {
 				a = 0;
 			}
 
 			if (!isNaN(fromValue)) {
 				b = parseInt(fromValue);
 			}
-			if (b == null || b == "") {
+			if (b === null || b === "") {
 				b = 0;
 			}
 
 			var s = 0;
 			s = a + b;
 			var strResult = String(s);
-			if (ConditionTo == "0") {
+			if (ConditionTo === "0") {
 				jQuery.data($(tg).get(0), "tag", [strResult]);
 			} else {
 				jQuery.data($(tg).get(0), "text", [strResult]);
@@ -2629,18 +2629,18 @@ function startSubtract(params) {
 
 			var toValue = null;
 			var fromValue = null;
-			if (ConditionTo == "0") {
+			if (ConditionTo === "0") {
 				toValue = jQuery.data($(tg).get(0), "tag");
 			} else {
 				toValue = jQuery.data($(tg).get(0), "text");
 				//toValue = $(tg).val();
 			}
-			if (toValue == null || toValue == undefined || toValue == "") {
+			if (toValue === null || toValue === undefined || toValue === "") {
 				toValue = 0;
 			}
 
-			if (UserInput == null || UserInput == 0) {
-				if (ConditionAttribute == "Tag") {
+			if (UserInput === null || UserInput === 0) {
+				if (ConditionAttribute === "Tag") {
 					fromValue = jQuery.data($(ConditionTarget).get(0), "tag");
 				} else {
 					fromValue = jQuery.data($(ConditionTarget).get(0), "text");
@@ -2655,14 +2655,14 @@ function startSubtract(params) {
 			if (!isNaN(toValue)) {
 				a = parseInt(toValue);
 			}
-			if (a == null || a == "" || a == isNaN(a)) {
+			if (a === null || a === "" || a === isNaN(a)) {
 				a = 0;
 			}
 
 			if (!isNaN(fromValue)) {
 				b = parseInt(fromValue);
 			}
-			if (b == null || b == "") {
+			if (b === null || b === "") {
 				b = 0;
 			}
 
@@ -2678,7 +2678,7 @@ function startSubtract(params) {
 			}
 			s = a - b;
 			var strResult = String(s);
-			if (ConditionTo == "0") {
+			if (ConditionTo === "0") {
 				jQuery.data($(tg).get(0), "tag", [strResult]);
 			} else {
 				jQuery.data($(tg).get(0), "text", [strResult]);
@@ -2708,18 +2708,18 @@ function startMultiply(params) {
 
 			var toValue = null;
 			var fromValue = null;
-			if (ConditionTo == "0") {
+			if (ConditionTo === "0") {
 				toValue = jQuery.data($(tg).get(0), "tag");
 			} else {
 				toValue = jQuery.data($(tg).get(0), "text");
 				//toValue = $(tg).val();
 			}
-			if (toValue == null || toValue == undefined || toValue == "") {
+			if (toValue === null || toValue === undefined || toValue === "") {
 				toValue = 0;
 			}
 
-			if (UserInput == null || UserInput == 0) {
-				if (ConditionAttribute == "Tag") {
+			if (UserInput === null || UserInput === 0) {
+				if (ConditionAttribute === "Tag") {
 					fromValue = jQuery.data($(ConditionTarget).get(0), "tag");
 				} else {
 					fromValue = jQuery.data($(ConditionTarget).get(0), "text");
@@ -2734,14 +2734,14 @@ function startMultiply(params) {
 			if (!isNaN(toValue)) {
 				a = parseInt(toValue);
 			}
-			if (a == null || a == "" || a == isNaN(a)) {
+			if (a === null || a === "" || a === isNaN(a)) {
 				a = 0;
 			}
 
 			if (!isNaN(fromValue)) {
 				b = parseInt(fromValue);
 			}
-			if (b == null || b == "") {
+			if (b === null || b === "") {
 				b = 0;
 			}
 
@@ -2757,7 +2757,7 @@ function startMultiply(params) {
 			}
 			s = a * b;
 			var strResult = String(s);
-			if (ConditionTo == "0") {
+			if (ConditionTo === "0") {
 				jQuery.data($(tg).get(0), "tag", [strResult]);
 			} else {
 				jQuery.data($(tg).get(0), "text", [strResult]);
@@ -2787,18 +2787,18 @@ function startDivide(params) {
 
 			var toValue = null;
 			var fromValue = null;
-			if (ConditionTo == "0") {
+			if (ConditionTo === "0") {
 				toValue = jQuery.data($(tg).get(0), "tag");
 			} else {
 				toValue = jQuery.data($(tg).get(0), "text");
 				//toValue = $(tg).val();
 			}
-			if (toValue == null || toValue == undefined || toValue == "") {
+			if (toValue === null || toValue === undefined || toValue === "") {
 				toValue = 0;
 			}
 
-			if (UserInput == null || UserInput == 0) {
-				if (ConditionAttribute == "Tag") {
+			if (UserInput === null || UserInput === 0) {
+				if (ConditionAttribute === "Tag") {
 					fromValue = jQuery.data($(ConditionTarget).get(0), "tag");
 				} else {
 					fromValue = jQuery.data($(ConditionTarget).get(0), "text");
@@ -2813,14 +2813,14 @@ function startDivide(params) {
 			if (!isNaN(toValue)) {
 				a = parseInt(toValue);
 			}
-			if (a == null || a == "" || a == isNaN(a)) {
+			if (a === null || a === "" || a === isNaN(a)) {
 				a = 0;
 			}
 
 			if (!isNaN(fromValue)) {
 				b = parseInt(fromValue);
 			}
-			if (b == null || b == "") {
+			if (b === null || b === "") {
 				b = 0;
 			}
 
@@ -2836,7 +2836,7 @@ function startDivide(params) {
 			}
 			s = a / b;
 			var strResult = String(s);
-			if (ConditionTo == "0") {
+			if (ConditionTo === "0") {
 				jQuery.data($(tg).get(0), "tag", [strResult]);
 			} else {
 				jQuery.data($(tg).get(0), "text", [strResult]);
@@ -2882,7 +2882,7 @@ function startFade(params) {
 		}
 
 		$(tg).show();
-		if (params.reverse == "Y") {
+		if (params.reverse === "Y") {
 			startFadeTimer = setTimeout(function() {
 				$(tg).animate(
 					{
@@ -2893,7 +2893,7 @@ function startFade(params) {
 						easing: easingVar,
 						queue: false,
 						complete: function() {
-							//if ($(tg).css("opacity") == 0) {
+							//if ($(tg).css("opacity") === 0) {
 							//    $(tg).hide();
 							//}
 							setTimeout(function() {
@@ -2907,19 +2907,19 @@ function startFade(params) {
 										queue: false,
 										complete: function() {
 											//alert("originOpacity // " + originOpacity);
-											if (params.opacity == 1) {
+											if (params.opacity === 1) {
 												$(tg).hide();
-												if (jQuery.data($(tg).get(0), "touch") == "y") {
+												if (jQuery.data($(tg).get(0), "touch") === "y") {
 													$(tg).css("pointerEvents", "none");
 												}
 											} else {
-												if (jQuery.data($(tg).get(0), "touch") == "y") {
+												if (jQuery.data($(tg).get(0), "touch") === "y") {
 													$(tg).css("pointerEvents", "auto");
 												}
 											}
 											if (
 												params.repeatForever != null &&
-												params.repeatForever == "Y"
+												params.repeatForever === "Y"
 											) {
 												params.delay = params.delay - params.startTime;
 												params.startTime = 0;
@@ -2952,11 +2952,11 @@ function startFade(params) {
 						duration: params.duration,
 						easing: easingVar,
 						complete: function() {
-							if ($(tg).css("opacity") == 0) {
+							if ($(tg).css("opacity") === 0) {
 								$(tg).hide();
 							}
 
-							if (params.repeatForever != null && params.repeatForever == "Y") {
+							if (params.repeatForever != null && params.repeatForever === "Y") {
 								params.delay = params.delay - params.startTime;
 								params.startTime = 0;
 								$(tg).css("opacity", originOpacity);
@@ -2964,13 +2964,13 @@ function startFade(params) {
 							} else {
 								if (
 									params.opacity > 0 &&
-									jQuery.data($(tg).get(0), "touch") == "y"
+									jQuery.data($(tg).get(0), "touch") === "y"
 								) {
 									$(tg).show();
 									$(tg).css("pointerEvents", "auto");
 								} else if (
-									params.opacity == 0 &&
-									jQuery.data($(tg).get(0), "touch") == "y"
+									params.opacity === 0 &&
+									jQuery.data($(tg).get(0), "touch") === "y"
 								) {
 									$(tg).hide();
 									$(tg).css("pointerEvents", "none");
@@ -2991,13 +2991,13 @@ function playMovie(params) {
 	//console.log("playMovie");
 	var target = params.target[0];
 	var videoSource = params.videoSrc;
-	if (params.actSubType == "Stop") {
+	if (params.actSubType === "Stop") {
 		//console.log("playMovie11");
 		jQuery.data(target, "state", "stop");
 		target.pause();
 		target.currentTime = 0;
 		videobox = null;
-	} else if (params.actSubType == "Pause") {
+	} else if (params.actSubType === "Pause") {
 		jQuery.data(target, "state", "pause");
 		//console.log("playMovie11");
 		target.pause();
@@ -3014,7 +3014,7 @@ function playMovie(params) {
 				document.getElementById("mp4").setAttribute("src", videoSource);
 				target.load();
 			}
-			if (target.paused != true || jQuery.data(target, "state") == "stop")
+			if (target.paused != true || jQuery.data(target, "state") === "stop")
 				target.load();
 		} else {
 			console.debug(videoSource);
@@ -3050,14 +3050,14 @@ function playSound(params) {
 			target.removeEventListener("timeupdate", functionS, null);
 		} catch (e) {}
 
-		if (params.actSubType == "Pause Sound") {
+		if (params.actSubType === "Pause Sound") {
 			target.pause();
 			distributeNextAction(params.nextAction);
-		} else if (params.actSubType == "Stop Sound") {
+		} else if (params.actSubType === "Stop Sound") {
 			target.pause();
 			target.currentTime = 0;
 			distributeNextAction(params.nextAction);
-		} else if (params.actSubType == "Play Sound") {
+		} else if (params.actSubType === "Play Sound") {
 			SoundPromisePlay(target);
 			target.addEventListener(
 				"ended",
@@ -3075,10 +3075,10 @@ function playSound(params) {
 				target.src = jQuery.data(jQuery.data(TargetTable, k), "VariablePath");
 			}
 
-			if (params.ReadyPlayer == "NO") {
+			if (params.ReadyPlayer === "NO") {
 				SoundPromisePlay(target);
 				//console.log("repeatCount : "+ params.repeatCount + ", soundPath : " + soundPath);
-				if (params.useSectionPlay == "YES") {
+				if (params.useSectionPlay === "YES") {
 					target.addEventListener("loadeddata", function() {
 						target.currentTime = params.secStartTime / 1000.0;
 					});
@@ -3090,7 +3090,7 @@ function playSound(params) {
 								target.currentTime = params.secStartTime / 1000.0;
 								if (
 									params.repeatForever != null &&
-									params.repeatForever == "Y"
+									params.repeatForever === "Y"
 								) {
 									SoundPromisePlay(target);
 								} else if (params.repeatCount > 0) {
@@ -3116,7 +3116,7 @@ function playSound(params) {
 								target.currentTime = 0;
 								if (
 									params.repeatForever != null &&
-									params.repeatForever == "Y"
+									params.repeatForever === "Y"
 								) {
 									SoundPromisePlay(target);
 								} else if (params.repeatCount > 0) {
@@ -3152,7 +3152,7 @@ function SoundPromisePlay(media) {
 
 function startMove(params) {
 	//console.log("startMove");
-	if (params.actSubType == "Curve To") {
+	if (params.actSubType === "Curve To") {
 		makeCurve(params);
 		return;
 	}
@@ -3191,9 +3191,9 @@ function startMove(params) {
 		var targetx = params.toX;
 		var targety = params.toY;
 
-		if (groupCheck == 2) {
+		if (groupCheck === 2) {
 			var groupRect = GroupResizing(tg);
-		} else if (groupCheck == 1) {
+		} else if (groupCheck === 1) {
 			var groupTg = tg.parentElement.parentElement;
 			var st = window.getComputedStyle(tg, null);
 			var tr = st.getPropertyValue("transform-origin").split("px");
@@ -3232,12 +3232,12 @@ function startMove(params) {
 			$(tg).css("transform-origin", "50% " + "50%");
 		}
 
-		if (params.actSubType == "Move By") {
+		if (params.actSubType === "Move By") {
 			targetx = params.toX + absX;
 			targety = params.toY + absY;
 		}
 
-		if (params.reverse == "Y") {
+		if (params.reverse === "Y") {
 			startMoveTimer = setTimeout(function() {
 				$(tg).animate(
 					{
@@ -3262,7 +3262,7 @@ function startMove(params) {
 										complete: function() {
 											if (
 												params.repeatForever != null &&
-												params.repeatForever == "Y"
+												params.repeatForever === "Y"
 											) {
 												params.delay = params.delay - params.startTime;
 												params.startTime = 0;
@@ -3300,7 +3300,7 @@ function startMove(params) {
 						queue: false,
 						complete: function() {
 							//console.log("after" + "/" + tg.offsetLeft + "/" + absY);
-							if (params.repeatForever != null && params.repeatForever == "Y") {
+							if (params.repeatForever != null && params.repeatForever === "Y") {
 								params.delay = params.delay - params.startTime;
 								params.startTime = 0;
 								startMove(params);
@@ -3328,7 +3328,7 @@ function makeCurve(params) {
 		var tg = params.target[i];
 		startCurveTimer = setTimeout(function() {
 			var path = params.elements;
-			if (jQuery.data($(params.target[0]).get(0), "reverse") == "Y") {
+			if (jQuery.data($(params.target[0]).get(0), "reverse") === "Y") {
 				path = params.reverselements;
 			} else {
 				path = params.elements;
@@ -3415,7 +3415,7 @@ function gotoPage(params) {
 			}
 		}
 
-		if (isNaN(params) == false) {
+		if (isNaN(params) === false) {
 			if (params > 0 && params <= totalPage) {
 				params = {
 					actSubType: "Next",
@@ -3428,7 +3428,7 @@ function gotoPage(params) {
 			} else return;
 		} else {
 			for (var key in BK_DB.PageList) {
-				if (params["goto"] == BK_DB.PageList[key].link) {
+				if (params["goto"] === BK_DB.PageList[key].link) {
 					BK_DB.PageNow = BK_DB.PageList[key];
 					break;
 				}
@@ -3441,7 +3441,7 @@ function gotoPage(params) {
 			if (
 				$(this)
 					.find(" h3 > a > .pagenum")
-					.text() == BK_DB.PageNow.pagenum
+					.text() === BK_DB.PageNow.pagenum
 			) {
 				is_marked = true;
 			}
@@ -3458,18 +3458,18 @@ function gotoPage(params) {
 	//console.log("gotoPage : " + params.goto);
 	//console.log("gotoPage : SubType " + params.actSubType);
 	setTimeout(function() {
-		if (params.target != null && params.target.length == 1) {
+		if (params.target != null && params.target.length === 1) {
 			$("#contents").attr("src", params.goto);
 		} else {
-			if (params.goto == "Home") {
+			if (params.goto === "Home") {
 				window.location.assign("../pb.html");
-			} else if (params.goto == "Finish") {
+			} else if (params.goto === "Finish") {
 				finish();
-			} else if (params.goto == "startActionLibrary") {
+			} else if (params.goto === "startActionLibrary") {
 				willStart(params.actSubType);
-			} else if (params.goto == "endActionLibrary") {
+			} else if (params.goto === "endActionLibrary") {
 				didFinish(params.actSubType);
-			} else if (params.goto == "contentsClick") {
+			} else if (params.goto === "contentsClick") {
 				contentsClick();
 			} else {
 				if (IsPbHTML()) {
@@ -3477,7 +3477,7 @@ function gotoPage(params) {
 				} else {
 					var temp = window.location.toString().split("/");
 					temp[temp.length - 1] = params.goto;
-					if (params.goto == "Backward") {
+					if (params.goto === "Backward") {
 						javascript: history.go(-1);
 					} else {
 						window.location = temp.join("/");
@@ -3564,9 +3564,9 @@ function startScaleMove(params) {
 		var targetx = params.toX,
 			targety = params.toY;
 
-		if (groupCheck == 2) {
+		if (groupCheck === 2) {
 			var groupRect = GroupResizing(tg);
-		} else if (groupCheck == 1) {
+		} else if (groupCheck === 1) {
 			var groupTg = tg.parentElement.parentElement;
 			var groupRect = GroupResizing(groupTg);
 			var st = window.getComputedStyle(tg, null);
@@ -3631,7 +3631,7 @@ function startScaleMove(params) {
 			$(tg).css("transform-origin", "50% " + "50%");
 		}
 
-		if (params.reverse == "Y") {
+		if (params.reverse === "Y") {
 			startScaleMoveTimer = setTimeout(function() {
 				$(tg).animate(
 					{
@@ -3646,7 +3646,7 @@ function startScaleMove(params) {
 						easing: easingVar,
 						step: function() {
 							var child = document.getElementById($(tg).attr("id") + "_child1");
-							if (groupCheck == 2) {
+							if (groupCheck === 2) {
 								child = document.getElementById(
 									$(tg).attr("id") + "_container"
 								);
@@ -3784,7 +3784,7 @@ function startScaleMove(params) {
 											var child = document.getElementById(
 												$(tg).attr("id") + "_child1"
 											);
-											if (groupCheck == 2) {
+											if (groupCheck === 2) {
 												child = document.getElementById(
 													$(tg).attr("id") + "_container"
 												);
@@ -3917,7 +3917,7 @@ function startScaleMove(params) {
 										complete: function() {
 											if (
 												params.repeatForever != null &&
-												params.repeatForever == "Y"
+												params.repeatForever === "Y"
 											) {
 												params.delay = params.delay - params.startTime;
 												params.startTime = 0;
@@ -3931,7 +3931,7 @@ function startScaleMove(params) {
 												var child = document.getElementById(
 													$(tg).attr("id") + "_child1"
 												);
-												if (groupCheck == 2) {
+												if (groupCheck === 2) {
 													child = document.getElementById(
 														$(tg).attr("id") + "_container"
 													);
@@ -4014,7 +4014,7 @@ function startScaleMove(params) {
 						queue: false,
 						step: function() {
 							var child = document.getElementById($(tg).attr("id") + "_child1");
-							if (groupCheck == 2) {
+							if (groupCheck === 2) {
 								child = document.getElementById(
 									$(tg).attr("id") + "_container"
 								);
@@ -4136,7 +4136,7 @@ function startScaleMove(params) {
 							}
 						},
 						complete: function() {
-							if (params.repeatForever != null && params.repeatForever == "Y") {
+							if (params.repeatForever != null && params.repeatForever === "Y") {
 								params.delay = params.delay - params.startTime;
 								params.startTime = 0;
 								startScaleMove(params);
@@ -4144,7 +4144,7 @@ function startScaleMove(params) {
 								var child = document.getElementById(
 									$(tg).attr("id") + "_child1"
 								);
-								if (groupCheck == 2) {
+								if (groupCheck === 2) {
 									child = document.getElementById(
 										$(tg).attr("id") + "_container"
 									);
@@ -4228,7 +4228,7 @@ function startRotate(params) {
 		var groupCheck = IsGroup(tg);
 		var anchorPoint = "'" + params.anchorX + "% " + params.anchorY + "%'";
 
-		if (groupCheck == 2) {
+		if (groupCheck === 2) {
 			var groupRect = GroupResizing(tg);
 		}
 
@@ -4242,7 +4242,7 @@ function startRotate(params) {
 
 		if (tr != null && tr != "none") {
 			var values =
-				tr == null
+				tr === null
 					? null
 					: tr
 							.split("(")[1]
@@ -4263,27 +4263,27 @@ function startRotate(params) {
 		var tr = st.getPropertyValue("transform-origin");
 
 		var xy = RotatePoint(tg, params.anchorX, params.anchorY, null, null, 1);
-		//if (!(params.anchorX == 50 && params.anchorY == 50)) {
+		//if (!(params.anchorX === 50 && params.anchorY === 50)) {
 		$(tg).css("left", xy[0] - xy[2] * (params.anchorX / 100)); //nx, width
 		$(tg).css("top", xy[1] - xy[3] * (params.anchorY / 100)); // ny, height
 		//}
 
 		$(tg).css("transform-origin", params.anchorX + "% " + params.anchorY + "%");
 
-		if (params.reverse == "Y") {
+		if (params.reverse === "Y") {
 			startRotateTimer = setTimeout(function() {
 				var revAngle = GetAngle(tg);
 				var aniAngle = params.angle;
 
-				if (params.actSubType == "Rotate By") {
+				if (params.actSubType === "Rotate By") {
 					aniAngle = aniAngle + nowAngle;
 					revAngle = nowAngle;
 				}
 
-				if (groupCheck == 1)
+				if (groupCheck === 1)
 					aniAngle -= GetAngle(tg.parentElement.parentElement);
 				var graphicSpacing;
-				if (!tg.nodeName == "X-TEXTBOX") graphicSpacing = "borderSpacing";
+				if (!tg.nodeName === "X-TEXTBOX") graphicSpacing = "borderSpacing";
 
 				$(tg).animate(
 					{
@@ -4339,7 +4339,7 @@ function startRotate(params) {
 										complete: function() {
 											if (
 												params.repeatForever != null &&
-												params.repeatForever == "Y"
+												params.repeatForever === "Y"
 											) {
 												$(tg).css("borderSpacing", 0);
 												params.delay = params.delay - params.startTime;
@@ -4367,7 +4367,7 @@ function startRotate(params) {
 			}, params.delay);
 		} else {
 			var initialRotate = $(tg).css("rotate");
-			if (typeof initialRotate == "string" || initialRotate instanceof String)
+			if (typeof initialRotate === "string" || initialRotate instanceof String)
 				initialRotate = initialRotate.replace("deg", "");
 			startRotateTimer = null;
 			startRotateTimer = setTimeout(function() {
@@ -4376,16 +4376,16 @@ function startRotate(params) {
 
 				if (params.actSubType != "Rotate By") {
 					//aniAngle = aniAngle - nowAngle;
-					if (aniAngle == nowAngle) return;
+					if (aniAngle === nowAngle) return;
 				} else {
 					aniAngle += parseFloat(initialRotate);
 				}
 				nowAngle = 0;
 
-				if (groupCheck == 1)
+				if (groupCheck === 1)
 					aniAngle -= GetAngle(tg.parentElement.parentElement);
 				var graphicSpacing;
-				if (!(tg.nodeName == "X-TEXTBOX")) graphicSpacing = "borderSpacing";
+				if (!(tg.nodeName === "X-TEXTBOX")) graphicSpacing = "borderSpacing";
 
 				$(tg).animate(
 					{
@@ -4409,7 +4409,7 @@ function startRotate(params) {
 							);
 						},
 						complete: function() {
-							if (params.repeatForever != null && params.repeatForever == "Y") {
+							if (params.repeatForever != null && params.repeatForever === "Y") {
 								$(tg).css("borderSpacing", 0);
 								$(tg).css("transform", "rotate(" + initialRotate + ")");
 								startRotate(params);
@@ -4440,7 +4440,7 @@ function startFlip(params) {
 	for (var i = 0; i < params.target.length; i++) {
 		var tg = params.target[i];
 		startFlipTimer = setTimeout(function() {
-			if (params.actSubType == "Flip X") {
+			if (params.actSubType === "Flip X") {
 				$(tg).css(
 					"-webkit-transform",
 					"translateZ(" + $(tg).height() / 2 + ")"
@@ -4502,7 +4502,7 @@ function flipX(params, tg) {
 		aniAngle = -180;
 	}
 
-	if (params.reverse == "Y") {
+	if (params.reverse === "Y") {
 		$(tg).animate(
 			{
 				rotateX: aniAngle,
@@ -4524,7 +4524,7 @@ function flipX(params, tg) {
 								complete: function() {
 									if (
 										params.repeatForever != null &&
-										params.repeatForever == "Y"
+										params.repeatForever === "Y"
 									) {
 										params.delay = params.delay - params.startTime;
 										params.startTime = 0;
@@ -4556,7 +4556,7 @@ function flipX(params, tg) {
 				duration: params.duration,
 				easing: easingVar,
 				complete: function() {
-					if (params.repeatForever != null && params.repeatForever == "Y") {
+					if (params.repeatForever != null && params.repeatForever === "Y") {
 						startFlip(params);
 					} else if (params.repeatCount > 0) {
 						params.delay = params.delay - params.startTime;
@@ -4617,7 +4617,7 @@ function flipY(params, tg) {
 			break;
 	}
 
-	if (params.reverse == "Y") {
+	if (params.reverse === "Y") {
 		$(tg).animate(
 			{
 				rotateY: aniAngle,
@@ -4639,7 +4639,7 @@ function flipY(params, tg) {
 								complete: function() {
 									if (
 										params.repeatForever != null &&
-										params.repeatForever == "Y"
+										params.repeatForever === "Y"
 									) {
 										params.delay = params.delay - params.startTime;
 										params.startTime = 0;
@@ -4671,7 +4671,7 @@ function flipY(params, tg) {
 				duration: params.duration,
 				easing: easingVar,
 				complete: function() {
-					if (params.repeatForever != null && params.repeatForever == "Y") {
+					if (params.repeatForever != null && params.repeatForever === "Y") {
 						startFlip(params);
 					} else if (params.repeatCount > 0) {
 						params.delay = params.delay - params.startTime;
@@ -4702,10 +4702,10 @@ function startAnimation(params) {
 
 		var aniIndex = 0;
 		if (
-			jQuery.data($(tg).get(0), "stopAction") == null ||
-			jQuery.data($(tg).get(0), "stopAction") == "N"
+			jQuery.data($(tg).get(0), "stopAction") === null ||
+			jQuery.data($(tg).get(0), "stopAction") === "N"
 		) {
-			if (params.autoReverse == "Y") {
+			if (params.autoReverse === "Y") {
 				setTimeout(function() {
 					for (var i = 1; i < length + 1; i++) {
 						var res = aniImages[length - i];
@@ -4721,11 +4721,11 @@ function startAnimation(params) {
 					function changeImage() {
 						$(tg).attr("src", aniImages[aniIndex]);
 						aniIndex = aniIndex + 1;
-						if (aniIndex == aniImages.length) {
+						if (aniIndex === aniImages.length) {
 							//console.log("aniIndex equal");
 							aniImages = null;
 							window.clearInterval(aniTimer);
-							if (params.repeatForever != null && params.repeatForever == "Y") {
+							if (params.repeatForever != null && params.repeatForever === "Y") {
 								startAnimation(params);
 							} else if (params.repeatCount > 0) {
 								startAnimation(params);
@@ -4751,19 +4751,19 @@ function startAnimation(params) {
 							$(tg).attr("src", aniImages[aniIndex]);
 							aniIndex = aniIndex + 1;
 
-							if (aniIndex == aniImages.length) {
+							if (aniIndex === aniImages.length) {
 								//console.log("aniIndex equal");
 								window.clearInterval(aniTimer);
 								if (
 									params.repeatForever != null &&
-									params.repeatForever == "Y"
+									params.repeatForever === "Y"
 								) {
 									startAnimation(params);
 								} else if (params.repeatCount > 0) {
 									startAnimation(params);
 									params.repeatCount -= 1;
 								} else {
-									if (params.restoreOrigin == "Y") $(tg).attr("src", revImages);
+									if (params.restoreOrigin === "Y") $(tg).attr("src", revImages);
 									distributeNextAction(params.nextAction);
 								}
 								return;
@@ -4784,14 +4784,14 @@ function startToggle(params) {
         var imageRes = null;
 
 
-        if (params.actSubType == "Show") {
-            if (params.obj.hidden == true) {
+        if (params.actSubType === "Show") {
+            if (params.obj.hidden === true) {
                 $(params.obj).removeClass("collapse");
             } else {
                 $(params.obj).addClass("collapse");
             }
             return;
-        } else if (params.actSubType == "Toggle") {
+        } else if (params.actSubType === "Toggle") {
 
             params.obj.changeToggleState();
             var curState = params.obj.state;
@@ -4805,9 +4805,9 @@ function startToggle(params) {
 
             var curState = params.obj.state;
 
-            var nextState = params.actSubType == "Off" ? false : true;
+            var nextState = params.actSubType === "Off" ? false : true;
 
-            if (curState == nextState) {
+            if (curState === nextState) {
                 distributeNextAction(params.nextAction);
                 return;
             }
@@ -4837,7 +4837,7 @@ function startToggle(params) {
 }
 
 function changeToggleState(obj) {
-	if (obj.state == true) {
+	if (obj.state === true) {
 		obj.state = false;
 	} else {
 		obj.state = true;
@@ -4874,7 +4874,7 @@ function startConditionalAction(params) {
 			var compareType = cloneActionConditinalNode.conditionCompare;
 
 			var isIgnoreCase =
-				cloneActionConditinalNode.caseSensitive == "Y" ? "N" : "Y";
+				cloneActionConditinalNode.caseSensitive === "Y" ? "N" : "Y";
 
 			//console.log("tag:conditional/" + targetA_attribute);
 			//console.log("tag:conditional/" + targetB_attribute);
@@ -4884,30 +4884,30 @@ function startConditionalAction(params) {
 
 			var compareValueA = getCompareValue(targetA, targetA_attribute);
 
-			if (compareValueA == undefined || compareValueA == null) {
+			if (compareValueA === undefined || compareValueA === null) {
 				compareValueA = "sdafadsfsadfsdfasfasfsa";
 			}
 			//console.log("tag:conditional/" + "compareValueA->" + compareValueA);
 			var compareValueB = getCompareValue(targetB, targetB_attribute);
-			if (compareValueB == undefined || compareValueB == null) {
+			if (compareValueB === undefined || compareValueB === null) {
 				compareValueB = "sadfasdfasdfasdfsadfasdfs";
 			}
 			//console.log("tag:conditional/" + "compareValueB->" + compareValueB);
 
-			if (conditionalName == "�뺣떟泥댄겕") {
+			if (conditionalName === "�뺣떟泥댄겕") {
 				//alert(compareValueA + "//" + compareValueB +"//" + targetA_attribute + "//" + targetA);
 			}
 			var result = false;
-			if (targetA_attribute == "Area" || targetA_attribute == "Area") {
+			if (targetA_attribute === "Area" || targetA_attribute === "Area") {
 				result = getCompareResultByRect(targetA, targetB, compareType);
 				//console.log("tag:conditional/" + "compare getCompareResultByRect=>" + result);
 			} else if (
-				compareType == "==" ||
-				compareType == "!=" ||
-				compareType == "ContainsAll" ||
-				compareType == "Contains" ||
-				compareType == "StartsWith" ||
-				compareType == "EndsWith"
+				compareType === "==" ||
+				compareType === "!=" ||
+				compareType === "ContainsAll" ||
+				compareType === "Contains" ||
+				compareType === "StartsWith" ||
+				compareType === "EndsWith"
 			) {
 				result = getCompareResultByString(
 					compareValueA,
@@ -4927,7 +4927,7 @@ function startConditionalAction(params) {
 			}
 
 			var action = null;
-			if (result == true) {
+			if (result === true) {
 				action = cloneActionConditinalNode.trueAction;
 				//console.log("tag:conditional/" + "start True Action");
 			} else {
@@ -4946,9 +4946,9 @@ function startConditionalAction(params) {
 function getCompareResultByRect(rectA, rectB, compareType) {
 	var result = false;
 	// �좎룞�숋옙�⑥삕�좑옙 占쎌쥙�⑵짆�쏆삕�좑옙.
-	if (compareType == "==") {
-	} else if (compareType == "!=") {
-	} else if (compareType == "ContainsAll") {
+	if (compareType === "==") {
+	} else if (compareType === "!=") {
+	} else if (compareType === "ContainsAll") {
 		if (
 			rectB.x >= rectA.x &&
 			rectB.x + rectB.w <= rectA.x + rectA.w &&
@@ -4960,7 +4960,7 @@ function getCompareResultByRect(rectA, rectB, compareType) {
 		} else {
 			result = false;
 		}
-	} else if (compareType == "Intersect") {
+	} else if (compareType === "Intersect") {
 		var bounds = [
 			{ x: rectB.x, y: rectB.y },
 			{ x: rectB.x + rectB.width, y: rectB.y },
@@ -5044,56 +5044,56 @@ function getCompareResultByString(
 	}
 
 	//�좎룞�숋옙�⑥삕�좑옙 占쎌쥙�⑵짆�쏆삕�좑옙.
-	if (compareType == "==") {
-		if (a.length == b.length) {
+	if (compareType === "==") {
+		if (a.length === b.length) {
 			var matchCount = 0;
 			for (var i = 0; i < a.length; i++) {
-				if (isIgnoreCase == "Y") {
+				if (isIgnoreCase === "Y") {
 					var lowerA = a[i].toLocaleLowerCase();
 					var lowerB = b[i].toLocaleLowerCase();
-					if (lowerA == lowerB) {
+					if (lowerA === lowerB) {
 						matchCount++;
 					}
 				} else {
-					if (a[i] == b[i]) {
+					if (a[i] === b[i]) {
 						matchCount++;
 					}
 				}
 			}
-			if (matchCount == a.length) {
+			if (matchCount === a.length) {
 				result = true;
 			}
 		}
-	} else if (compareType == "!=") {
+	} else if (compareType === "!=") {
 		if (a.length != b.length) {
 			result = true;
 		} else {
 			var matchCount = 0;
 			for (var i = 0; i < a.length; i++) {
-				if (isIgnoreCase == "Y") {
+				if (isIgnoreCase === "Y") {
 					var lowerA = a[i].toLocaleLowerCase();
 					var lowerB = b[i].toLocaleLowerCase();
-					if (lowerA == lowerB) {
+					if (lowerA === lowerB) {
 						matchCount++;
 					}
 				} else {
-					if (a[i] == b[i]) {
+					if (a[i] === b[i]) {
 						matchCount++;
 					}
 				}
 			}
-			if (!(matchCount == a.length)) {
+			if (!(matchCount === a.length)) {
 				result = true;
 			}
 		}
-	} else if (compareType == "ContainsAll") {
-		if (a.length == b.length) {
+	} else if (compareType === "ContainsAll") {
+		if (a.length === b.length) {
 			var matchCount = 0;
 			var tempA = a.slice(0);
 			var tempB = b.slice(0);
 			for (var i = 0; i < a.length; i++) {
 				for (var j = 0; j < b.length; j++) {
-					if (isIgnoreCase == "Y") {
+					if (isIgnoreCase === "Y") {
 						var lowerA = tempA[i].toLocaleLowerCase();
 						var lowerB = tempB[j].toLocaleLowerCase();
 
@@ -5103,7 +5103,7 @@ function getCompareResultByString(
 							tempB[j] = "!#$!$!$!" + j;
 						}
 					} else {
-						if (tempA[i] == tempB[j]) {
+						if (tempA[i] === tempB[j]) {
 							matchCount++;
 							tempA[i] = "!#$!@$!#$!@" + i;
 							tempB[j] = "!#$!$!$!" + j;
@@ -5111,18 +5111,18 @@ function getCompareResultByString(
 					}
 				}
 			}
-			if (matchCount == a.length) {
+			if (matchCount === a.length) {
 				result = true;
 			}
 		}
-	} else if (compareType == "Contains") {
-		if (a.length == b.length) {
+	} else if (compareType === "Contains") {
+		if (a.length === b.length) {
 			var matchCount = 0;
 			var tempA = a.slice(0);
 			var tempB = b.slice(0);
 			for (var i = 0; i < a.length; i++) {
 				for (var j = 0; j < b.length; j++) {
-					if (isIgnoreCase == "Y") {
+					if (isIgnoreCase === "Y") {
 						var lowerA = tempA[i].toLocaleLowerCase();
 						var lowerB = tempB[j].toLocaleLowerCase();
 
@@ -5132,7 +5132,7 @@ function getCompareResultByString(
 							tempB[j] = "!#$!$!$!" + j;
 						}
 					} else {
-						if (tempA[i] == tempB[j]) {
+						if (tempA[i] === tempB[j]) {
 							matchCount++;
 							tempA[i] = "!#$!@$!#$!@" + i;
 							tempB[j] = "!#$!$!$!" + j;
@@ -5140,12 +5140,12 @@ function getCompareResultByString(
 					}
 				}
 			}
-			if (matchCount == b.length) {
+			if (matchCount === b.length) {
 				result = true;
 			}
 		}
-	} else if (compareType == "StartsWith") {
-	} else if (compareType == "EndsWith") {
+	} else if (compareType === "StartsWith") {
+	} else if (compareType === "EndsWith") {
 	}
 
 	return result;
@@ -5185,13 +5185,13 @@ function getCompareResultByNumber(
 
 	a = parseInt(a);
 	b = parseInt(b);
-	if (compareType == ">") {
+	if (compareType === ">") {
 		result = a > b;
-	} else if (compareType == ">=") {
+	} else if (compareType === ">=") {
 		result = a >= b;
-	} else if (compareType == "<") {
+	} else if (compareType === "<") {
 		result = a < b;
-	} else if (compareType == "<=") {
+	} else if (compareType === "<=") {
 		result = a <= b;
 	}
 
@@ -5200,11 +5200,11 @@ function getCompareResultByNumber(
 
 function getCompareValue(target, attribute) {
 	var compareValue = null;
-	if (target == "^UserInput") {
+	if (target === "^UserInput") {
 		compareValue = attribute;
-	} else if (attribute == "Tag") {
+	} else if (attribute === "Tag") {
 		compareValue = jQuery.data($(target).get(0), "tag");
-	} else if (attribute == "Tag Count") {
+	} else if (attribute === "Tag Count") {
 		var textCount = 1;
 		try {
 			var str = jQuery.data($(target).get(0), "tag");
@@ -5212,13 +5212,13 @@ function getCompareValue(target, attribute) {
 			textCount = arrSplit.length;
 		} catch (err) {}
 		compareValue = textCount + "";
-	} else if (attribute == "Text") {
+	} else if (attribute === "Text") {
 		compareValue = jQuery.data($(target).get(0), "text");
 		//$(target).val(compareValue);
 		changeDisplayedText(target, compareValue);
-	} else if (attribute == "Text Count") {
+	} else if (attribute === "Text Count") {
 		compareValue = jQuery.data($(target).get(0), "text").length;
-	} else if (attribute == "Alpha") {
+	} else if (attribute === "Alpha") {
 		// compareValue =
 		// String.valueOf(target.getmTargetView().getAlpha());
 		var targetRect = {
@@ -5258,7 +5258,7 @@ function startLibraryAction(params) {
 				ActionLibraryTable,
 				actionLibraryName
 			);
-			if (actionLibraryNode == null) {
+			if (actionLibraryNode === null) {
 				// jaeho - 20151125
 				// onFinish보다 늦게 호출되는 경우 발생으로인한 오류 방지하기 위해, 찾지 못한 target을 돌려준다
 				var count = 0;
@@ -5267,13 +5267,13 @@ function startLibraryAction(params) {
 					if (ActionLibraryTable.hasOwnProperty(key)) {
 						var data = ActionLibraryTable[key];
 						for (var dkey in data) {
-							if (dkey == "data") {
+							if (dkey === "data") {
 								count = Object.keys(data).length;
 								found = true;
 								break;
 							}
 						}
-						if (found == true) break;
+						if (found === true) break;
 					}
 				}
 				targetNotFound(actionLibraryName, count);
@@ -5282,7 +5282,7 @@ function startLibraryAction(params) {
 			var cloneActionLibraryNode = new Object();
 			$.extend(true, cloneActionLibraryNode, actionLibraryNode);
 
-			if (cloneActionLibraryNode.rand == "Y")
+			if (cloneActionLibraryNode.rand === "Y")
 				distributeAction(
 					actionLibraryNode,
 					"ActionLibrary",
@@ -5396,7 +5396,7 @@ function startStopAll(params) {
 			try {
 				var curveTimer = jQuery.data($(params.target[0]).get(0), "curveTimer");
 
-				if (typeof curveTimer == "undefined") {
+				if (typeof curveTimer === "undefined") {
 					curveTimer = jQuery.data(tg, "curveTimer");
 					//console.log(tg);
 					//console.log(curveTimer);
@@ -5408,7 +5408,7 @@ function startStopAll(params) {
 
 			try {
 				var aniTimer = jQuery.data($(tg).get(0), "animation_Timer");
-				if (typeof curveTimer == "undefined") {
+				if (typeof curveTimer === "undefined") {
 					aniTimer = jQuery.data(tg, "animation_Timer");
 				}
 				clearInterval(aniTimer);
@@ -5487,8 +5487,8 @@ function falsefunc(e) {
 	firstX = e.offsetX || e.touches[0].clientX;
 	firstY = e.offsetY || e.touches[0].clientY;
 	//console.log("falsefunc : " + firstX)
-	if (paramsobj.objectType == "scrollBox") {
-		if (paramsobj.pagingScroll == "Y") {
+	if (paramsobj.objectType === "scrollBox") {
+		if (paramsobj.pagingScroll === "Y") {
 			switch (paramsobj.paramValue[0].Direction) {
 				case "Horiz":
 					$(dragobj).stop();
@@ -5570,7 +5570,7 @@ function grab(context, rand, params) {
 	elex = orix = $(dragobj).css("left");
 	eley = oriy = $(dragobj).css("top");
 
-	if (paramsobj.isSwipe == "N") {
+	if (paramsobj.isSwipe === "N") {
 		document.onmousemove = drag;
 		document.onmouseup = drop;
 
@@ -5629,8 +5629,8 @@ function out(e) {
 	console.log("[OUT] isMouseDown : " + isMousedown);
 	var localOffsetX = scrollOffsetX;
 	var localOffsetY = scrollOffsetY;
-	if (paramsobj.objectType == "scrollBox") {
-		if (paramsobj.pagingScroll == "Y") {
+	if (paramsobj.objectType === "scrollBox") {
+		if (paramsobj.pagingScroll === "Y") {
 			isScrollAnimate = true;
 			switch (paramsobj.paramValue[0].Direction) {
 				case "Horiz":
@@ -5732,7 +5732,7 @@ function out(e) {
 	/*if(isMousedown){
      //console.log("triggerAction")
      isMousedown = false;
-     if(paramsobj.paramValue[0].Direction == 'Vert'){
+     if(paramsobj.paramValue[0].Direction === 'Vert'){
      if(deltaY > 0){
      firstY = canvasY;
      distributeAction(this, 'down', 'N', [[{actType:13, actSubType: 'Go Next', effect : paramsobj.effect, useAnimation : paramsobj.useAnimation, target:[dragobj], Direction : paramsobj.paramValue[0].Direction, startTime:0, delay:0, duration: paramsobj.duration }]])
@@ -5764,7 +5764,7 @@ function out(e) {
 function drop(e) {
 	console.log("마우스 업sdfsdfads이라고???");
 	e.preventDefault();
-	if (paramsobj.isSwipe == "Y") {
+	if (paramsobj.isSwipe === "Y") {
 		isMousedown = false;
 		isActed = false;
 		clickedEnter = false;
@@ -5778,8 +5778,8 @@ function drop(e) {
 		var localOffsetX = scrollOffsetX;
 		var localOffsetY = scrollOffsetY;
 
-		if (paramsobj.objectType == "scrollBox") {
-			if (paramsobj.pagingScroll == "Y") {
+		if (paramsobj.objectType === "scrollBox") {
+			if (paramsobj.pagingScroll === "Y") {
 				isScrollAnimate = true;
 				switch (paramsobj.paramValue[0].Direction) {
 					case "Horiz":
@@ -5896,7 +5896,7 @@ function drag(e) {
 	// parameter passing is important for NS family
 	e.preventDefault();
 	try {
-		if (jQuery.data($(dragobj).get(0), "startedInRect") == "Y") {
+		if (jQuery.data($(dragobj).get(0), "startedInRect") === "Y") {
 			console.log("return 01");
 			return;
 		}
@@ -5945,9 +5945,9 @@ function drag(e) {
 		deltaX = firstX - canvasX;
 		deltaY = firstY - canvasY;
 		//console.log("[DRAG] firstX : " + firstX + " e.offsetX : " + e.offsetX + " canvasX : " + canvasX);
-		if (paramsobj.isSwipe == "Y") {
-			if (paramsobj.objectType == "scrollBox") {
-				if (paramsobj.pagingScroll == "Y") {
+		if (paramsobj.isSwipe === "Y") {
+			if (paramsobj.objectType === "scrollBox") {
+				if (paramsobj.pagingScroll === "Y") {
 					switch (paramsobj.paramValue[0].Direction) {
 						case "Horiz":
 							if (scrollOffsetX > 0) {
@@ -5985,7 +5985,7 @@ function drag(e) {
 					$(dragobj).scrollLeft(Math.abs(deltaX));
 				}
 			} else {
-				if (paramsobj.paramValue[0].Direction == "Vert") {
+				if (paramsobj.paramValue[0].Direction === "Vert") {
 					if (deltaY > $(dragobj).height() / 3) {
 						firstY = canvasY;
 						console.log("drag1  : " + firstY);
@@ -6091,7 +6091,7 @@ function drag(e) {
 			dragobj.style.left = afterDragX + "px";
 			dragobj.style.top = afterDragY + "px";
 
-			if (paramsobj.isRect == "Y") {
+			if (paramsobj.isRect === "Y") {
 				console.log("recdddt check :: " + mousex / scale);
 				if (
 					mousex / scale >= actStartRect[0] &&
@@ -6101,12 +6101,12 @@ function drag(e) {
 				) {
 					console.log("In Rect~~~~~~~");
 					if (
-						jQuery.data($(dragobj).get(0), "startedInRect") == null ||
-						jQuery.data($(dragobj).get(0), "startedInRect") == "N"
+						jQuery.data($(dragobj).get(0), "startedInRect") === null ||
+						jQuery.data($(dragobj).get(0), "startedInRect") === "N"
 					) {
 						jQuery.data($(dragobj).get(0), "startedInRect", "Y");
 						//$(dragobj).css("pointerEvents", "none");
-						if (randForDrag == "Y")
+						if (randForDrag === "Y")
 							distributeAction(dragobj, "inRect", "Y", inRectAction);
 						else distributeAction(dragobj, "inRect", "N", inRectAction);
 						dragobj = null;
@@ -6115,7 +6115,7 @@ function drag(e) {
 			} else {
 				//console.log("dragAreaLeftLimit : " + dragAreaLeftLimit + ", dragobj.style.left : " + dragobj.style.left +", dragAreaRightLimit : " + dragAreaRightLimit)
 				for (var j = 0; j < paramsobj.paramValue.length; j++) {
-					if (paramsobj.paramValue[j].Direction == "Vert") {
+					if (paramsobj.paramValue[j].Direction === "Vert") {
 						percentRate =
 							(parseFloat(dragobj.style.top) - parseInt(dragAreaTopLimit)) /
 							(parseInt(dragAreaBottomLimit) - parseInt(dragAreaTopLimit));
@@ -6273,7 +6273,7 @@ function startScroll(params) {
 		var nowScrollY = $(tg).scrollTop();
 
 		//console.log("scrollX => " + nowScrollX + "scrollY => " + nowScrollY);
-		if (params.reverse == "Y") {
+		if (params.reverse === "Y") {
 			setTimeout(function() {
 				$(tg).animate(
 					{
@@ -6296,7 +6296,7 @@ function startScroll(params) {
 										complete: function() {
 											if (
 												params.repeatForever != null &&
-												params.repeatForever == "Y"
+												params.repeatForever === "Y"
 											) {
 												params.delay = params.delay - params.startTime;
 												params.startTime = 0;
@@ -6332,7 +6332,7 @@ function startScroll(params) {
 						duration: params.duration,
 						queue: false,
 						complete: function() {
-							if (params.repeatForever != null && params.repeatForever == "Y") {
+							if (params.repeatForever != null && params.repeatForever === "Y") {
 								params.delay = params.delay - params.startTime;
 								params.startTime = 0;
 								startScroll(params);
@@ -6373,10 +6373,10 @@ CurveAnimator.prototype.animate = function(params, duration, callback, delay) {
 			percent = 1;
 			clearInterval(curveAnim.animTimer);
 
-			if (params.reverse == "Y") {
-				if (jQuery.data($(params.target[0]).get(0), "reverse") == "Y") {
+			if (params.reverse === "Y") {
+				if (jQuery.data($(params.target[0]).get(0), "reverse") === "Y") {
 					jQuery.data($(params.target[0]).get(0), "reverse", "N");
-					if (params.repeatForever != null && params.repeatForever == "Y") {
+					if (params.repeatForever != null && params.repeatForever === "Y") {
 						params.delay = params.delay - params.startTime;
 						params.startTime = 0;
 						makeCurve(params);
@@ -6393,7 +6393,7 @@ CurveAnimator.prototype.animate = function(params, duration, callback, delay) {
 					makeCurve(params);
 				}
 			} else {
-				if (params.repeatForever != null && params.repeatForever == "Y") {
+				if (params.repeatForever != null && params.repeatForever === "Y") {
 					params.delay = params.delay - params.startTime;
 					params.startTime = 0;
 					makeCurve(params);
@@ -6499,7 +6499,7 @@ function reDraw(target, context, image, scaleW, scaleH, timer) {
 	$(target).get(0).width = $(target).width();
 	$(target).get(0).height = $(target).height();
 	context.drawImage(image, 0, 0, $(target).width(), $(target).height());
-	if ($(target).width() == scaleW.replace("px", "")) {
+	if ($(target).width() === scaleW.replace("px", "")) {
 		clearInterval(timer);
 	}
 }
@@ -6548,9 +6548,9 @@ function startLoadData(params) {
 			var jsonData = JSON.parse(tempData);
 			//console.log(jsonData);
 
-			if (preUrl == "http://m.englisheye.co.kr/game/login.asp") {
+			if (preUrl === "http://m.englisheye.co.kr/game/login.asp") {
 				parseLoginData(jsonData);
-			} else if (jsonData[0] == undefined) {
+			} else if (jsonData[0] === undefined) {
 				parseData(jsonData);
 				distributeNextAction(params.nextAction);
 			} else {
@@ -6567,7 +6567,7 @@ function startLoadData(params) {
 
 function parseLoginData(data) {
 	$.each(data, function(k, v) {
-		if (k == "error") {
+		if (k === "error") {
 			alert(v);
 			return;
 		}
@@ -6602,7 +6602,7 @@ function parseData(data) {
 			if (img != null) img.src = imgPath;
 		}
 
-		if (k == "sound") {
+		if (k === "sound") {
 			soundPath = v.path;
 		} else {
 			soundPath = v.sound;
@@ -6642,7 +6642,7 @@ function startChangeData(params) {
 						if (img != null) img.src = imgPath;
 					}
 
-					if (k == "sound") {
+					if (k === "sound") {
 						if (v.path != null && v.path != undefined) {
 							soundPath = v.path;
 						}
@@ -6691,7 +6691,7 @@ function startTimer(params) {
 
 			if (timerStartAction != null) {
 				startActionNode = jQuery.data(ConditionalTable, timerStartAction);
-				if (startActionNode == null) {
+				if (startActionNode === null) {
 					startActionNode = jQuery.data(ActionLibraryTable, timerStartAction);
 					startActionNodeType = "ActionLibrary";
 				}
@@ -6699,7 +6699,7 @@ function startTimer(params) {
 
 			if (timerEndAction != null) {
 				endActionNode = jQuery.data(ConditionalTable, timerEndAction);
-				if (endActionNode == null) {
+				if (endActionNode === null) {
 					endActionNode = jQuery.data(ActionLibraryTable, timerEndAction);
 					endActionNodeType = "ActionLibrary";
 				}
@@ -6708,7 +6708,7 @@ function startTimer(params) {
 			if (timerScheduleAction != null) {
 				scheduleActionNode = jQuery.data(ConditionalTable, timerScheduleAction);
 
-				if (scheduleActionNode == null) {
+				if (scheduleActionNode === null) {
 					scheduleActionNode = jQuery.data(
 						ActionLibraryTable,
 						timerScheduleAction
@@ -6719,7 +6719,7 @@ function startTimer(params) {
 			}
 
 			if (startActionNode != null) {
-				if (startActionNodeType == "Conditional") {
+				if (startActionNodeType === "Conditional") {
 					startConditionalAction({
 						actType: timerStartAction,
 						target: ["Conditional"],
@@ -6763,9 +6763,9 @@ function startTimer(params) {
 				);
 
 				jQuery.data(tg, "currentTime", Number(strTime) - 1);
-				if (Number(strTime) - 1 == 0) {
+				if (Number(strTime) - 1 === 0) {
 					if (endActionNode != null) {
-						if (endActionNodeType == "Conditional") {
+						if (endActionNodeType === "Conditional") {
 							startConditionalAction({
 								actType: timerEndAction,
 								target: ["Conditional"],
@@ -6787,14 +6787,14 @@ function startTimer(params) {
 					clearInterval(timer);
 				}
 				if (scheduleActionNode != null) {
-					if (timerScheduleRepeat != null && timerScheduleRepeat == "1") {
-						if (Number(strTime) - 1 == jQuery.data(tg, "NextScheduleTime")) {
+					if (timerScheduleRepeat != null && timerScheduleRepeat === "1") {
+						if (Number(strTime) - 1 === jQuery.data(tg, "NextScheduleTime")) {
 							jQuery.data(
 								tg,
 								"NextScheduleTime",
 								jQuery.data(tg, "NextScheduleTime") - timerScheduleTime
 							);
-							if (scheduleActionNodeType == "Conditional") {
+							if (scheduleActionNodeType === "Conditional") {
 								startConditionalAction({
 									actType: timerScheduleAction,
 									target: ["Conditional"],
@@ -6814,8 +6814,8 @@ function startTimer(params) {
 							}
 						}
 					} else {
-						if (Number(strTime) - 1 == timerScheduleTime) {
-							if (scheduleActionNodeType == "Conditional") {
+						if (Number(strTime) - 1 === timerScheduleTime) {
+							if (scheduleActionNodeType === "Conditional") {
 								startConditionalAction({
 									actType: timerScheduleAction,
 									target: ["Conditional"],
@@ -6856,14 +6856,14 @@ function stopTimer(params) {
 			var startActionNodeType = "Conditional";
 			if (timerStartAction != null) {
 				startActionNode = jQuery.data(ConditionalTable, timerStartAction);
-				if (startActionNode == null) {
+				if (startActionNode === null) {
 					startActionNode = jQuery.data(ActionLibraryTable, timerStartAction);
 					startActionNodeType = "ActionLibrary";
 				}
 			}
 
 			if (startActionNode != null) {
-				if (startActionNodeType == "Conditional") {
+				if (startActionNodeType === "Conditional") {
 					startConditionalAction({
 						actType: timerStartAction,
 						target: ["Conditional"],
@@ -6900,8 +6900,8 @@ function getDurationString(seconds, initCount) {
 	var initSeconds = parseInt(initCount % 60.0);
 
 	var sb = "";
-	if (initHours == 0) {
-		if (initMinutes == 0) {
+	if (initHours === 0) {
+		if (initMinutes === 0) {
 			sb += twoDigitString(seconds);
 			console.log("1 : " + sb);
 		} else {
@@ -6921,11 +6921,11 @@ function getDurationString(seconds, initCount) {
 }
 
 function twoDigitString(number) {
-	if (number == 0) {
+	if (number === 0) {
 		return "00";
 	}
 
-	if (parseInt(number / 10) == 0) {
+	if (parseInt(number / 10) === 0) {
 		return "0" + number;
 	}
 
@@ -6943,7 +6943,7 @@ Array.prototype.remove = function(value) {
 function stopBlink(tg, originImage, ShowAtFinish) {
 	var blink_timer = jQuery.data(tg, "blink_timer");
 	clearInterval(blink_timer);
-	if (ShowAtFinish == "Y") {
+	if (ShowAtFinish === "Y") {
 		$(tg).show();
 	} else {
 		$(tg).hide();
@@ -6963,13 +6963,13 @@ function convertToMyLevel(course, level, month) {
 	month = replaceAll(month, "Month", "");
 	month = replaceAll(month, "0", "");
 
-	if (month == "1") {
+	if (month === "1") {
 		month = "A";
 	}
-	if (month == "2") {
+	if (month === "2") {
 		month = "B";
 	}
-	if (month == "3") {
+	if (month === "3") {
 		month = "C";
 	}
 
@@ -6980,7 +6980,7 @@ $.urlParam = function(name) {
 	var results = new RegExp("[?&]" + name + "=([^&#]*)").exec(
 		window.location.href
 	);
-	if (results == null) {
+	if (results === null) {
 		return null;
 	} else {
 		return results[1] || 0;
@@ -7018,11 +7018,11 @@ function deleteLoginInfo() {
 }
 
 function loadLoginInfo() {
-	var myid = getCookie("userid") == "" ? "no log" : getCookie("userid");
-	var mycourse = getCookie("course") == "" ? "mycourse" : getCookie("course");
-	var mylevel = getCookie("level") == "" ? "mylevel" : getCookie("level");
-	var mymonth = getCookie("month") == "" ? "mymonth" : getCookie("month");
-	var username = getCookie("username") == "" ? "" : getCookie("username");
+	var myid = getCookie("userid") === "" ? "no log" : getCookie("userid");
+	var mycourse = getCookie("course") === "" ? "mycourse" : getCookie("course");
+	var mylevel = getCookie("level") === "" ? "mylevel" : getCookie("level");
+	var mymonth = getCookie("month") === "" ? "mymonth" : getCookie("month");
+	var username = getCookie("username") === "" ? "" : getCookie("username");
 
 	$(jQuery.data(TargetTable, "userid")).val(myid);
 	$(jQuery.data(TargetTable, "course")).val(mycourse);
@@ -7053,8 +7053,8 @@ function getCookie(cname) {
 	var ca = document.cookie.split(";");
 	for (var i = 0; i < ca.length; i++) {
 		var c = ca[i];
-		while (c.charAt(0) == " ") c = c.substring(1);
-		if (c.indexOf(name) == 0) {
+		while (c.charAt(0) === " ") c = c.substring(1);
+		if (c.indexOf(name) === 0) {
 			return c.substring(name.length, c.length);
 		}
 	}
@@ -7063,9 +7063,9 @@ function getCookie(cname) {
 
 function changeDisplayedText(tg, text) {
 	var tagName = $(tg).get(0).tagName.toLowerCase();
-	if (tagName == "x-textbox") {
+	if (tagName === "x-textbox") {
 		$(tg).find(".contentsbox p > span").html(text);
-	} else if (tgaName == "textarea") {
+	} else if (tgaName === "textarea") {
 		$(tg).html(text);
 	}
 }
@@ -7075,9 +7075,9 @@ function IsGroup(tg) {
 	var groupCheck = 0;
 	if (tg != null) {
 		var idSplit = tg.id.split("_");
-		if (idSplit[2] == "Group") {
+		if (idSplit[2] === "Group") {
 			groupCheck = 2;
-		} else if (idSplit[2] == "GroupChild") {
+		} else if (idSplit[2] === "GroupChild") {
 			groupCheck = 1;
 		}
 	}
@@ -7134,7 +7134,7 @@ function RotatePoint(
 
 	if (tr != null && tr != "none") {
 		var values =
-			tr == null
+			tr === null
 				? null
 				: tr
 						.split("(")[1]
@@ -7225,7 +7225,7 @@ function GroupResizing(group) {
 			top = xy[1] - height / 2;
 		}
 
-		if (unionRectPoints == null)
+		if (unionRectPoints === null)
 			unionRectPoints = [left, left + width, top, top + height];
 		else {
 			unionRectPoints = UnionPointsByRect(unionRectPoints, [
