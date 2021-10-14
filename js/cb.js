@@ -114,10 +114,6 @@ function contentsZoomIn() {
 	$("#contents").css("width", $("#contents").width() + 100 * scale + "px");
 	$("#contents2").css("height", $("#contents2").height() + 100 + "px");
 	$("#contents2").css("width", $("#contents2").width() + 100 * scale + "px");
-	/*
-     $("#contents").css("top", ($("#contents").top()*0.8) + "px");
-     $("#contents").css("left", ($("#contents").left()*0.8) + "px");
-     */
 }
 
 function contentsZoomOut() {
@@ -132,15 +128,11 @@ function contentsZoomOut() {
 	$("#contents").css("width", $("#contents").width() - 100 * scale + "px");
 	$("#contents2").css("height", $("#contents2").height() - 100 + "px");
 	$("#contents2").css("width", $("#contents2").width() - 100 * scale + "px");
-	/*
-     $("#contents").css("top", ($("#contents").top()*1.2) + "px");
-     $("#contents").css("left", ($("#contents").left()*1.2) + "px");
-     */
 }
 
 function inputBoxKeyEvent() {
 	$("#currentPageCountBox").keyup(function(event) {
-		if (event.keyCode == 13) {
+		if (event.keyCode === 13) {
 			gotoPage({
 				goto: "Get Content"
 			});
@@ -150,63 +142,24 @@ function inputBoxKeyEvent() {
 
 function setTotalPageCountBox() {
 	$("#totalPageCountBox").val(totalPageCount);
-	/*
-     if(countPerPage == 2) {
-  
-     $("#totalPageCountBox").val(Math.ceil(totalPageCount/2));
-     }else{
-     $("#totalPageCountBox").val(totalPageCount);
-     }
-     */
 }
 
 function setCurrentPageCountBox() {
-	var currentPageNo = null;
-	var iframeSrc = null;
-	var isInnerFrame = false;
-	if (countPerPage == 2) {
-		/*
-         iframeSrc = $("#contents").attr('src');
-    
-         if(iframeSrc == null) {
-         iframeSrc = $("#contents2", parent.document).attr('src');
-         isInnerFrame = true;
-         }
-    
-         currentPageNo = ((iframeSrc.split("-"))[0]);
-         if(isInnerFrame != true) {
-         $("#currentPageCountBox").val(currentPageNo);
-         }else {
-         $("#currentPageCountBox", parent.document).val(currentPageNo);
-         }
-         */
-		iframeSrc = $("#contents").attr("src");
+	const currentPageNo = null;
+	let isInnerFrame = false;
+	let iframeSrc = $("#contents").attr("src");
 
-		if (iframeSrc == null) {
-			iframeSrc = $("#contents", parent.document).attr("src");
-			isInnerFrame = true;
-		}
+	if (iframeSrc == null) {
+		// if (countPerPage === 2)
+		iframeSrc = $("#contents", parent.document).attr("src");
+		isInnerFrame = true;
+	}
 
-		currentPageNo = iframeSrc.split("-")[0];
-		if (isInnerFrame != true) {
-			$("#currentPageCountBox").val(currentPageNo);
-		} else {
-			$("#currentPageCountBox", parent.document).val(currentPageNo);
-		}
+	currentPageNo = iframeSrc.split("-")[0];
+	if (isInnerFrame) {
+		$("#currentPageCountBox", parent.document).val(currentPageNo);
 	} else {
-		iframeSrc = $("#contents").attr("src");
-
-		if (iframeSrc == null) {
-			iframeSrc = $("#contents", parent.document).attr("src");
-			isInnerFrame = true;
-		}
-
-		currentPageNo = iframeSrc.split("-")[0];
-		if (isInnerFrame != true) {
-			$("#currentPageCountBox").val(currentPageNo);
-		} else {
-			$("#currentPageCountBox", parent.document).val(currentPageNo);
-		}
+		$("#currentPageCountBox").val(currentPageNo);
 	}
 }
 
