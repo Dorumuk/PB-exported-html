@@ -106,7 +106,7 @@ if (isHide) {
 if ($("#cvs_0002").css('visibility').toLowerCase() != 'visible') { return; } 
 } 
 e.stopPropagation();
-distributeAction(cvs_0002, 'down', 'N', [[{actType:3, actSubType:'Move To', aniTiming:0, target:[cvs_0003], toX:677, toY:90, startTime:0, delay:0, duration:2000 },{actType:3, actSubType:'Move To', aniTiming:0, target:[cvs_1287], toX:677, toY:180, startTime:0, delay:0, duration:2000 },{actType:3, actSubType:'Move To', aniTiming:0, target:[cvs_1289], toX:677, toY:270, startTime:0, delay:0, duration:2000 },{actType:3, actSubType:'Move To', aniTiming:0, target:[cvs_1291], toX:677, toY:360, startTime:0, delay:0, duration:2000 },{actType:3, actSubType:'Move To', aniTiming:0, target:[cvs_1293], toX:677, toY:450, startTime:0, delay:0, duration:2000 },{actType:3, actSubType:'Move To', aniTiming:0, target:[cvs_1295], toX:677, toY:540, startTime:0, delay:0, duration:2000 },{actType:3, actSubType:'Move To', aniTiming:0, target:[cvs_1297], toX:677, toY:630, startTime:0, delay:0, duration:2000 },{actType:3, actSubType:'Move To', aniTiming:0, target:[cvs_1299], toX:677, toY:720, startTime:0, delay:0, duration:2000 },{actType:3, actSubType:'Move To', aniTiming:0, target:[cvs_1301], toX:677, toY:810, startTime:0, delay:0, duration:2000 },{actType:3, actSubType:'Move To', aniTiming:0, target:[cvs_1303], toX:677, toY:900, startTime:0, delay:0, duration:2000 }]]);
+distributeAction(cvs_0002, 'down', 'N', [[{actType:3, actSubType:'Move To', aniTiming:0, target:[cvs_0003], toX:677, toY:90, startTime:0, delay:0, duration:2000 },{actType:3, actSubType:'Move To', aniTiming:0, target:[cvs_1287], toX:677, toY:180, startTime:0, delay:0, duration:2000, reverse:'Y', aniTiming:0, revDuration:2000, waitingTime:0, repeatForever:'N' },{actType:3, actSubType:'Move By', aniTiming:0, target:[cvs_1289], toX:677, toY:0, startTime:0, delay:0, duration:2000 },{actType:3, actSubType:'Curve To', aniTiming:0, target:[cvs_1291], elements:'M45, 405 C45, 525, 722, 525, 722, 405 ', startTime:0, delay:0, duration:2000 },{actType:3, actSubType:'Curve To', aniTiming:0, target:[cvs_1293], elements:'M45, 495 C171, 832, 602, 848, 722, 495 ', startTime:0, delay:0, duration:2000 },{actType:3, actSubType:'Curve To', aniTiming:0, target:[cvs_1295], elements:'M45, 585 C122, 297, 680, 290, 722, 585 ', reverselements:'M722, 585 C680, 290, 122, 297, 45, 585 ', startTime:0, delay:0, duration:2000, reverse:'Y', aniTiming:0, revDuration:2000, waitingTime:0, repeatForever:'N' },{actType:3, actSubType:'Move To', aniTiming:3, target:[cvs_1297], toX:677, toY:630, startTime:0, delay:0, duration:2000 },{actType:3, actSubType:'Move To', aniTiming:0, target:[cvs_1299], toX:677, toY:720, startTime:0, delay:0, duration:2000,repeatCount:3 },{actType:3, actSubType:'Move To', aniTiming:0, target:[cvs_1301], toX:677, toY:810, startTime:0, delay:0, duration:2000,repeatCount:5, reverse:'Y', aniTiming:0, revDuration:2000, waitingTime:0, repeatForever:'N' },{actType:3, actSubType:'Move To', aniTiming:0, target:[cvs_1303], toX:677, toY:900, startTime:0, delay:0, duration:2000, reverse:'Y', aniTiming:0, revDuration:0, waitingTime:0, repeatForever:'Y' }]]);
 });
 });
 $(document).ready(function(){
@@ -114,7 +114,7 @@ jQuery.data(cvs_0003, "tag", []);
 jQuery.data(cvs_0003, "tag count", '0');
 jQuery.data(cvs_0003, "alpha", '1');
 jQuery.data(cvs_0003, "hidden", 'False');
-jQuery.data(cvs_0003, "area", '0,90,90,90');
+jQuery.data(cvs_0003, "area", '0,88,90,90');
 jQuery.data(cvs_0003, "interval", 0);
 jQuery.data(cvs_0003, "duration", 0);
 	AppendClass($('#cvs_0003'), '');

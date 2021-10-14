@@ -380,11 +380,8 @@ function IsGroup(target) {
 }
 
 function makeCurve(params) {
-	var startCurveTimer;
-
-	for (var i = 0; i < params.target.length; i++) {
-		var tg = params.target[i];
-		startCurveTimer = setTimeout(function () {
+	for (const tg of params.target) {
+		const startCurveTimer = setTimeout(function () {
 			var path = params.elements;
 			if (jQuery.data($(params.target[0]).get(0), "reverse") == "Y") {
 				path = params.reverselements;
@@ -394,7 +391,7 @@ function makeCurve(params) {
 
 			var lastCurve;
 
-			function updateFromCode(doNotUpdatePath) {
+			(function updateFromCode(doNotUpdatePath) {
 				if (lastCurve) lastCurve.stop();
 				var curve = new CurveAnimator(path);
 
@@ -409,9 +406,7 @@ function makeCurve(params) {
 				if (!doNotUpdatePath) {
 					fireEvent(path, "updated");
 				}
-			}
-
-			updateFromCode();
+			})();
 
 			function fireEvent(el, name) {
 				var e = document.createEvent("Event");
