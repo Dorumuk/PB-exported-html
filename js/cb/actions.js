@@ -242,9 +242,7 @@ function startMove(params) {
 		makeCurve(params);
 		return;
 	}
-	var startMoveTimer;
-	var easingVar = "";
-
+	let easingVar = "";
 	switch (params.aniTiming) {
 		case 0: easingVar = "linear"; break;
 		case 1: easingVar = "easeInCubic"; break;
@@ -252,33 +250,31 @@ function startMove(params) {
 		case 3: easingVar = "easeInOutCubic"; break;
 	}
 
-	for (var i = 0; i < params.target.length; i++) {
-		var tg = params.target[i];
-		var groupCheck = IsGroup(tg);
-
+	for (const tg of params.target) {
+		const groupCheck = IsGroup(tg);
 		const absX = Number($(tg).css("left").replace("px", ""));
 		const absY = Number($(tg).css("top").replace("px", ""));
 		const relX = tg.clientLeft;
 		const relY = tg.clientTop;
-		let absToX = params.toX;
+		let absToX = params.toX; // absoulte destination X
 		let absToY = params.toY;
 
 		if (groupCheck === "Group") {
-			var groupRect = GroupResizing(tg);
+			const groupRect = GroupResizing(tg);
 		} else if (groupCheck === "GroupChild") {
-			var groupTg = tg.parentElement.parentElement;
-			var st = window.getComputedStyle(tg, null);
-			var tr = st.getPropertyValue("transform-origin").split("px");
-			var width = parseFloat(st.getPropertyValue("width").split("px")[0]);
-			var height = parseFloat(st.getPropertyValue("height").split("px")[0]);
-			var left = parseFloat(st.getPropertyValue("left").split("px")[0]);
-			var top = parseFloat(st.getPropertyValue("top").split("px")[0]);
+			const groupTg = tg.parentElement.parentElement;
+			const st = window.getComputedStyle(tg, null);
+			const tr = st.getPropertyValue("transform-origin").split("px");
+			const width = parseFloat(st.getPropertyValue("width").split("px")[0]);
+			const height = parseFloat(st.getPropertyValue("height").split("px")[0]);
+			const left = parseFloat(st.getPropertyValue("left").split("px")[0]);
+			const top = parseFloat(st.getPropertyValue("top").split("px")[0]);
 
-			var gSt = window.getComputedStyle(groupTg, null);
-			var gLeft = parseFloat(gSt.getPropertyValue("left").split("px")[0]);
-			var gTop = parseFloat(gSt.getPropertyValue("top").split("px")[0]);
+			const gSt = window.getComputedStyle(groupTg, null);
+			const gLeft = parseFloat(gSt.getPropertyValue("left").split("px")[0]);
+			const gTop = parseFloat(gSt.getPropertyValue("top").split("px")[0]);
 
-			var xy = RotatePoint(
+			const xy = RotatePoint(
 				groupTg,
 				null,
 				null,
@@ -291,7 +287,7 @@ function startMove(params) {
 			absToX = xy[0] - width / 2;
 			absToY = xy[1] - height / 2;
 
-			var leftTopCenter = RotatePoint(
+			const leftTopCenter = RotatePoint(
 				tg,
 				null,
 				null,
@@ -304,23 +300,23 @@ function startMove(params) {
 			$(tg).css("transform-origin", "50% " + "50%");
 		}
 
-		if (params.actSubType == "Move By") {
+		if (params.actSubType === "Move By") {
 			absToX = params.toX + absX;
 			absToY = params.toY + absY;
 		}
 
-		if (params.reverse == "Y") {
-			startMoveTimer = setTimeout(function () {
-				$(tg).animate(
-					{
-						left: absToX,
-						top: absToY
-					},
-					{
-						duration: params.duration,
-						easing: easingVar,
-						queue: false,
-						complete: function () {
+		const startMoveTimer = setTimeout(function () {
+			$(tg).animate(
+				{
+					left: absToX,
+					top: absToY
+				},
+				{
+					duration: params.duration,
+					easing: easingVar,
+					queue: false,
+					complete: function () {
+						if (params.reverse == "Y"){
 							setTimeout(function () {
 								$(tg).animate(
 									{
@@ -336,13 +332,11 @@ function startMove(params) {
 												params.repeatForever != null &&
 												params.repeatForever == "Y"
 											) {
-												params.delay = params.delay - params.startTime;
-												params.startTime = 0;
+												params.delay -= params.startTime;
 												params.startTime = 0;
 												startMove(params);
 											} else if (params.repeatCount > 0) {
-												params.delay = params.delay - params.startTime;
-												params.startTime = 0;
+												params.delay -= params.startTime;
 												params.startTime = 0;
 												startMove(params);
 												params.repeatCount -= 1;
@@ -355,29 +349,14 @@ function startMove(params) {
 									}
 								);
 							}, params.waitingTime);
-						}
-					}
-				);
-			}, params.delay);
-		} else {
-			startMoveTimer = setTimeout(function () {
-				$(tg).animate(
-					{
-						left: absToX,
-						top: absToY
-					},
-					{
-						duration: params.duration,
-						easing: easingVar,
-						queue: false,
-						complete: function () {
+						} else {
 							//console.log("after" + "/" + tg.offsetLeft + "/" + absY);
 							if (params.repeatForever != null && params.repeatForever == "Y") {
 								params.delay = params.delay - params.startTime;
 								params.startTime = 0;
 								startMove(params);
 							} else if (params.repeatCount > 0) {
-								params.delay = params.delay - params.startTime;
+								params.delay -= params.startTime;
 								params.startTime = 0;
 								startMove(params);
 								params.repeatCount -= 1;
@@ -386,9 +365,9 @@ function startMove(params) {
 							}
 						}
 					}
-				);
-			}, params.delay);
-		}
+				}
+			);
+		}, params.delay);
 		jQuery.data(tg, "startMove", startMoveTimer);
 	}
 }
@@ -399,6 +378,7 @@ function IsGroup(target) {
 	if (target == null) return "NonGroup";
 	return target.id.split("_")[2] || "NonGroup";
 }
+
 function makeCurve(params) {
 	var startCurveTimer;
 
@@ -426,24 +406,7 @@ function makeCurve(params) {
 					o.style.top = point.y - $(o).height() / 2 + "px";
 				});
 				lastCurve = CurveAnimator.lastCreated;
-				var p2s = lastCurve.path.pathSegList;
-				//m2 = p2s.getItem(0),
-				//c2 = p2s.getItem(1);
 				if (!doNotUpdatePath) {
-					/* try {
-							m1.x = m2.x;
-							m1.y = m2.y;
-					} catch (err) {
-					}*/
-					try {
-						/*c1.x = c2.x;
-						c1.y = c2.y;
-						c1.x1 = c2.x1;
-						c1.y1 = c2.y1;
-						c1.x2 = c2.x2;
-						c1.y2 = c2.y2;*/
-					} catch (err) { }
-
 					fireEvent(path, "updated");
 				}
 			}
@@ -518,8 +481,7 @@ function startScaleMove(params) {
 			var gNowAngle = GetAngle(groupTg);
 
 			// test용
-			var gTr = st.getPropertyValue("transform-origin").split("px");
-			// test용
+			// var gTr = st.getPropertyValue("transform-origin").split("px");
 
 			var xy = RotatePoint(
 				groupTg,
