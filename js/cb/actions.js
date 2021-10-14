@@ -498,9 +498,9 @@ function startScaleMove(params) {
 		var absToX = params.toX,
 			absToY = params.toY;
 
-		if (groupCheck == 2) {
+		if (groupCheck === "Group") {
 			var groupRect = GroupResizing(tg);
-		} else if (groupCheck == 1) {
+		} else if (groupCheck === "GroupChild") {
 			var groupTg = tg.parentElement.parentElement;
 			var groupRect = GroupResizing(groupTg);
 			var st = window.getComputedStyle(tg, null);
@@ -580,7 +580,7 @@ function startScaleMove(params) {
 						easing: easingVar,
 						step: function() {
 							var child = document.getElementById($(tg).attr("id") + "_child1");
-							if (groupCheck == 2) {
+							if (groupCheck === "Group") {
 								child = document.getElementById(
 									$(tg).attr("id") + "_container"
 								);
@@ -591,7 +591,7 @@ function startScaleMove(params) {
 								$(tg).css("overflow", "visible");
 								var scaleWidth = 1;
 								var scaleHeight = 1;
-								if (groupCheck != 2) {
+								if (groupCheck !== "Group") {
 									scaleWidth = $(tg).width() / $(child)[0].getBBox().width;
 									scaleHeight = $(tg).height() / $(child)[0].getBBox().height;
 								} else {
@@ -718,7 +718,7 @@ function startScaleMove(params) {
 											var child = document.getElementById(
 												$(tg).attr("id") + "_child1"
 											);
-											if (groupCheck == 2) {
+											if (groupCheck === "Group") {
 												child = document.getElementById(
 													$(tg).attr("id") + "_container"
 												);
@@ -730,7 +730,7 @@ function startScaleMove(params) {
 												$(tg).css("overflow", "visible");
 												var scaleWidth = 1;
 												var scaleHeight = 1;
-												if (groupCheck != 2) {
+												if (groupCheck !== "Group") {
 													scaleWidth =
 														$(tg).width() / $(child)[0].getBBox().width;
 													scaleHeight =
@@ -865,7 +865,7 @@ function startScaleMove(params) {
 												var child = document.getElementById(
 													$(tg).attr("id") + "_child1"
 												);
-												if (groupCheck == 2) {
+												if (groupCheck === "Group") {
 													child = document.getElementById(
 														$(tg).attr("id") + "_container"
 													);
@@ -875,7 +875,7 @@ function startScaleMove(params) {
 													var c1St = window.getComputedStyle(child, null);
 													var child1Trans = ["1", "0", "0", "1"];
 
-													if (groupCheck != 2)
+													if (groupCheck !== "Group")
 														child1Trans = c1St
 															.getPropertyValue("transform")
 															.split("(")[1]
@@ -948,7 +948,7 @@ function startScaleMove(params) {
 						queue: false,
 						step: function() {
 							var child = document.getElementById($(tg).attr("id") + "_child1");
-							if (groupCheck == 2) {
+							if (groupCheck === "Group") {
 								child = document.getElementById(
 									$(tg).attr("id") + "_container"
 								);
@@ -959,7 +959,7 @@ function startScaleMove(params) {
 								$(tg).css("overflow", "visible");
 								var scaleWidth = 1;
 								var scaleHeight = 1;
-								if (groupCheck != 2) {
+								if (groupCheck !== "Group") {
 									scaleWidth = $(tg).width() / $(child)[0].getBBox().width;
 									scaleHeight = $(tg).height() / $(child)[0].getBBox().height;
 								} else {
@@ -1078,7 +1078,7 @@ function startScaleMove(params) {
 								var child = document.getElementById(
 									$(tg).attr("id") + "_child1"
 								);
-								if (groupCheck == 2) {
+								if (groupCheck === "Group") {
 									child = document.getElementById(
 										$(tg).attr("id") + "_container"
 									);
@@ -1088,7 +1088,7 @@ function startScaleMove(params) {
 									var c1St = window.getComputedStyle(child, null);
 									var child1Trans = ["1", "0", "0", "1"];
 
-									if (groupCheck != 2)
+									if (groupCheck !== "Group")
 										child1Trans = c1St
 											.getPropertyValue("transform")
 											.split("(")[1]
@@ -1162,7 +1162,7 @@ function startRotate(params) {
 		var groupCheck = IsGroup(tg);
 		var anchorPoint = "'" + params.anchorX + "% " + params.anchorY + "%'";
 
-		if (groupCheck == 2) {
+		if (groupCheck === "Group") {
 			var groupRect = GroupResizing(tg);
 		}
 
@@ -1214,7 +1214,7 @@ function startRotate(params) {
 					revAngle = nowAngle;
 				}
 
-				if (groupCheck == 1)
+				if (groupCheck === "GroupChild")
 					aniAngle -= GetAngle(tg.parentElement.parentElement);
 				var graphicSpacing;
 				if (!tg.nodeName == "X-TEXTBOX") graphicSpacing = "borderSpacing";
@@ -1316,7 +1316,7 @@ function startRotate(params) {
 				}
 				nowAngle = 0;
 
-				if (groupCheck == 1)
+				if (groupCheck === "GroupChild")
 					aniAngle -= GetAngle(tg.parentElement.parentElement);
 				var graphicSpacing;
 				if (!(tg.nodeName == "X-TEXTBOX")) graphicSpacing = "borderSpacing";
