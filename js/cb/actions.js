@@ -1,6 +1,6 @@
 // start stop all
 function startStopAll(params) {
-	setTimeout(function() {
+	setTimeout(function () {
 		for (var i = 0; i < params.target.length; i++) {
 			var tg = params.target[i];
 
@@ -76,16 +76,16 @@ function startHideShow(params) {
 				"clearInterval(" + replaceAll(tg.id, "cvs", "blink_setTimer") + ")";
 			eval(blink_setTimer);
 			eval(blink_setTimer);
-		} catch (e) {}
-		startHideShowTimer = setTimeout(function() {
+		} catch (e) { }
+		startHideShowTimer = setTimeout(function () {
 			if (params.actSubType == "Hide") {
-                $(tg).addClass("collapse");
+				$(tg).addClass("collapse");
 				if (videobox == tg) {
 					videobox.pause();
 					videobox = null;
 				}
 			} else {
-                $(tg).removeClass("collapse");
+				$(tg).removeClass("collapse");
 
 				if (params.callfunc) {
 					var fnstring = params.callfunc;
@@ -132,7 +132,7 @@ function startFade(params) {
 
 		$(tg).show();
 		if (params.reverse == "Y") {
-			startFadeTimer = setTimeout(function() {
+			startFadeTimer = setTimeout(function () {
 				$(tg).animate(
 					{
 						opacity: params.opacity
@@ -141,11 +141,11 @@ function startFade(params) {
 						duration: params.duration,
 						easing: easingVar,
 						queue: false,
-						complete: function() {
+						complete: function () {
 							//if ($(tg).css("opacity") == 0) {
 							//    $(tg).hide();
 							//}
-							setTimeout(function() {
+							setTimeout(function () {
 								$(tg).animate(
 									{
 										opacity: originOpacity
@@ -154,7 +154,7 @@ function startFade(params) {
 										duration: params.revDuration,
 										easing: easingVar,
 										queue: false,
-										complete: function() {
+										complete: function () {
 											//alert("originOpacity // " + originOpacity);
 											if (params.opacity == 1) {
 												$(tg).hide();
@@ -192,7 +192,7 @@ function startFade(params) {
 				);
 			}, params.delay);
 		} else {
-			startFadeTimer = setTimeout(function() {
+			startFadeTimer = setTimeout(function () {
 				$(tg).animate(
 					{
 						opacity: params.opacity
@@ -200,7 +200,7 @@ function startFade(params) {
 					{
 						duration: params.duration,
 						easing: easingVar,
-						complete: function() {
+						complete: function () {
 							if ($(tg).css("opacity") == 0) {
 								$(tg).hide();
 							}
@@ -310,7 +310,7 @@ function startMove(params) {
 		}
 
 		if (params.reverse == "Y") {
-			startMoveTimer = setTimeout(function() {
+			startMoveTimer = setTimeout(function () {
 				$(tg).animate(
 					{
 						left: absToX,
@@ -320,8 +320,8 @@ function startMove(params) {
 						duration: params.duration,
 						easing: easingVar,
 						queue: false,
-						complete: function() {
-							setTimeout(function() {
+						complete: function () {
+							setTimeout(function () {
 								$(tg).animate(
 									{
 										left: absX,
@@ -331,7 +331,7 @@ function startMove(params) {
 										duration: params.revDuration,
 										easing: easingVar,
 										queue: false,
-										complete: function() {
+										complete: function () {
 											if (
 												params.repeatForever != null &&
 												params.repeatForever == "Y"
@@ -360,7 +360,7 @@ function startMove(params) {
 				);
 			}, params.delay);
 		} else {
-			startMoveTimer = setTimeout(function() {
+			startMoveTimer = setTimeout(function () {
 				$(tg).animate(
 					{
 						left: absToX,
@@ -370,7 +370,7 @@ function startMove(params) {
 						duration: params.duration,
 						easing: easingVar,
 						queue: false,
-						complete: function() {
+						complete: function () {
 							//console.log("after" + "/" + tg.offsetLeft + "/" + absY);
 							if (params.repeatForever != null && params.repeatForever == "Y") {
 								params.delay = params.delay - params.startTime;
@@ -404,7 +404,7 @@ function makeCurve(params) {
 
 	for (var i = 0; i < params.target.length; i++) {
 		var tg = params.target[i];
-		startCurveTimer = setTimeout(function() {
+		startCurveTimer = setTimeout(function () {
 			var path = params.elements;
 			if (jQuery.data($(params.target[0]).get(0), "reverse") == "Y") {
 				path = params.reverselements;
@@ -421,7 +421,7 @@ function makeCurve(params) {
 				var o = tg;
 				o.style.position = "absolute";
 
-				curve.animate(params, params.duration / 1000, function(point, angle) {
+				curve.animate(params, params.duration / 1000, function (point, angle) {
 					o.style.left = point.x - $(o).width() / 2 + "px";
 					o.style.top = point.y - $(o).height() / 2 + "px";
 				});
@@ -430,11 +430,11 @@ function makeCurve(params) {
 				//m2 = p2s.getItem(0),
 				//c2 = p2s.getItem(1);
 				if (!doNotUpdatePath) {
-						/* try {
-								m1.x = m2.x;
-								m1.y = m2.y;
-						} catch (err) {
-						}*/
+					/* try {
+							m1.x = m2.x;
+							m1.y = m2.y;
+					} catch (err) {
+					}*/
 					try {
 						/*c1.x = c2.x;
 						c1.y = c2.y;
@@ -442,7 +442,7 @@ function makeCurve(params) {
 						c1.y1 = c2.y1;
 						c1.x2 = c2.x2;
 						c1.y2 = c2.y2;*/
-					} catch (err) {}
+					} catch (err) { }
 
 					fireEvent(path, "updated");
 				}
@@ -455,7 +455,7 @@ function makeCurve(params) {
 				e.initEvent(name, true, true);
 				try {
 					el.dispatchEvent(e);
-				} catch (err) {}
+				} catch (err) { }
 			}
 		}, params.delay);
 		jQuery.data(tg, "startCurve", startCurveTimer);
@@ -566,7 +566,7 @@ function startScaleMove(params) {
 		}
 
 		if (params.reverse == "Y") {
-			startScaleMoveTimer = setTimeout(function() {
+			startScaleMoveTimer = setTimeout(function () {
 				$(tg).animate(
 					{
 						width: params.scaleWidth,
@@ -578,7 +578,7 @@ function startScaleMove(params) {
 						queue: false,
 						duration: params.duration,
 						easing: easingVar,
-						step: function() {
+						step: function () {
 							var child = document.getElementById($(tg).attr("id") + "_child1");
 							if (groupCheck === "Group") {
 								child = document.getElementById(
@@ -675,23 +675,23 @@ function startScaleMove(params) {
 										$(groupChild).css(
 											"width",
 											(childWidth / transformX) * childScaleWidth * scaleWidth +
-												"px"
+											"px"
 										);
 										$(groupChild).css(
 											"height",
 											(childHeight / transformY) *
-												childScaleHeight *
-												scaleHeight +
-												"px"
+											childScaleHeight *
+											scaleHeight +
+											"px"
 										);
 
 										$(child1).attr(
 											"transform",
 											"scale(" +
-												childScaleWidth * scaleWidth +
-												" " +
-												childScaleHeight * scaleHeight +
-												")"
+											childScaleWidth * scaleWidth +
+											" " +
+											childScaleHeight * scaleHeight +
+											")"
 										);
 									}
 								}
@@ -701,8 +701,8 @@ function startScaleMove(params) {
 								);
 							}
 						},
-						complete: function() {
-							setTimeout(function() {
+						complete: function () {
+							setTimeout(function () {
 								$(tg).animate(
 									{
 										width: originWidth,
@@ -714,7 +714,7 @@ function startScaleMove(params) {
 										duration: params.revDuration,
 										easing: easingVar,
 										queue: false,
-										step: function() {
+										step: function () {
 											var child = document.getElementById(
 												$(tg).attr("id") + "_child1"
 											);
@@ -820,25 +820,25 @@ function startScaleMove(params) {
 														$(groupChild).css(
 															"width",
 															(childWidth / transformX) *
-																childScaleWidth *
-																scaleWidth +
-																"px"
+															childScaleWidth *
+															scaleWidth +
+															"px"
 														);
 														$(groupChild).css(
 															"height",
 															(childHeight / transformY) *
-																childScaleHeight *
-																scaleHeight +
-																"px"
+															childScaleHeight *
+															scaleHeight +
+															"px"
 														);
 
 														$(child1).attr(
 															"transform",
 															"scale(" +
-																childScaleWidth * scaleWidth +
-																" " +
-																childScaleHeight * scaleHeight +
-																")"
+															childScaleWidth * scaleWidth +
+															" " +
+															childScaleHeight * scaleHeight +
+															")"
 														);
 													}
 												}
@@ -848,7 +848,7 @@ function startScaleMove(params) {
 												);
 											}
 										},
-										complete: function() {
+										complete: function () {
 											if (
 												params.repeatForever != null &&
 												params.repeatForever == "Y"
@@ -933,7 +933,7 @@ function startScaleMove(params) {
 				);
 			}, params.delay);
 		} else {
-			startScaleMoveTimer = setTimeout(function() {
+			startScaleMoveTimer = setTimeout(function () {
 				// scaleInterval(tg, params.context, params.image, params.scaleWidth, params.scaleHeight);
 				$(tg).animate(
 					{
@@ -946,7 +946,7 @@ function startScaleMove(params) {
 						duration: params.duration,
 						easing: easingVar,
 						queue: false,
-						step: function() {
+						step: function () {
 							var child = document.getElementById($(tg).attr("id") + "_child1");
 							if (groupCheck === "Group") {
 								child = document.getElementById(
@@ -1043,23 +1043,23 @@ function startScaleMove(params) {
 										$(groupChild).css(
 											"width",
 											(childWidth / transformX) * childScaleWidth * scaleWidth +
-												"px"
+											"px"
 										);
 										$(groupChild).css(
 											"height",
 											(childHeight / transformY) *
-												childScaleHeight *
-												scaleHeight +
-												"px"
+											childScaleHeight *
+											scaleHeight +
+											"px"
 										);
 
 										$(child1).attr(
 											"transform",
 											"scale(" +
-												childScaleWidth * scaleWidth +
-												" " +
-												childScaleHeight * scaleHeight +
-												")"
+											childScaleWidth * scaleWidth +
+											" " +
+											childScaleHeight * scaleHeight +
+											")"
 										);
 									}
 								}
@@ -1069,7 +1069,7 @@ function startScaleMove(params) {
 								);
 							}
 						},
-						complete: function() {
+						complete: function () {
 							if (params.repeatForever != null && params.repeatForever == "Y") {
 								params.delay = params.delay - params.startTime;
 								params.startTime = 0;
@@ -1179,9 +1179,9 @@ function startRotate(params) {
 				tr == null
 					? null
 					: tr
-							.split("(")[1]
-							.split(")")[0]
-							.split(",");
+						.split("(")[1]
+						.split(")")[0]
+						.split(",");
 
 			var a = values[0];
 			var b = values[1];
@@ -1205,7 +1205,7 @@ function startRotate(params) {
 		$(tg).css("transform-origin", params.anchorX + "% " + params.anchorY + "%");
 
 		if (params.reverse == "Y") {
-			startRotateTimer = setTimeout(function() {
+			startRotateTimer = setTimeout(function () {
 				var revAngle = GetAngle(tg);
 				var aniAngle = params.angle;
 
@@ -1227,7 +1227,7 @@ function startRotate(params) {
 					{
 						duration: params.duration,
 						easing: easingVar,
-						step: function(now, fx) {
+						step: function (now, fx) {
 							$(this).css(
 								"-webkit-transform",
 								"rotate(" + (parseInt(nowAngle) + parseInt(now)) + "deg)"
@@ -1241,8 +1241,8 @@ function startRotate(params) {
 								"rotate(" + (parseInt(nowAngle) + parseInt(now)) + "deg)"
 							);
 						},
-						complete: function() {
-							setTimeout(function() {
+						complete: function () {
+							setTimeout(function () {
 								$(tg).animate(
 									{
 										graphicSpacing: revAngle
@@ -1250,27 +1250,27 @@ function startRotate(params) {
 									{
 										duration: params.revDuration,
 										easing: easingVar,
-										step: function(now, fx) {
+										step: function (now, fx) {
 											$(this).css(
 												"-webkit-transform",
 												"rotate(" +
-													(parseInt(nowAngle) + parseInt(now)) +
-													"deg)"
+												(parseInt(nowAngle) + parseInt(now)) +
+												"deg)"
 											);
 											$(this).css(
 												"-moz-transform",
 												"rotate(" +
-													(parseInt(nowAngle) + parseInt(now)) +
-													"deg)"
+												(parseInt(nowAngle) + parseInt(now)) +
+												"deg)"
 											);
 											$(this).css(
 												"transform",
 												"rotate(" +
-													(parseInt(nowAngle) + parseInt(now)) +
-													"deg)"
+												(parseInt(nowAngle) + parseInt(now)) +
+												"deg)"
 											);
 										},
-										complete: function() {
+										complete: function () {
 											if (
 												params.repeatForever != null &&
 												params.repeatForever == "Y"
@@ -1304,7 +1304,7 @@ function startRotate(params) {
 			if (typeof initialRotate == "string" || initialRotate instanceof String)
 				initialRotate = initialRotate.replace("deg", "");
 			startRotateTimer = null;
-			startRotateTimer = setTimeout(function() {
+			startRotateTimer = setTimeout(function () {
 				//initialRotate = nowAngle;
 				var aniAngle = params.angle;
 
@@ -1328,7 +1328,7 @@ function startRotate(params) {
 					{
 						duration: params.duration,
 						easing: easingVar,
-						step: function(now, fx) {
+						step: function (now, fx) {
 							$(this).css(
 								"-webkit-transform",
 								"rotate(" + (parseFloat(nowAngle) + parseFloat(now)) + "deg)"
@@ -1342,7 +1342,7 @@ function startRotate(params) {
 								"rotate(" + (parseFloat(nowAngle) + parseFloat(now)) + "deg)"
 							);
 						},
-						complete: function() {
+						complete: function () {
 							if (params.repeatForever != null && params.repeatForever == "Y") {
 								$(tg).css("borderSpacing", 0);
 								$(tg).css("transform", "rotate(" + initialRotate + ")");
@@ -1373,7 +1373,7 @@ function startFlip(params) {
 	var startFlipTimer;
 	for (var i = 0; i < params.target.length; i++) {
 		var tg = params.target[i];
-		startFlipTimer = setTimeout(function() {
+		startFlipTimer = setTimeout(function () {
 			if (params.actSubType == "Flip X") {
 				$(tg).css(
 					"-webkit-transform",
@@ -1393,17 +1393,17 @@ function flipX(params, tg) {
 	var xAngle = parseFloat(
 		oriAngle.indexOf("rotateX") > -1
 			? oriAngle
-					.split("rotateX(")[1]
-					.split(")")[0]
-					.split("d")[0]
+				.split("rotateX(")[1]
+				.split(")")[0]
+				.split("d")[0]
 			: "0"
 	);
 	var yAngle = parseFloat(
 		oriAngle.indexOf("rotateY") > -1
 			? oriAngle
-					.split("rotateY(")[1]
-					.split(")")[0]
-					.split("d")[0]
+				.split("rotateY(")[1]
+				.split(")")[0]
+				.split("d")[0]
 			: "0"
 	);
 
@@ -1444,8 +1444,8 @@ function flipX(params, tg) {
 			{
 				duration: params.duration,
 				easing: easingVar,
-				complete: function() {
-					setTimeout(function() {
+				complete: function () {
+					setTimeout(function () {
 						$(tg).animate(
 							{
 								rotateX: xAngle,
@@ -1454,7 +1454,7 @@ function flipX(params, tg) {
 							{
 								duration: params.revDuration,
 								easing: easingVar,
-								complete: function() {
+								complete: function () {
 									if (
 										params.repeatForever != null &&
 										params.repeatForever == "Y"
@@ -1488,7 +1488,7 @@ function flipX(params, tg) {
 			{
 				duration: params.duration,
 				easing: easingVar,
-				complete: function() {
+				complete: function () {
 					if (params.repeatForever != null && params.repeatForever == "Y") {
 						startFlip(params);
 					} else if (params.repeatCount > 0) {
@@ -1509,17 +1509,17 @@ function flipY(params, tg) {
 	var xAngle = parseFloat(
 		oriAngle.indexOf("rotateX") > -1
 			? oriAngle
-					.split("rotateX(")[1]
-					.split(")")[0]
-					.split("d")[0]
+				.split("rotateX(")[1]
+				.split(")")[0]
+				.split("d")[0]
 			: "0"
 	);
 	var yAngle = parseFloat(
 		oriAngle.indexOf("rotateY") > -1
 			? oriAngle
-					.split("rotateY(")[1]
-					.split(")")[0]
-					.split("d")[0]
+				.split("rotateY(")[1]
+				.split(")")[0]
+				.split("d")[0]
 			: "0"
 	);
 
@@ -1558,8 +1558,8 @@ function flipY(params, tg) {
 			{
 				duration: params.duration,
 				easing: easingVar,
-				complete: function() {
-					setTimeout(function() {
+				complete: function () {
+					setTimeout(function () {
 						$(tg).animate(
 							{
 								rotateX: xAngle,
@@ -1568,7 +1568,7 @@ function flipY(params, tg) {
 							{
 								duration: params.revDuration,
 								easing: easingVar,
-								complete: function() {
+								complete: function () {
 									if (
 										params.repeatForever != null &&
 										params.repeatForever == "Y"
@@ -1602,7 +1602,7 @@ function flipY(params, tg) {
 			{
 				duration: params.duration,
 				easing: easingVar,
-				complete: function() {
+				complete: function () {
 					if (params.repeatForever != null && params.repeatForever == "Y") {
 						startFlip(params);
 					} else if (params.repeatCount > 0) {
