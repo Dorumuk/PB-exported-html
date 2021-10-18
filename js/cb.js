@@ -1,24 +1,22 @@
-var gameURL = "";
+let gameURL = "";
 
-var mArrJsonData;
-var mDataIndex = 0;
-var videobox;
-var myWindow;
-var totalPageCount;
-var countPerPage = 2;
-var recorder = "";
-var userData;
+let mArrJsonData;
+let mDataIndex = 0;
+let videobox;
+let myWindow;
+let totalPageCount; // ❗
+let countPerPage = 2;
+let userData;
 
-var mode1Contents1X = "640px";
-var mode2Contents1X = "171px";
+const mode1Contents1X = "640px";
+const mode2Contents1X = "171px";
 
-var functionS;
-var minHeight = 1470;
+let functionS;
+// const minHeight = 1470;
+// const originContentsWidth = 918;
+// const originContentsHeight = 1470;
 
-var originContentsWidth = 918;
-var originContentsHeight = 1470;
-
-window.receiveMessage = function(event) {
+window.receiveMessage = function (event) {
 	// event.data로 결과가 전달됨.
 	if (event.data.stuInfo) {
 		window.userData = event.data.stuInfo;
@@ -80,27 +78,27 @@ function changePageShowMode() {
 }
 
 function shapeBlink(target) {
-    if (target == undefined) return;
-    var computedStyle = window.getComputedStyle(target, null);
-    var opacity = parseFloat(computedStyle.getPropertyValue("opacity"));
-    if (jQuery.data(target, 'alpha') == undefined) {
-        jQuery.data(target, 'alpha', opacity);
-    }
-    if (opacity > 0) {
-        $(target).fadeTo("fast", 0.0);
-    } else {
-        $(target).fadeTo("fast", parseFloat(jQuery.data(target, 'alpha')));
-    }
+	if (target == undefined) return;
+	var computedStyle = window.getComputedStyle(target, null);
+	var opacity = parseFloat(computedStyle.getPropertyValue("opacity"));
+	if (jQuery.data(target, 'alpha') == undefined) {
+		jQuery.data(target, 'alpha', opacity);
+	}
+	if (opacity > 0) {
+		$(target).fadeTo("fast", 0.0);
+	} else {
+		$(target).fadeTo("fast", parseFloat(jQuery.data(target, 'alpha')));
+	}
 }
 
 function stopShapeBlink(target, ShowAtFinish) {
-    var blink_timer = jQuery.data(target, "blink_timer");
-    clearInterval(blink_timer);
-    if (ShowAtFinish == 'Y') {
-        $(target).fadeTo("fast", parseFloat(jQuery.data(target, 'alpha')));
-    } else {
-        $(target).fadeTo("fast", 0.0);
-    }
+	var blink_timer = jQuery.data(target, "blink_timer");
+	clearInterval(blink_timer);
+	if (ShowAtFinish == 'Y') {
+		$(target).fadeTo("fast", parseFloat(jQuery.data(target, 'alpha')));
+	} else {
+		$(target).fadeTo("fast", 0.0);
+	}
 }
 
 function openWin(url) {
@@ -131,7 +129,7 @@ function contentsZoomOut() {
 }
 
 function inputBoxKeyEvent() {
-	$("#currentPageCountBox").keyup(function(event) {
+	$("#currentPageCountBox").keyup(function (event) {
 		if (event.keyCode === 13) {
 			gotoPage({
 				goto: "Get Content"
@@ -168,7 +166,7 @@ function makeObj(ori, alt) {
 	cvs.state = false;
 	cvs.originImage = ori;
 	cvs.altImage = alt;
-	cvs.changeToggleState = function() {
+	cvs.changeToggleState = function () {
 		changeToggleState(cvs);
 	};
 	return cvs;
@@ -238,19 +236,19 @@ function change(params, s) {
 function changeBy(params, s) {
 	console.log($(params.target[0]).find("font"));
 	console.log($(params.target[0]).length);
-	setTimeout(function() {
+	setTimeout(function () {
 		for (var i = 0; i < params.target.length; i++) {
 			var tg = params.target[i];
 			if (tg == null) alert("null box");
 			if (params.actSubType == "Hide") {
-                $(params.obj).addClass("collapse");
+				$(params.obj).addClass("collapse");
 				if (videobox == tg) {
 					videobox.pause();
 					videobox = null;
 				}
 			} else {
-                $(params.obj).removeClass("collapse");
-                if (params.callfunc) {
+				$(params.obj).removeClass("collapse");
+				if (params.callfunc) {
 					var fnstring = params.callfunc;
 					var fn = window[fnstring];
 					if (typeof fn === "function") fn();
@@ -266,7 +264,7 @@ function changeBy(params, s) {
 				var ls = a[i].style.letterSpacing;
 				if (fontPx.length > 0) {
 					fontPx = fontPx.replace("rem", "");
-					var point = Number(fontPx) + s  / 10;
+					var point = Number(fontPx) + s / 10;
 					a[i].style.fontSize = point + "rem";
 				}
 				if (ls.length > 0) {
@@ -338,523 +336,422 @@ function smaller(params) {
 //var mTouchedObject;
 
 function distributeAction(touchedObject, touchID, rand, arrActions) {
-   // try {
-    //     event.preventDefault();
-    // } catch (err) {
+	if (arrActions == null) {
+		return;
+	}
+	var arrActionParams;
 
-    // }
-    if (arrActions == null) {
-        return;
-    }
-    var arrActionParams;
+	try {
+		if (touchedObject != null) {
+			if (touchID == "up") {
+				console.log("[up] triggerObject : " + touchedObject)
+				if (jQuery.data($(touchedObject).get(0), "startedInRect") == 'Y') {
+					return;
+				}
+				if (jQuery.data($(touchedObject).get(0), "actionUpIndex") == null) {
+					jQuery.data($(touchedObject).get(0), "actionUpIndex", -1);
+				}
 
-    try {
-        if (touchedObject != null) {
-            if (touchID == "up") {
-                //console.log("[up] previousObject : " + mTouchedObject)
-                console.log("[up] triggerObject : " + touchedObject)
-                //if (mTouchedObject != touchedObject) return;
-                if (jQuery.data($(touchedObject).get(0), "startedInRect") == 'Y') {
-                    return;
-                }
-                if (jQuery.data($(touchedObject).get(0), "actionUpIndex") == null) {
-                    jQuery.data($(touchedObject).get(0), "actionUpIndex", -1);
-                }
+				jQuery.data($(touchedObject).get(0), "actionUpIndex", jQuery.data($(touchedObject).get(0), "actionUpIndex") + 1);
 
-                jQuery.data($(touchedObject).get(0), "actionUpIndex", jQuery.data($(touchedObject).get(0), "actionUpIndex") + 1);
-                /*     alert("actionUpIndex" + "//" + (jQuery.data($(touchedObject).get(0), "actionUpIndex"))); */
+			} else if (touchID == "down") {
+				// 2018-07-19 recoed
+				var contentsType;
+				try {
+					contentsType = arrActions[0][0].content;
+				} catch (err) {
+					contentsType = "";
+				}
+				console.log("[down] triggerObject : " + touchedObject)
+				if (jQuery.data($(touchedObject).get(0), "actionDownIndex") == null) {
+					jQuery.data($(touchedObject).get(0), "actionDownIndex", -1);
+				}
+				jQuery.data($(touchedObject).get(0), "actionDownIndex", jQuery.data($(touchedObject).get(0), "actionDownIndex") + 1);
+			} else if (touchID == "inRect") {
+				if (jQuery.data($(touchedObject).get(0), "actionInRectIndex") == null) {
+					jQuery.data($(touchedObject).get(0), "actionInRectIndex", -1);
+				}
+				jQuery.data($(touchedObject).get(0), "actionInRectIndex", jQuery.data($(touchedObject).get(0), "actionInRectIndex") + 1);
 
-            } else if (touchID == "down") {
-                // 2018-07-19 recoed
-                var contentsType;
-                try {
-                    contentsType = arrActions[0][0].content;
-                } catch (err) {
-                    contentsType = "";
-                }
-                console.log("[down] triggerObject : " + touchedObject)
-                //mTouchedObject = touchedObject;
-                if (jQuery.data($(touchedObject).get(0), "actionDownIndex") == null) {
-                    jQuery.data($(touchedObject).get(0), "actionDownIndex", -1);
-                }
-                jQuery.data($(touchedObject).get(0), "actionDownIndex", jQuery.data($(touchedObject).get(0), "actionDownIndex") + 1);
-            } else if (touchID == "inRect") {
-                if (jQuery.data($(touchedObject).get(0), "actionInRectIndex") == null) {
-                    jQuery.data($(touchedObject).get(0), "actionInRectIndex", -1);
-                }
-                jQuery.data($(touchedObject).get(0), "actionInRectIndex", jQuery.data($(touchedObject).get(0), "actionInRectIndex") + 1);
-
-            } else if (touchID == "Conditional") {
-                if (jQuery.data($(touchedObject).get(0), "actionConditionalIndex") == null) {
-                    jQuery.data($(touchedObject).get(0), "actionConditionalIndex", -1);
-                }
-                jQuery.data($(touchedObject).get(0), "actionConditionalIndex", jQuery.data($(touchedObject).get(0), "actionConditionalIndex") + 1);
-            } else if (touchID == "ActionLibrary") {
-                if (jQuery.data($(touchedObject).get(0), "actionLibraryIndex") == null) {
-                    jQuery.data($(touchedObject).get(0), "actionLibraryIndex", -1);
-                }
-                jQuery.data($(touchedObject).get(0), "actionLibraryIndex", jQuery.data($(touchedObject).get(0), "actionLibraryIndex") + 1);
-            }
+			} else if (touchID == "Conditional") {
+				if (jQuery.data($(touchedObject).get(0), "actionConditionalIndex") == null) {
+					jQuery.data($(touchedObject).get(0), "actionConditionalIndex", -1);
+				}
+				jQuery.data($(touchedObject).get(0), "actionConditionalIndex", jQuery.data($(touchedObject).get(0), "actionConditionalIndex") + 1);
+			} else if (touchID == "ActionLibrary") {
+				if (jQuery.data($(touchedObject).get(0), "actionLibraryIndex") == null) {
+					jQuery.data($(touchedObject).get(0), "actionLibraryIndex", -1);
+				}
+				jQuery.data($(touchedObject).get(0), "actionLibraryIndex", jQuery.data($(touchedObject).get(0), "actionLibraryIndex") + 1);
+			}
 
 
-            if (touchID == "up") {
-                if (jQuery.data($(touchedObject).get(0), "actionUpIndex") >= arrActions.length) {
-                    jQuery.data($(touchedObject).get(0), "actionUpIndex", 0);
-                }
+			if (touchID == "up") {
+				if (jQuery.data($(touchedObject).get(0), "actionUpIndex") >= arrActions.length) {
+					jQuery.data($(touchedObject).get(0), "actionUpIndex", 0);
+				}
 
-                if (rand == "Y") {
-                    var beforeNo;
-                    if (jQuery.data($(touchedObject).get(0), "beforeRand") == null) {
-                        beforeNo = 0;
-                    } else {
-                        beforeNo = jQuery.data($(touchedObject).get(0), "beforeRand");
-                    }
+				if (rand == "Y") {
+					const beforeNo = jQuery.data($(touchedObject).get(0), "beforeRand") ?? 0;
+					const randNo = arrActions.length > 1? shuffleRandom(beforeNo, arrActions.length) : 0;
 
+					jQuery.data($(touchedObject).get(0), "beforeRand", randNo);
+					arrActionParams = arrActions[randNo];
+				} else {
+					arrActionParams = arrActions[(jQuery.data($(touchedObject).get(0), "actionUpIndex"))];
+				}				
+			} else if (touchID == "down") {
+				if (jQuery.data($(touchedObject).get(0), "actionDownIndex") >= arrActions.length) {
+					jQuery.data($(touchedObject).get(0), "actionDownIndex", 0);
+				}
+				if (rand == "Y") {
+					const beforeNo = jQuery.data($(touchedObject).get(0), "beforeRand") ?? 0;
+					const randNo = arrActions.length > 1? shuffleRandom(beforeNo, arrActions.length) : 0;
 
-                    /* alert(shuffleRandom(beforeNo, arrActions.length)); */
-                    var randNo = 0;
-                    if (arrActions.length > 1) {
-                        randNo = shuffleRandom(beforeNo, arrActions.length);
-                    }
-                    jQuery.data($(touchedObject).get(0), "beforeRand", randNo);
-                    arrActionParams = arrActions[randNo];
-                } else {
-                    arrActionParams = arrActions[(jQuery.data($(touchedObject).get(0), "actionUpIndex"))];
-                }
+					jQuery.data($(touchedObject).get(0), "beforeRand", randNo);
+					arrActionParams = arrActions[randNo];
+				} else {
+					arrActionParams = arrActions[(jQuery.data($(touchedObject).get(0), "actionDownIndex"))];
+				}
+			} else if (touchID == "inRect") {
+				if (jQuery.data($(touchedObject).get(0), "actionInRectIndex") >= arrActions.length) {
+					jQuery.data($(touchedObject).get(0), "actionInRectIndex", 0);
+				}
+				if (rand == "Y") {
 
+					var beforeNo;
+					if (jQuery.data($(touchedObject).get(0), "beforeRand") == null) {
+						beforeNo = 0;
+					} else {
+						beforeNo = jQuery.data($(touchedObject).get(0), "beforeRand");
+					}
+					var randNo = 0;
+					if (arrActions.length > 1) {
+						randNo = shuffleRandom(beforeNo, arrActions.length);
+					}
+					jQuery.data($(touchedObject).get(0), "beforeRand", randNo);
+					arrActionParams = arrActions[randNo];
+				} else {
+					arrActionParams = arrActions[(jQuery.data($(touchedObject).get(0), "actionInRectIndex"))];
+				}
+			} else if (touchID == "Conditional") {
+				if (jQuery.data($(touchedObject).get(0), "actionConditionalIndex") >= arrActions.length) {
+					jQuery.data($(touchedObject).get(0), "actionConditionalIndex", 0);
+				}
+				if (rand == "Y") {
 
-            } else if (touchID == "down") {
-                if (jQuery.data($(touchedObject).get(0), "actionDownIndex") >= arrActions.length) {
-                    jQuery.data($(touchedObject).get(0), "actionDownIndex", 0);
-                }
-                if (rand == "Y") {
+					var beforeNo;
+					if (jQuery.data($(touchedObject).get(0), "beforeRand") == null) {
+						beforeNo = 0;
+					} else {
+						beforeNo = jQuery.data($(touchedObject).get(0), "beforeRand");
+					}
+					var randNo = 0;
+					if (arrActions.length > 1) {
+						randNo = shuffleRandom(beforeNo, arrActions.length);
+					}
+					jQuery.data($(touchedObject).get(0), "beforeRand", randNo);
+					arrActionParams = arrActions[randNo];
+				} else {
+					arrActionParams = arrActions[(jQuery.data($(touchedObject).get(0), "actionConditionalIndex"))];
+				}
+			} else if (touchID == "ActionLibrary") {
+				if (jQuery.data($(touchedObject).get(0), "actionLibraryIndex") >= arrActions.length) {
+					jQuery.data($(touchedObject).get(0), "actionLibraryIndex", 0);
+				}
+				if (rand == "Y") {
 
-                    var beforeNo;
-                    if (jQuery.data($(touchedObject).get(0), "beforeRand") == null) {
-                        beforeNo = 0;
-                    } else {
-                        beforeNo = jQuery.data($(touchedObject).get(0), "beforeRand");
-                    }
-                    var randNo = 0;
-                    if (arrActions.length > 1) {
-                        randNo = shuffleRandom(beforeNo, arrActions.length);
-                    }
-                    jQuery.data($(touchedObject).get(0), "beforeRand", randNo);
-                    arrActionParams = arrActions[randNo];
-                } else {
-                    arrActionParams = arrActions[(jQuery.data($(touchedObject).get(0), "actionDownIndex"))];
-                }
-            } else if (touchID == "inRect") {
-                if (jQuery.data($(touchedObject).get(0), "actionInRectIndex") >= arrActions.length) {
-                    jQuery.data($(touchedObject).get(0), "actionInRectIndex", 0);
-                }
-                if (rand == "Y") {
+					var beforeNo;
+					if (jQuery.data($(touchedObject).get(0), "beforeRand") == null) {
+						beforeNo = 0;
+					} else {
+						beforeNo = jQuery.data($(touchedObject).get(0), "beforeRand");
+					}
+					var randNo = 0;
+					if (arrActions.length > 1) {
+						randNo = shuffleRandom(beforeNo, arrActions.length);
+					}
+					jQuery.data($(touchedObject).get(0), "beforeRand", randNo);
+					arrActionParams = arrActions[randNo];
+				} else {
+					arrActionParams = arrActions[(jQuery.data($(touchedObject).get(0), "actionLibraryIndex"))];
+				}
+			}
+		} else {
+			arrActionParams = arrActions[0];
+		}
+	}
+	catch (e) {
+		arrActionParams = arrActions[0];
+	}
 
-                    var beforeNo;
-                    if (jQuery.data($(touchedObject).get(0), "beforeRand") == null) {
-                        beforeNo = 0;
-                    } else {
-                        beforeNo = jQuery.data($(touchedObject).get(0), "beforeRand");
-                    }
-                    var randNo = 0;
-                    if (arrActions.length > 1) {
-                        randNo = shuffleRandom(beforeNo, arrActions.length);
-                    }
-                    jQuery.data($(touchedObject).get(0), "beforeRand", randNo);
-                    arrActionParams = arrActions[randNo];
-                } else {
-                    arrActionParams = arrActions[(jQuery.data($(touchedObject).get(0), "actionInRectIndex"))];
-                }
-            } else if (touchID == "Conditional") {
-                if (jQuery.data($(touchedObject).get(0), "actionConditionalIndex") >= arrActions.length) {
-                    jQuery.data($(touchedObject).get(0), "actionConditionalIndex", 0);
-                }
-                if (rand == "Y") {
-
-                    var beforeNo;
-                    if (jQuery.data($(touchedObject).get(0), "beforeRand") == null) {
-                        beforeNo = 0;
-                    } else {
-                        beforeNo = jQuery.data($(touchedObject).get(0), "beforeRand");
-                    }
-                    var randNo = 0;
-                    if (arrActions.length > 1) {
-                        randNo = shuffleRandom(beforeNo, arrActions.length);
-                    }
-                    jQuery.data($(touchedObject).get(0), "beforeRand", randNo);
-                    arrActionParams = arrActions[randNo];
-                } else {
-                    arrActionParams = arrActions[(jQuery.data($(touchedObject).get(0), "actionConditionalIndex"))];
-                }
-            } else if (touchID == "ActionLibrary") {
-                if (jQuery.data($(touchedObject).get(0), "actionLibraryIndex") >= arrActions.length) {
-                    jQuery.data($(touchedObject).get(0), "actionLibraryIndex", 0);
-                }
-                if (rand == "Y") {
-
-                    var beforeNo;
-                    if (jQuery.data($(touchedObject).get(0), "beforeRand") == null) {
-                        beforeNo = 0;
-                    } else {
-                        beforeNo = jQuery.data($(touchedObject).get(0), "beforeRand");
-                    }
-                    var randNo = 0;
-                    if (arrActions.length > 1) {
-                        randNo = shuffleRandom(beforeNo, arrActions.length);
-                    }
-                    jQuery.data($(touchedObject).get(0), "beforeRand", randNo);
-                    arrActionParams = arrActions[randNo];
-                } else {
-                    arrActionParams = arrActions[(jQuery.data($(touchedObject).get(0), "actionLibraryIndex"))];
-                }
-            }
-        } else {
-            arrActionParams = arrActions[0];
-        }
-    }
-    catch (e) {
-        arrActionParams = arrActions[0];
-    }
-
-    if (arrActionParams == null) {
-        return;
-    }
+	if (arrActionParams == null) {
+		return;
+	}
 
 
-    for (var i = 0; i < arrActionParams.length; i++) {
-        var params = arrActionParams[i];
-        try {
-            if (params.repeatCount > 0) {
-                params.repeatCount = params.repeatCount - 1;
-            }
-        } catch (e) {
+	for (var i = 0; i < arrActionParams.length; i++) {
+		var params = arrActionParams[i];
+		try {
+			if (params.repeatCount > 0) {
+				params.repeatCount = params.repeatCount - 1;
+			}
+		} catch (e) {
 
-        }
-        try {
-            params.delay = params.startTime + params.delay;
-        } catch (e) {
+		}
+		try {
+			params.delay = params.startTime + params.delay;
+		} catch (e) {
 
-        }
-        try {
-            playEffectSound(params.effectSound, params.delay);
-        } catch (e) {
+		}
+		try {
+			playEffectSound(params.effectSound, params.delay);
+		} catch (e) {
 
-        }
+		}
 
-        var firstTarget = null;
-        try {
-            firstTarget = params.target[0];
-        } catch (err) {
-            console.log("My ErrorLog : " + err);
-        }
-        if (firstTarget == "Conditional") {
-            startConditionalAction(params);
-        }
-        if (firstTarget == "ActionLibrary") {
-            startLibraryAction(params);
-        } else {
-            if (params == undefined || params.actType == undefined) return;
+		var firstTarget = null;
+		try {
+			firstTarget = params.target[0];
+		} catch (err) {
+			console.log("My ErrorLog : " + err);
+		}
+		if (firstTarget == "Conditional") {
+			startConditionalAction(params);
+		}
+		if (firstTarget == "ActionLibrary") {
+			startLibraryAction(params);
+		} else {
+			if (params == undefined || params.actType == undefined) return;
 
-            switch (params.actType) {
-                case 0:
-                    startStopAll(params);
-                    break;
-                case 1:
-                    startHideShow(params);
-                    break;
-                case 2:
-                    startFade(params);
-                    break;
-                case 3:
-                    startMove(params);
-                    break;
-                case 4:
-                    startScaleMove(params);
-                    break;
-                case 5:
-                    break;
-                case 6:
-                    startRotate(params);
-                    break;
-                case 8:
-                    startFlip(params);
-                    break;
-                case 9:
-                    startAnimation(params);
-                    break;
-                case 10:
-                    playMovie(params);
-                    break;
-                case 11:
-                    playSound(params);
-                    break;
-                case 12: // gotopage
-                    gotoPage(params);
-                    break;
-                case 13: // gotopage
-                    pagingViewControl(params);
-                    break;
-                case 14: // scroll
-                    startScroll(params);
-                    break;
-                case 15: //
-                    startToggle(params);
-                    break;
-                case 16: // setContent
-                    if (params.content == "getUserInfo") {
-                        getUserInfo();
-                        return false;
-                    }
-                    if (params.actSubType == "change mode") {
-                        changePageShowMode();
-                    } else if (params.actSubType == "replace") {
-                        // 2018-07-19 recoed
-                        var contentsType;
-                        try {
-                            contentsType = params.content.replace(/\s/gi, '').toLowerCase();
-                        } catch (err) {
-                            contentsType = "";
-                        }
-                        if (!(contentsType && contentsType.indexOf("recode") != -1 && !(navigator.getUserMedia || navigator.mediaDevices.getUserMedia))) { // ie 같이 userMedia가 없는 브라우저는 이렇게 처리
-                            if (contentsType == "recodestart" || contentsType == "recodeplay") {
+			switch (params.actType) {
+				case 0: startStopAll(params); break;
+				case 1: startHideShow(params); break;
+				case 2: startFade(params); break;
+				case 3: startMove(params); break;
+				case 4: startScaleMove(params); break;
+				case 5: break;
+				case 6: startRotate(params); break;
+				case 8: startFlip(params); break;
+				case 9: startAnimation(params); break;
+				case 10: playMovie(params); break;
+				case 11: playSound(params); break;
+				case 12: gotoPage(params); break; // gotopage
+				case 13: pagingViewControl(params); break; // gotopage
+				case 14: startScroll(params); break; // scroll
+				case 15: startToggle(params); break;
+				case 16: // setContent
+					if (params.content == "getUserInfo") {
+						getUserInfo();
+						return false;
+					}
+					if (params.actSubType == "change mode") {
+						changePageShowMode();
+					} else if (params.actSubType == "replace") {
+						// 2018-07-19 recoed
+						var contentsType;
+						try {
+							contentsType = params.content.replace(/\s/gi, '').toLowerCase();
+						} catch (err) {
+							contentsType = "";
+						}
+						if (!(contentsType && contentsType.indexOf("recode") != -1 && !(navigator.getUserMedia || navigator.mediaDevices.getUserMedia))) { // ie 같이 userMedia가 없는 브라우저는 이렇게 처리
+							if (contentsType == "recodestart" || contentsType == "recodeplay") {
 
-                                var user_media;
-                                function startUserMedia_(stream) {
-                                    startUserMedia(stream);
-                                    if (contentsType == "recodestart") window.pb_custom_recode.clear();
-                                    window.pb_custom_recode.record();
-                                    distributeNextAction(arrActions[0][0].nextAction);
-                                }
-                                try {
-                                    window.AudioContext = window.AudioContext || window.webkitAudioContext;
-                                    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mediaDevices.getUserMedia;
-                                    window.URL = window.URL || window.webkitURL;
+								var user_media;
+								function startUserMedia_(stream) {
+									startUserMedia(stream);
+									if (contentsType == "recodestart") window.pb_custom_recode.clear();
+									window.pb_custom_recode.record();
+									distributeNextAction(arrActions[0][0].nextAction);
+								}
+								try {
+									window.AudioContext = window.AudioContext || window.webkitAudioContext;
+									navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mediaDevices.getUserMedia;
+									window.URL = window.URL || window.webkitURL;
 
-                                    audio_context = new AudioContext;
-                                    __log('Audio context set up.');
-                                    __log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
-                                } catch (e) {
-                                    alert('No web audio support in this browser!');
-                                }
+									audio_context = new AudioContext;
+									__log('Audio context set up.');
+									__log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
+								} catch (e) {
+									alert('No web audio support in this browser!');
+								}
 
-                                if (navigator.userAgent.indexOf('iP') != -1) {
-                                    console.log("iPad");
-                                    navigator.mediaDevices.getUserMedia({ audio: true }).then(startUserMedia_).catch(function (e) {
-                                        __log('No live audio input: ' + e);
-                                    });
-                                } else {
-                                    navigator.getUserMedia({ audio: true }, startUserMedia_, function (e) {
-                                        __log('No live audio input: ' + e);
-                                    });
-                                }
+								if (navigator.userAgent.indexOf('iP') != -1) {
+									console.log("iPad");
+									navigator.mediaDevices.getUserMedia({ audio: true }).then(startUserMedia_).catch(function (e) {
+										__log('No live audio input: ' + e);
+									});
+								} else {
+									navigator.getUserMedia({ audio: true }, startUserMedia_, function (e) {
+										__log('No live audio input: ' + e);
+									});
+								}
 
-                            } else if (contentsType == "recodestop") {
-                                console.log("stop");
-                                window.pb_custom_recode.stop();
-                                distributeNextAction(arrActions[0][0].nextAction);
+							} else if (contentsType == "recodestop") {
+								console.log("stop");
+								window.pb_custom_recode.stop();
+								distributeNextAction(arrActions[0][0].nextAction);
 
-                            } else if (contentsType == "recodeend") {
-                                window.pb_custom_recode.stop();
-                                distributeNextAction(arrActions[0][0].nextAction);
-                            } else if (contentsType == "recodelisten") {
-                                //alert("url :: "+window.pb_custom_recode.url.substring(0,100));
-                                sound1 = new Audio(window.pb_custom_recode.url);
-                                sound1.play();
-                                distributeNextAction(arrActions[0][0].nextAction);
-                            } else if (contentsType == "recodelistenpause") {
-                                try {
-                                    sound1.pause();
-                                    distributeNextAction(arrActions[0][0].nextAction);
-                                } catch (err) {
-                                }
-                            } else if (contentsType == "recodesistenpausecheck") {
-                                try {
-                                    sound1.addEventListener('timeupdate', function () {
-                                        if (sound1.currentTime == sound1.duration) {
-                                            arrActions[0][0].pauseCallback();
-                                        }
-                                    })
-                                } catch (err) {
-                                }
-                            } else if (contentsType == "recodesave") {
-                                window.pb_custom_recode.onsave();
-                                distributeNextAction(arrActions[0][0].nextAction);
-                            }
-                        }
-                        if (contentsType && contentsType.indexOf("@") != -1 && contentsType.split("@")[0] == "locationmove") {
-                            window.location.assign(contentsType.split("@")[1]);
-                        }
-                        if (contentsType == "pictureinsert") {
-                            var input_item = $("<input id='PictureInsert' type='file' accept='image/*' capture />"); //capture='camera' accept='image/*'
-                            var input_label = $("<label for='PictureInsert'></label>");
-                            input_label.css({
-                                position: 'absolute',
-                                top: 0,
-                                left: 0,
-                                fontSize: 0,
-                                width: 10,
-                                height: 10,
-                                padding: 0,
-                                opacity: 0
-                            });
-                            $("body").append(input_item);
-                            $("body").append(input_label);
-                            input_item.on("change", function (e) {
-                                $(arrActions[0][0].target).attr("src", URL.createObjectURL(e.target.files[0]));
-                                !userData ? userData = window.parent.userData : "";
+							} else if (contentsType == "recodeend") {
+								window.pb_custom_recode.stop();
+								distributeNextAction(arrActions[0][0].nextAction);
+							} else if (contentsType == "recodelisten") {
+								//alert("url :: "+window.pb_custom_recode.url.substring(0,100));
+								sound1 = new Audio(window.pb_custom_recode.url);
+								sound1.play();
+								distributeNextAction(arrActions[0][0].nextAction);
+							} else if (contentsType == "recodelistenpause") {
+								try {
+									sound1.pause();
+									distributeNextAction(arrActions[0][0].nextAction);
+								} catch (err) {
+								}
+							} else if (contentsType == "recodesistenpausecheck") {
+								try {
+									sound1.addEventListener('timeupdate', function () {
+										if (sound1.currentTime == sound1.duration) {
+											arrActions[0][0].pauseCallback();
+										}
+									})
+								} catch (err) {
+								}
+							} else if (contentsType == "recodesave") {
+								window.pb_custom_recode.onsave();
+								distributeNextAction(arrActions[0][0].nextAction);
+							}
+						}
+						if (contentsType && contentsType.indexOf("@") != -1 && contentsType.split("@")[0] == "locationmove") {
+							window.location.assign(contentsType.split("@")[1]);
+						}
+						if (contentsType == "pictureinsert") {
+							var input_item = $("<input id='PictureInsert' type='file' accept='image/*' capture />"); //capture='camera' accept='image/*'
+							var input_label = $("<label for='PictureInsert'></label>");
+							input_label.css({
+								position: 'absolute',
+								top: 0,
+								left: 0,
+								fontSize: 0,
+								width: 10,
+								height: 10,
+								padding: 0,
+								opacity: 0
+							});
+							$("body").append(input_item);
+							$("body").append(input_label);
+							input_item.on("change", function (e) {
+								$(arrActions[0][0].target).attr("src", URL.createObjectURL(e.target.files[0]));
+								!userData ? userData = window.parent.userData : "";
 
-                                var file = e.target.files[0];
-                                var frm = document.createElement("form");
-                                frm.method = 'POST';
-                                frm.enctype = 'multipart/form-data';
+								var file = e.target.files[0];
+								var frm = document.createElement("form");
+								frm.method = 'POST';
+								frm.enctype = 'multipart/form-data';
 
-                                var fileData = new FormData();
-                                fileData.append('file', file, 'output.png');
-                                fileData.append('fileExt', 'png');
-                                fileData.append('stu_id', userData.userId);
-                                fileData.append('book_name', userData.bookNm);
-                                fileData.append('actvt_kind', '02');
-                                fileData.append('timelrn_sq', userData.chapterId);
+								var fileData = new FormData();
+								fileData.append('file', file, 'output.png');
+								fileData.append('fileExt', 'png');
+								fileData.append('stu_id', userData.userId);
+								fileData.append('book_name', userData.bookNm);
+								fileData.append('actvt_kind', '02');
+								fileData.append('timelrn_sq', userData.chapterId);
 
-                                // ajax
-                                $.ajax({
-                                    url: 'https://stu.ideepstudy.com/app/api/rd/uploadFile.do',
-                                    type: 'POST',
-                                    data: fileData,
-                                    async: false,
-                                    cache: false,
-                                    contentType: false,
-                                    processData: false,
-                                }).done(function (response) {
-                                    console.log("전달성공");
-                                });
+								// ajax
+								$.ajax({
+									url: 'https://stu.ideepstudy.com/app/api/rd/uploadFile.do',
+									type: 'POST',
+									data: fileData,
+									async: false,
+									cache: false,
+									contentType: false,
+									processData: false,
+								}).done(function (response) {
+									console.log("전달성공");
+								});
 
-                            });
+							});
 
-                            input_label.trigger("click");
-                            return false;
-                        }
-                        if (params.content == "backgroundcolor") {
-                            var regex = /[?&]([^=#]+)=([^&#]*)/g,
-                                url = window.location.href,
-                                params = {},
-                                match;
-                            while (match = regex.exec(document.location.href)) {
-                                params[match[1]] = match[2];
-                            }
-                            console.log(params);
-                            $('body').css({
-                                background: "#" + params.bgColor
-                            });
-                            $('div#div_main').css({
-                                background: "#" + params.bgColor
-                            });
-                            distributeNextAction(arrActions[0][0].nextAction);
-                            return false;
-                        }
-                        if (params.content == "game1" || params.content == "game2" || params.content == "game3" || params.content == "game4" || params.content == "game5") {
-                            var myid = $((jQuery.data(TargetTable, 'userid'))).val();
-                            var loginstate = 'login_no';
-                            var mycourse = $((jQuery.data(TargetTable, 'course'))).val();
-                            var mylevel = $((jQuery.data(TargetTable, 'level'))).val();
-                            var month = $((jQuery.data(TargetTable, 'month'))).val();
-                            if (myid != 'no log') {
-                                loginstate = 'login_yes'
-                                gameURL = "./" + params.content + "/pb.html?userid=" + myid + "&loginstate=" + loginstate + "&course=" + mycourse + "&level=" + mylevel + "&month=" + month;
-                            } else {
-                                gameURL = "./" + params.content + "/pb.html";
-                            }
-                        } else if (params.content == 'savelogininfo') {
-                            saveLoginInfo();
-                        } else if (params.content == 'deletelogininfo') {
-                            deleteLoginInfo();
-                        } else if (params.content == 'load data') {
-                            startLoadData(params);
-                        } else if (params.content == 'change data') {
-                            startChangeData(params);
-                        } else {
-                            replaceContent(params);
-                        }
+							input_label.trigger("click");
+							return false;
+						}
+						if (params.content == "backgroundcolor") {
+							var regex = /[?&]([^=#]+)=([^&#]*)/g,
+								url = window.location.href,
+								params = {},
+								match;
+							while (match = regex.exec(document.location.href)) {
+								params[match[1]] = match[2];
+							}
+							console.log(params);
+							$('body').css({
+								background: "#" + params.bgColor
+							});
+							$('div#div_main').css({
+								background: "#" + params.bgColor
+							});
+							distributeNextAction(arrActions[0][0].nextAction);
+							return false;
+						}
+						if (params.content == "game1" || params.content == "game2" || params.content == "game3" || params.content == "game4" || params.content == "game5") {
+							var myid = $((jQuery.data(TargetTable, 'userid'))).val();
+							var loginstate = 'login_no';
+							var mycourse = $((jQuery.data(TargetTable, 'course'))).val();
+							var mylevel = $((jQuery.data(TargetTable, 'level'))).val();
+							var month = $((jQuery.data(TargetTable, 'month'))).val();
+							if (myid != 'no log') {
+								loginstate = 'login_yes'
+								gameURL = "./" + params.content + "/pb.html?userid=" + myid + "&loginstate=" + loginstate + "&course=" + mycourse + "&level=" + mylevel + "&month=" + month;
+							} else {
+								gameURL = "./" + params.content + "/pb.html";
+							}
+						} else if (params.content == 'savelogininfo') {
+							saveLoginInfo();
+						} else if (params.content == 'deletelogininfo') {
+							deleteLoginInfo();
+						} else if (params.content == 'load data') {
+							startLoadData(params);
+						} else if (params.content == 'change data') {
+							startChangeData(params);
+						} else {
+							replaceContent(params);
+						}
 
-                    } else if (params.actSubType == "loadData") {
+					} else if (params.actSubType == "loadData") {
 
-                    } else {
-                        openWin(params.url);
-                    }
-                    break;
-                //占쎌쥙�⒳펺誘�삕�좑옙 �좎럡�∽옙�뀀쐻�좑옙 占쎌쥙��옙占쎌삕�좑옙.
-                case 24:
-                    startResetBeginSequence(params);
-                    break;
-                case 25:
-                    startResetEndSequence(params);
-                    break;
-                case 26:
-                    startResetInRectSequence(params);
-                    break;
-
-                case 27:
-                    startAppend(params);
-                    break;
-                case 28:
-                    startRemove(params);
-                    break;
-                case 29:
-                    startReplace(params);
-                    break;
-                case 30:
-                    startRemoveAll(params);
-                    break;
-                case 31:
-                    startAdd(params);
-                    break;
-                case 32:
-                    startSubtract(params);
-                    break;
-                case 33:
-                    startMultiply(params);
-                    break;
-                case 34:
-                    startDivide(params);
-                    break;
-                case 35: // 占쎄퀣�좑옙占� 占쎄쑴��.
-
-                    break;
-                case 36:
-                    startTimer(params);
-                    break;
-                case 37:
-                    stopTimer(params);
-                    break;
-
-                case 38: //iframe
-                    goBack(params);
-                    break;
-                case 39: //iframe
-                    goForward(params);
-                    break;
-                case 40: //iframe
-                    reload(params);
-                    break;
-                case 41:
-                    if (params.actSubType == "Get Data") {
-                        startLoadData(params);
-                    } else if (params.actSubType == "Select Next") {
-                        startChangeData(params);
-                    }
-                    break;
-                case 46:
-                    smaller(params);
-                    break;
-                case 47:
-                    bigger(params);
-                    break;
-                case 50:
-                    startlink(params);
-                    break;
-            }
-        }
-    }
+					} else {
+						openWin(params.url);
+					}
+					break;
+				case 24: startResetBeginSequence(params); break;
+				case 25: startResetEndSequence(params); break;
+				case 26: startResetInRectSequence(params); break;
+				case 27: startAppend(params); break;
+				case 28: startRemove(params); break;
+				case 29: startReplace(params); break;
+				case 30: startRemoveAll(params); break;
+				case 31: startAdd(params); break;
+				case 32: startSubtract(params); break;
+				case 33: startMultiply(params); break;
+				case 34: startDivide(params); break;
+				case 35: break;
+				case 36: startTimer(params); break;
+				case 37: stopTimer(params); break;
+				case 38: goBack(params); break; //iframe
+				case 39: goForward(params); break; //iframe
+				case 40: reload(params); break; //iframe
+				case 41:
+					if (params.actSubType == "Get Data") {
+						startLoadData(params);
+					} else if (params.actSubType == "Select Next") {
+						startChangeData(params);
+					}
+					break;
+				case 46: smaller(params); break;
+				case 47: bigger(params); break;
+				case 50: startlink(params); break;
+			}
+		}
+	}
 }
 
 function distributeNextAction(arrActionParams) {
@@ -888,50 +785,21 @@ function distributeNextAction(arrActionParams) {
 			startLibraryAction(params);
 		} else {
 			switch (params.actType) {
-				case 0:
-					startStopAll(params);
-					break;
-				case 1:
-					startHideShow(params);
-					break;
-				case 2:
-					startFade(params);
-					break;
-				case 3:
-					startMove(params);
-					break;
-				case 4:
-					startScaleMove(params);
-					break;
-				case 5:
-					break;
-				case 6:
-					startRotate(params);
-					break;
-				case 8:
-					startFlip(params);
-					break;
-				case 9:
-					startAnimation(params);
-					break;
-				case 10:
-					playMovie(params);
-					break;
-				case 11:
-					playSound(params);
-					break;
-				case 12: // gotopage
-					gotoPage(params);
-					break;
-				case 13: // gotopage
-					pagingViewControl(params);
-					break;
-				case 14: // scroll
-					startScroll(params);
-					break;
-				case 15: //
-					startToggle(params);
-					break;
+				case 0: startStopAll(params); break;
+				case 1: startHideShow(params); break;
+				case 2: startFade(params); break;
+				case 3: startMove(params); break;
+				case 4: startScaleMove(params); break;
+				case 5: break;
+				case 6: startRotate(params); break;
+				case 8: startFlip(params); break;
+				case 9: startAnimation(params); break;
+				case 10: playMovie(params); break;
+				case 11: playSound(params); break;
+				case 12: gotoPage(params); break; // gotopage
+				case 13: pagingViewControl(params); break; // gotopage
+				case 14: startScroll(params); break; // scroll
+				case 15: startToggle(params); break;
 				case 16: // setContent
 					if (params.actSubType == "changemode") {
 						changePageShowMode();
@@ -972,7 +840,7 @@ function distributeNextAction(arrActionParams) {
 									__log("Audio context set up.");
 									__log(
 										"navigator.getUserMedia " +
-											(navigator.getUserMedia ? "available." : "not present!")
+										(navigator.getUserMedia ? "available." : "not present!")
 									);
 								} catch (e) {
 									alert("No web audio support in this browser!");
@@ -983,14 +851,14 @@ function distributeNextAction(arrActionParams) {
 									navigator.mediaDevices
 										.getUserMedia({ audio: true })
 										.then(startUserMedia_)
-										.catch(function(e) {
+										.catch(function (e) {
 											__log("No live audio input: " + e);
 										});
 								} else {
 									navigator.getUserMedia(
 										{ audio: true },
 										startUserMedia_,
-										function(e) {
+										function (e) {
 											__log("No live audio input: " + e);
 										}
 									);
@@ -1011,15 +879,15 @@ function distributeNextAction(arrActionParams) {
 								try {
 									sound1.pause();
 									distributeNextAction(arrActions[0][0].nextAction);
-								} catch (err) {}
+								} catch (err) { }
 							} else if (contentsType == "recodelistenpausecheck") {
 								try {
-									sound1.addEventListener("timeupdate", function() {
+									sound1.addEventListener("timeupdate", function () {
 										if (sound1.currentTime == sound1.duration) {
 											arrActions[0][0].pauseCallback();
 										}
 									});
-								} catch (err) {}
+								} catch (err) { }
 							} else if (contentsType == "recodesave") {
 								window.pb_custom_recode.onsave();
 								distributeNextAction(arrActions[0][0].nextAction);
@@ -1060,7 +928,7 @@ function distributeNextAction(arrActionParams) {
 							});
 							$("body").append(input_item);
 							$("body").append(input_label);
-							input_item.on("change", function(e) {
+							input_item.on("change", function (e) {
 								$(arrActions[0][0].target).attr(
 									"src",
 									URL.createObjectURL(e.target.files[0])
@@ -1089,7 +957,7 @@ function distributeNextAction(arrActionParams) {
 									cache: false,
 									contentType: false,
 									processData: false
-								}).done(function(response) {
+								}).done(function (response) {
 									console.log("전달성공");
 								});
 							});
@@ -1160,59 +1028,23 @@ function distributeNextAction(arrActionParams) {
 						openWin(params.url);
 					}
 					break;
-				//占쎌쥙�⒳펺誘�삕�좑옙 �좎럡�∽옙�뀀쐻�좑옙 占쎌쥙��옙占쎌삕�좑옙.
-				case 24:
-					startResetBeginSequence(params);
-					break;
-				case 25:
-					startResetEndSequence(params);
-					break;
-				case 26:
-					startResetInRectSequence(params);
-					break;
-
-				case 27:
-					startAppend(params);
-					break;
-				case 28:
-					startRemove(params);
-					break;
-				case 29:
-					startReplace(params);
-					break;
-				case 30:
-					startRemoveAll(params);
-					break;
-				case 31:
-					startAdd(params);
-					break;
-				case 32:
-					startSubtract(params);
-					break;
-				case 33:
-					startMultiply(params);
-					break;
-				case 34:
-					startDivide(params);
-					break;
-				case 35: // 占쎄퀣�좑옙占� 占쎄쑴��.
-					break;
-
-				case 36:
-					startTimer(params);
-					break;
-				case 37:
-					stopTimer(params);
-					break;
-				case 38: //iframe
-					goBack(params);
-					break;
-				case 39: //iframe
-					goForward(params);
-					break;
-				case 40: //iframe
-					reload(params);
-					break;
+				case 24: startResetBeginSequence(params); break;
+				case 25: startResetEndSequence(params); break;
+				case 26: startResetInRectSequence(params); break;
+				case 27: startAppend(params); break;
+				case 28: startRemove(params);	break;
+				case 29: startReplace(params); break;
+				case 30: startRemoveAll(params); break;
+				case 31: startAdd(params); break;
+				case 32: startSubtract(params); break;
+				case 33: startMultiply(params); break;
+				case 34: startDivide(params); break;
+				case 35: break;
+				case 36: startTimer(params); break;
+				case 37: stopTimer(params); break;
+				case 38: goBack(params); break; //iframe
+				case 39: goForward(params); break; //iframe
+				case 40: reload(params); break; //iframe
 				case 41:
 					if (params.actSubType == "Get Data") {
 						startLoadData(params);
@@ -1220,9 +1052,7 @@ function distributeNextAction(arrActionParams) {
 						startChangeData(params);
 					}
 					break;
-				case 50:
-					startlink(params);
-					break;
+				case 50: startlink(params);	break;
 			}
 		}
 	}
@@ -1234,8 +1064,6 @@ function quickSort(arr, left, right) {
 
 	var temp;
 	var pivot = parseInt($(arr[Math.round((left + right) / 2)]).css("z-index"));
-
-	//console.log('right : ' + right +', left : ' + left + ', pivot : ' + pivot);
 
 	while (i <= j) {
 		while (parseInt($(arr[i]).css("z-index")) > pivot) i++;
@@ -1261,7 +1089,7 @@ function quickSort(arr, left, right) {
 function pagingViewControl(params) {
 	console.log("pagingViewControl");
 	//console.log("params : " + params.duration)
-	setTimeout(function() {
+	setTimeout(function () {
 		var tg = params.target[0];
 		//var tgArray = $(tg).find('canvas');
 		//var ctx = tg.getContext("2d");
@@ -1366,12 +1194,12 @@ function pagingViewControl(params) {
 								duration: params.duration / 2,
 								easing: "linear",
 								queue: false,
-								complete: function() {
+								complete: function () {
 									$(tgArray[1]).animate(properties2, {
 										duration: params.duration / 2,
 										easing: "linear",
 										queue: false,
-										complete: function() {}
+										complete: function () { }
 									});
 									$(tgArray[0]).css("opacity", 1);
 									$(tgArray[0]).animate(
@@ -1382,7 +1210,7 @@ function pagingViewControl(params) {
 											duration: params.duration / 2,
 											easing: "linear",
 											queue: false,
-											complete: function() {
+											complete: function () {
 												//console.log("complete!!!!!");
 
 												isAnimated = false;
@@ -1446,7 +1274,7 @@ function pagingViewControl(params) {
 								duration: params.duration,
 								easing: "linear",
 								queue: false,
-								complete: function() {
+								complete: function () {
 									console.log("complete!!!!!");
 									for (var i = 0; i < tgArray.length; i++) {
 										switch (i) {
@@ -1519,12 +1347,12 @@ function pagingViewControl(params) {
 								duration: params.duration / 2,
 								easing: "linear",
 								queue: false,
-								complete: function() {
+								complete: function () {
 									$(tgArray[0]).animate(properties2, {
 										duration: params.duration / 2,
 										easing: "linear",
 										queue: false,
-										complete: function() {}
+										complete: function () { }
 									});
 								}
 							});
@@ -1533,12 +1361,12 @@ function pagingViewControl(params) {
 								duration: params.duration / 2,
 								easing: "linear",
 								queue: false,
-								complete: function() {
+								complete: function () {
 									$(tgArray[1]).animate(properties4, {
 										duration: params.duration / 2,
 										easing: "linear",
 										queue: false,
-										complete: function() {
+										complete: function () {
 											console.log("complete!!!!!");
 											for (var i = 0; i < tgArray.length; i++) {
 												switch (i) {
@@ -1608,14 +1436,14 @@ function pagingViewControl(params) {
 								duration: params.duration / 2,
 								easing: "linear",
 								queue: false,
-								complete: function() {
+								complete: function () {
 									$(tgArray[0]).animate(properties2, {
 										duration: params.duration / 2,
 										easing: "linear",
 										queue: false,
-										complete: function() {
+										complete: function () {
 											/*$(tgArray[0]).css('left', 0);
-                                             $(tgArray[0]).css('left', 0);*/
+																						 $(tgArray[0]).css('left', 0);*/
 											console.log("complete");
 											isAnimated = false;
 											for (var i = 0; i < tgArray.length; i++) {
@@ -1655,7 +1483,7 @@ function pagingViewControl(params) {
 								duration: params.duration / 2,
 								easing: "linear",
 								queue: false,
-								complete: function() {}
+								complete: function () { }
 							});
 
 							break;
@@ -1761,17 +1589,17 @@ function pagingViewControl(params) {
 							$(tgArray[tgArray.length - 1]).animate(properties1, {
 								duration: params.duration / 2,
 								easing: "linear",
-								complete: function() {
+								complete: function () {
 									$(tgArray[tgArray.length - 1]).animate(properties2, {
 										duration: params.duration / 2,
 										easing: "linear",
-										complete: function() {}
+										complete: function () { }
 									});
 
 									$(tgArray[0]).animate(properties3, {
 										duration: params.duration / 2,
 										easing: "linear",
-										complete: function() {
+										complete: function () {
 											tgArray = quickSort(tgArray, 0, tgArray.length - 1);
 
 											for (var j = 0; j < tgArray.length; j++) {
@@ -1805,7 +1633,7 @@ function pagingViewControl(params) {
 								duration: params.duration,
 								easing: "linear",
 								queue: false,
-								complete: function() {
+								complete: function () {
 									console.log("complete!!!!!");
 									for (var i = 0; i < tgArray.length; i++) {
 										switch (i) {
@@ -1875,12 +1703,12 @@ function pagingViewControl(params) {
 								duration: params.duration / 2,
 								easing: "linear",
 								queue: false,
-								complete: function() {
+								complete: function () {
 									$(tgArray[0]).animate(properties2, {
 										duration: params.duration / 2,
 										easing: "linear",
 										queue: false,
-										complete: function() {}
+										complete: function () { }
 									});
 								}
 							});
@@ -1889,12 +1717,12 @@ function pagingViewControl(params) {
 								duration: params.duration / 2,
 								easing: "linear",
 								queue: false,
-								complete: function() {
+								complete: function () {
 									$(tgArray[tgArray.length - 1]).animate(properties4, {
 										duration: params.duration / 2,
 										easing: "linear",
 										queue: false,
-										complete: function() {
+										complete: function () {
 											console.log("complete!!!!!");
 											for (var i = 0; i < tgArray.length; i++) {
 												switch (i) {
@@ -1957,12 +1785,12 @@ function pagingViewControl(params) {
 								duration: params.duration / 2,
 								easing: "linear",
 								queue: false,
-								complete: function() {
+								complete: function () {
 									$(tgArray[0]).animate(properties2, {
 										duration: params.duration / 2,
 										easing: "linear",
 										queue: false,
-										complete: function() {
+										complete: function () {
 											isAnimated = false;
 											for (var i = 0; i < tgArray.length; i++) {
 												switch (i) {
@@ -1996,7 +1824,7 @@ function pagingViewControl(params) {
 								duration: params.duration / 2,
 								easing: "linear",
 								queue: false,
-								complete: function() {}
+								complete: function () { }
 							});
 
 							break;
@@ -2030,34 +1858,34 @@ function pagingViewControl(params) {
 		}
 
 		/*switch (params.actSubType){
-         case 'Go Next' :
-         if(imageCnt < imageArray.length - 1 )
-         imageCnt ++;
-    
-         tempImage.src = imageArray[imageCnt];
-         tempImage.onload = function(){
-         ctx.clearRect(0,0,width,height);
-         //ctx.save();
-         drawImage(ctx, tempImage, 0,0,width,height,0);
-         //ctx.restore();
-         }
-    
-         jQuery.data(tg, 'imageCnt', imageCnt);
-         break;
-    
-         case 'Go Prev' :
-         if(imageCnt > 0 )
-         imageCnt --;
-         tempImage.src = imageArray[imageCnt];
-         tempImage.onload = function(){
-         ctx.clearRect(left,top,width,height);
-         //ctx.save();
-         drawImage(ctx, tempImage, 0,0,width,height,0);
-         //ctx.restore();
-         }
-         jQuery.data(tg, 'imageCnt', imageCnt);
-         break;
-         }*/
+				 case 'Go Next' :
+				 if(imageCnt < imageArray.length - 1 )
+				 imageCnt ++;
+	  
+				 tempImage.src = imageArray[imageCnt];
+				 tempImage.onload = function(){
+				 ctx.clearRect(0,0,width,height);
+				 //ctx.save();
+				 drawImage(ctx, tempImage, 0,0,width,height,0);
+				 //ctx.restore();
+				 }
+	  
+				 jQuery.data(tg, 'imageCnt', imageCnt);
+				 break;
+	  
+				 case 'Go Prev' :
+				 if(imageCnt > 0 )
+				 imageCnt --;
+				 tempImage.src = imageArray[imageCnt];
+				 tempImage.onload = function(){
+				 ctx.clearRect(left,top,width,height);
+				 //ctx.save();
+				 drawImage(ctx, tempImage, 0,0,width,height,0);
+				 //ctx.restore();
+				 }
+				 jQuery.data(tg, 'imageCnt', imageCnt);
+				 break;
+				 }*/
 		//distributeNextAction(params.nextAction);
 	}, params.delay);
 }
@@ -2078,7 +1906,7 @@ function startlink(params) {
 }
 
 function replaceContent(params) {
-	setTimeout(function() {
+	setTimeout(function () {
 		distributeNextAction(params.nextAction);
 
 		if (params.content.endsWith("mp4")) {
@@ -2109,7 +1937,7 @@ function replaceContent(params) {
 
 			try {
 				$(element).attr("src", params.content);
-			} catch (err) {}
+			} catch (err) { }
 
 			//distributeNextAction(params.nextAction);
 		}
@@ -2117,12 +1945,12 @@ function replaceContent(params) {
 }
 if (typeof String.prototype.startsWith != "function") {
 	// see below for better implementation!
-	String.prototype.startsWith = function(str) {
+	String.prototype.startsWith = function (str) {
 		return this.indexOf(str) === 0;
 	};
 }
 if (typeof String.prototype.endsWith !== "function") {
-	String.prototype.endsWith = function(suffix) {
+	String.prototype.endsWith = function (suffix) {
 		return this.indexOf(suffix, this.length - suffix.length) !== -1;
 	};
 }
@@ -2141,7 +1969,7 @@ function drawImage(ctx, image, x, y, w, h, r) {
 
 function startAppend(params) {
 	//console.log("startAppend");
-	setTimeout(function() {
+	setTimeout(function () {
 		for (var i = 0; i < params.target.length; i++) {
 			var tg = params.target[i];
 
@@ -2199,7 +2027,7 @@ function startAppend(params) {
 
 function startRemove(params) {
 	//console.log("startRemove");
-	setTimeout(function() {
+	setTimeout(function () {
 		for (var i = 0; i < params.target.length; i++) {
 			var tg = params.target[i];
 
@@ -2356,13 +2184,13 @@ function getTextBoxText(elem) {
 
 function setTextBoxText(elem, text) {
 
-	var firstParagraphStyle = null; 
-	var firstSpanStyle =  null; 
+	var firstParagraphStyle = null;
+	var firstSpanStyle = null;
 
 	//  div contentsbox  ~> div     ~> p       ~> span
-	if ( elem.children[0] !=null  ) { // DIV always exist, but for test
-		
-		try{ 
+	if (elem.children[0] != null) { // DIV always exist, but for test
+
+		try {
 			firstParagraphStyle = elem.children[0].children[0].style;
 			firstSpanStyle = elem.children[0].children[0].children[0].style;
 		}
@@ -2455,7 +2283,7 @@ function startRemoveAll(params) {
 
 function startAdd(params) {
 	//console.log("startAdd");
-	setTimeout(function() {
+	setTimeout(function () {
 		for (var i = 0; i < params.target.length; i++) {
 			var tg = params.target[i];
 
@@ -2526,7 +2354,7 @@ function startAdd(params) {
 
 function startSubtract(params) {
 	//console.log("startSubtract");
-	setTimeout(function() {
+	setTimeout(function () {
 		for (var i = 0; i < params.target.length; i++) {
 			var tg = params.target[i];
 
@@ -2605,7 +2433,7 @@ function startSubtract(params) {
 
 function startMultiply(params) {
 	//console.log("startMultiply");
-	setTimeout(function() {
+	setTimeout(function () {
 		for (var i = 0; i < params.target.length; i++) {
 			var tg = params.target[i];
 
@@ -2684,7 +2512,7 @@ function startMultiply(params) {
 
 function startDivide(params) {
 	//console.log("startDivide");
-	setTimeout(function() {
+	setTimeout(function () {
 		for (var i = 0; i < params.target.length; i++) {
 			var tg = params.target[i];
 
@@ -2817,12 +2645,12 @@ function soundResume() {
 }
 
 function playSound(params) {
-	setTimeout(function() {
+	setTimeout(function () {
 		var target = document.getElementById(params.target[0]);
 		try {
 			target.removeEventListener("ended", functionS, null);
 			target.removeEventListener("timeupdate", functionS, null);
-		} catch (e) {}
+		} catch (e) { }
 
 		if (params.actSubType == "Pause Sound") {
 			target.pause();
@@ -2835,7 +2663,7 @@ function playSound(params) {
 			SoundPromisePlay(target);
 			target.addEventListener(
 				"ended",
-				(functionS = function() {
+				(functionS = function () {
 					distributeNextAction(params.nextAction);
 				})
 			);
@@ -2853,12 +2681,12 @@ function playSound(params) {
 				SoundPromisePlay(target);
 				//console.log("repeatCount : "+ params.repeatCount + ", soundPath : " + soundPath);
 				if (params.useSectionPlay == "YES") {
-					target.addEventListener("loadeddata", function() {
+					target.addEventListener("loadeddata", function () {
 						target.currentTime = params.secStartTime / 1000.0;
 					});
 					target.addEventListener(
 						"timeupdate",
-						(functionS = function() {
+						(functionS = function () {
 							if (target.currentTime > params.secEndTime / 1000.0) {
 								target.pause();
 								target.currentTime = params.secStartTime / 1000.0;
@@ -2883,7 +2711,7 @@ function playSound(params) {
 				} else {
 					target.addEventListener(
 						"ended",
-						(functionS = function() {
+						(functionS = function () {
 							// target.removeEventListener("ended", functionS, null);
 							if (target.currentTime > params.secEndTime / 1000.0) {
 								target.pause();
@@ -2918,7 +2746,7 @@ function SoundPromisePlay(media) {
 	//    playPromise.catch(() => { media.play(); })
 	//}
 	if (playPromise !== null) {
-		playPromise.catch(function() {
+		playPromise.catch(function () {
 			media.play();
 		});
 	}
@@ -2975,7 +2803,7 @@ function gotoPage(params) {
 
 		// 북마크 여부 체크.
 		var is_marked = false;
-		$("x-bookmarklist[data-bookmark=true] > ul > li").each(function(idx) {
+		$("x-bookmarklist[data-bookmark=true] > ul > li").each(function (idx) {
 			if (
 				$(this)
 					.find(" h3 > a > .pagenum")
@@ -2985,17 +2813,17 @@ function gotoPage(params) {
 			}
 		});
 		if (is_marked) {
-            $(".bookmarker_on[data-bookmark=true]").addClass("collapse");
-            $(".bookmarker_off[data-bookmark=true]").removeClass("collapse");
+			$(".bookmarker_on[data-bookmark=true]").addClass("collapse");
+			$(".bookmarker_off[data-bookmark=true]").removeClass("collapse");
 		} else {
-            $(".bookmarker_off[data-bookmark=true]").addClass("collapse");
-            $(".bookmarker_on[data-bookmark=true]").removeClass("collapse");
+			$(".bookmarker_off[data-bookmark=true]").addClass("collapse");
+			$(".bookmarker_on[data-bookmark=true]").removeClass("collapse");
 		}
-	} catch (e) {}
+	} catch (e) { }
 
 	//console.log("gotoPage : " + params.goto);
 	//console.log("gotoPage : SubType " + params.actSubType);
-	setTimeout(function() {
+	setTimeout(function () {
 		if (params.target != null && params.target.length == 1) {
 			$("#contents").attr("src", params.goto);
 		} else {
@@ -3085,14 +2913,14 @@ function startAnimation(params) {
 			jQuery.data($(tg).get(0), "stopAction") == "N"
 		) {
 			if (params.autoReverse == "Y") {
-				setTimeout(function() {
+				setTimeout(function () {
 					for (var i = 1; i < length + 1; i++) {
 						var res = aniImages[length - i];
 						revImages.push(res);
 					}
 
 					aniImages = aniImages.concat(revImages);
-					var aniTimer = setInterval(function() {
+					var aniTimer = setInterval(function () {
 						changeImage();
 					}, interval);
 					jQuery.data($(tg).get(0), "animation_Timer", aniTimer);
@@ -3117,11 +2945,11 @@ function startAnimation(params) {
 					}
 				}, params.delay);
 			} else {
-				setTimeout(function() {
+				setTimeout(function () {
 					for (var i = 0; i < params.target.length; i++) {
 						var tg = params.target[i];
 						var interval = params.duration / aniImages.length;
-						var aniTimer = setInterval(function() {
+						var aniTimer = setInterval(function () {
 							changeImage();
 						}, interval);
 						jQuery.data($(tg).get(0), "animation_Timer", aniTimer);
@@ -3156,63 +2984,63 @@ function startAnimation(params) {
 }
 
 function startToggle(params) {
-    for (var i = 0; i < params.target.length; i++) {
-        var tg = params.target[i];
+	for (var i = 0; i < params.target.length; i++) {
+		var tg = params.target[i];
 
-        var subType = params.actSubType;
-        var imageRes = null;
-
-
-        if (params.actSubType == "Show") {
-            if (params.obj.hidden == true) {
-                $(params.obj).removeClass("collapse");
-            } else {
-                $(params.obj).addClass("collapse");
-            }
-            return;
-        } else if (params.actSubType == "Toggle") {
-
-            params.obj.changeToggleState();
-            var curState = params.obj.state;
-            if (curState) {
-                imageRes = params.obj.altImage;
-            } else {
-                imageRes = params.obj.originImage;
-            }
-
-        } else {
-
-            var curState = params.obj.state;
-
-            var nextState = params.actSubType == "Off" ? false : true;
-
-            if (curState == nextState) {
-                distributeNextAction(params.nextAction);
-                return;
-            }
-
-            if (nextState) {
-                params.obj.state = true;
-                imageRes = params.obj.altImage;
-            } else {
-                params.obj.state = false;
-                imageRes = params.obj.originImage;
-            }
+		var subType = params.actSubType;
+		var imageRes = null;
 
 
-        }
-        if (imageRes != "") {
-            if ($(tg).attr('xlink:href') != undefined) $(tg).attr("xlink:href", imageRes);
-            else if ($(tg).attr('src') != undefined) $(tg).attr("src", imageRes);
-            $(tg).show();
+		if (params.actSubType == "Show") {
+			if (params.obj.hidden == true) {
+				$(params.obj).removeClass("collapse");
+			} else {
+				$(params.obj).addClass("collapse");
+			}
+			return;
+		} else if (params.actSubType == "Toggle") {
 
-        } else {
-            $(tg).hide();
-        }
+			params.obj.changeToggleState();
+			var curState = params.obj.state;
+			if (curState) {
+				imageRes = params.obj.altImage;
+			} else {
+				imageRes = params.obj.originImage;
+			}
 
-        distributeNextAction(params.nextAction);
+		} else {
 
-    }
+			var curState = params.obj.state;
+
+			var nextState = params.actSubType == "Off" ? false : true;
+
+			if (curState == nextState) {
+				distributeNextAction(params.nextAction);
+				return;
+			}
+
+			if (nextState) {
+				params.obj.state = true;
+				imageRes = params.obj.altImage;
+			} else {
+				params.obj.state = false;
+				imageRes = params.obj.originImage;
+			}
+
+
+		}
+		if (imageRes != "") {
+			if ($(tg).attr('xlink:href') != undefined) $(tg).attr("xlink:href", imageRes);
+			else if ($(tg).attr('src') != undefined) $(tg).attr("src", imageRes);
+			$(tg).show();
+
+		} else {
+			$(tg).hide();
+		}
+
+		distributeNextAction(params.nextAction);
+
+	}
 }
 
 function changeToggleState(obj) {
@@ -3228,7 +3056,7 @@ function playEffectSound(effectSound, delay) {
 		var effect = new Audio();
 
 		effect.src = effectSound;
-		setTimeout(function() {
+		setTimeout(function () {
 			effect.play();
 		}, delay);
 	}
@@ -3237,7 +3065,7 @@ function playEffectSound(effectSound, delay) {
 //////////占쎈툕�쀯옙��쨨�븐눊猿�좑옙 占쎌쥙��옙占쎌삕�좑옙 �좎럡�∽옙�뀀쐻�좑옙///////////////
 
 function startConditionalAction(params) {
-	setTimeout(function() {
+	setTimeout(function () {
 		for (var i = 0; i < params.target.length; i++) {
 			var tg = params.target[i];
 			var conditionalName = params.actType;
@@ -3589,7 +3417,7 @@ function getCompareValue(target, attribute) {
 			var str = jQuery.data($(target).get(0), "tag");
 			var arrSplit = str.split(",");
 			textCount = arrSplit.length;
-		} catch (err) {}
+		} catch (err) { }
 		compareValue = textCount + "";
 	} else if (attribute == "Text") {
 		compareValue = jQuery.data($(target).get(0), "text");
@@ -3629,7 +3457,7 @@ function cloneObject(obj) {
 //占쎌쥙�⑼옙�볦삕�ル뜄��좎룞�숋옙濡녹삕繹먮씮�� 占쎌쥙��옙占쎌삕�좑옙 �좎럡�∽옙�뀀쐻�좑옙
 function startLibraryAction(params) {
 	//console.debug("[startLibraryAction] params.actType = " + params.actType);
-	setTimeout(function() {
+	setTimeout(function () {
 		for (var i = 0; i < params.target.length; i++) {
 			var tg = params.target[i];
 			var actionLibraryName = params.actType;
@@ -3692,7 +3520,7 @@ function targetNotFound(target, count) {
 
 function startResetBeginSequence(params) {
 	//console.log("startResetBeginSequence");
-	setTimeout(function() {
+	setTimeout(function () {
 		for (var i = 0; i < params.target.length; i++) {
 			var tg = params.target[i];
 			var ResetIndex = params.ResetIndex;
@@ -3704,7 +3532,7 @@ function startResetBeginSequence(params) {
 
 function startResetEndSequence(params) {
 	//console.log("startResetEndSequence");
-	setTimeout(function() {
+	setTimeout(function () {
 		for (var i = 0; i < params.target.length; i++) {
 			var tg = params.target[i];
 			var ResetIndex = params.ResetIndex;
@@ -3717,7 +3545,7 @@ function startResetEndSequence(params) {
 
 function startResetInRectSequence(params) {
 	//console.log("startResetInRectSequence");
-	setTimeout(function() {
+	setTimeout(function () {
 		for (var i = 0; i < params.target.length; i++) {
 			var tg = params.target[i];
 			var actionLibraryName = params.actType;
@@ -3871,7 +3699,7 @@ function update(e) {
 function grab(context, rand, params) {
 	try {
 		event.preventDefault();
-	} catch (err) {}
+	} catch (err) { }
 	document.onmousedown = falsefunc; // in NS this prevents cascading of events, thus disabling text selection
 	document.ontouchstart = falsefunc; // in NS this prevents cascading of events, thus disabling text selection
 
@@ -3960,7 +3788,7 @@ function out(e) {
 							},
 							{
 								duration: 400,
-								complete: function() {
+								complete: function () {
 									console.log("complete");
 									firstX =
 										parseInt(e.offsetX || e.touches[0].clientX) +
@@ -3981,7 +3809,7 @@ function out(e) {
 							},
 							{
 								duration: 400,
-								complete: function() {
+								complete: function () {
 									firstX =
 										parseInt(e.offsetX || e.touches[0].clientX) -
 										(paramsobj.cropValue -
@@ -4006,7 +3834,7 @@ function out(e) {
 							},
 							{
 								duration: 400,
-								complete: function() {
+								complete: function () {
 									console.log("complete");
 									firstY =
 										parseInt(e.offsetY || e.touches[0].clientY) +
@@ -4027,7 +3855,7 @@ function out(e) {
 							},
 							{
 								duration: 400,
-								complete: function() {
+								complete: function () {
 									firstY =
 										parseInt(e.offsetY || e.touches[0].clientY) -
 										(paramsobj.cropValue -
@@ -4046,35 +3874,35 @@ function out(e) {
 	}
 
 	/*if(isMousedown){
-     //console.log("triggerAction")
-     isMousedown = false;
-     if(paramsobj.paramValue[0].Direction == 'Vert'){
-     if(deltaY > 0){
-     firstY = canvasY;
-     distributeAction(this, 'down', 'N', [[{actType:13, actSubType: 'Go Next', effect : paramsobj.effect, useAnimation : paramsobj.useAnimation, target:[dragobj], Direction : paramsobj.paramValue[0].Direction, startTime:0, delay:0, duration: paramsobj.duration }]])
-     isActed = true;
-     return;
-     }
-     if(deltaY < 0){
-     firstY = canvasY;
-     distributeAction(this, 'down', 'N', [[{actType:13, actSubType: 'Go Prev', effect : paramsobj.effect, useAnimation : paramsobj.useAnimation, target:[dragobj], Direction : paramsobj.paramValue[0].Direction, startTime:0, delay:0, duration: paramsobj.duration }]])
-     return;
-     }
-     }else{
-     if(deltaX > 0){
-     firstX = canvasX;
-     distributeAction(this, 'down', 'N', [[{actType:13, actSubType: 'Go Next', effect : paramsobj.effect, useAnimation : paramsobj.useAnimation, target:[dragobj], Direction : paramsobj.paramValue[0].Direction, startTime:0, delay:0, duration: paramsobj.duration }]])
-     isActed = true;
-     return;
-     }
-     if(deltaX < 0){
-     firstX = canvasX;
-     distributeAction(this, 'down', 'N', [[{actType:13, actSubType: 'Go Prev', effect : paramsobj.effect, useAnimation : paramsobj.useAnimation, target:[dragobj], Direction : paramsobj.paramValue[0].Direction,startTime:0, delay:0, duration: paramsobj.duration }]])
-     isActed = true;
-     return;
-     }
-     }
-     }*/
+		 //console.log("triggerAction")
+		 isMousedown = false;
+		 if(paramsobj.paramValue[0].Direction == 'Vert'){
+		 if(deltaY > 0){
+		 firstY = canvasY;
+		 distributeAction(this, 'down', 'N', [[{actType:13, actSubType: 'Go Next', effect : paramsobj.effect, useAnimation : paramsobj.useAnimation, target:[dragobj], Direction : paramsobj.paramValue[0].Direction, startTime:0, delay:0, duration: paramsobj.duration }]])
+		 isActed = true;
+		 return;
+		 }
+		 if(deltaY < 0){
+		 firstY = canvasY;
+		 distributeAction(this, 'down', 'N', [[{actType:13, actSubType: 'Go Prev', effect : paramsobj.effect, useAnimation : paramsobj.useAnimation, target:[dragobj], Direction : paramsobj.paramValue[0].Direction, startTime:0, delay:0, duration: paramsobj.duration }]])
+		 return;
+		 }
+		 }else{
+		 if(deltaX > 0){
+		 firstX = canvasX;
+		 distributeAction(this, 'down', 'N', [[{actType:13, actSubType: 'Go Next', effect : paramsobj.effect, useAnimation : paramsobj.useAnimation, target:[dragobj], Direction : paramsobj.paramValue[0].Direction, startTime:0, delay:0, duration: paramsobj.duration }]])
+		 isActed = true;
+		 return;
+		 }
+		 if(deltaX < 0){
+		 firstX = canvasX;
+		 distributeAction(this, 'down', 'N', [[{actType:13, actSubType: 'Go Prev', effect : paramsobj.effect, useAnimation : paramsobj.useAnimation, target:[dragobj], Direction : paramsobj.paramValue[0].Direction,startTime:0, delay:0, duration: paramsobj.duration }]])
+		 isActed = true;
+		 return;
+		 }
+		 }
+		 }*/
 }
 
 function drop(e) {
@@ -4109,7 +3937,7 @@ function drop(e) {
 								},
 								{
 									duration: 400,
-									complete: function() {
+									complete: function () {
 										//console.log("complete")
 										firstX =
 											parseInt(e.offsetX || e.touches[0].clientX) +
@@ -4130,7 +3958,7 @@ function drop(e) {
 								},
 								{
 									duration: 400,
-									complete: function() {
+									complete: function () {
 										firstX =
 											parseInt(e.offsetX || e.touches[0].clientX) -
 											(paramsobj.cropValue -
@@ -4155,7 +3983,7 @@ function drop(e) {
 								},
 								{
 									duration: 400,
-									complete: function() {
+									complete: function () {
 										//console.log("complete")
 										firstY =
 											parseInt(e.offsetY || e.targetTouches[0].clientY) +
@@ -4176,7 +4004,7 @@ function drop(e) {
 								},
 								{
 									duration: 400,
-									complete: function() {
+									complete: function () {
 										firstY =
 											parseInt(e.offsetY || e.targetTouches[0].clientY) -
 											(paramsobj.cropValue -
@@ -4216,7 +4044,7 @@ function drag(e) {
 			console.log("return 01");
 			return;
 		}
-	} catch (err) {}
+	} catch (err) { }
 
 	var percentRate;
 
@@ -4564,10 +4392,10 @@ function drag(e) {
 							//$(paramsobj.controlObj).css({'transform': 'scale('+widthScale+', ' +heightScale+')'});                 }
 
 							/*ctx.save();
-                             ctx.translate(x + w / 2, y + h / 2);
-                             ctx.rotate(r * Math.PI / 180);
-                             ctx.drawImage(image, -w / 2, -h / 2, w, h);
-                             ctx.restore();*/
+														 ctx.translate(x + w / 2, y + h / 2);
+														 ctx.rotate(r * Math.PI / 180);
+														 ctx.drawImage(image, -w / 2, -h / 2, w, h);
+														 ctx.restore();*/
 							break;
 					}
 				}
@@ -4590,7 +4418,7 @@ function startScroll(params) {
 
 		//console.log("scrollX => " + nowScrollX + "scrollY => " + nowScrollY);
 		if (params.reverse == "Y") {
-			setTimeout(function() {
+			setTimeout(function () {
 				$(tg).animate(
 					{
 						scrollTop: params.scrollY,
@@ -4599,8 +4427,8 @@ function startScroll(params) {
 					{
 						duration: params.duration,
 						queue: false,
-						complete: function() {
-							setTimeout(function() {
+						complete: function () {
+							setTimeout(function () {
 								$(tg).animate(
 									{
 										scrollTop: nowScrollY,
@@ -4609,7 +4437,7 @@ function startScroll(params) {
 									{
 										duration: params.revDuration,
 										queue: false,
-										complete: function() {
+										complete: function () {
 											if (
 												params.repeatForever != null &&
 												params.repeatForever == "Y"
@@ -4638,7 +4466,7 @@ function startScroll(params) {
 				);
 			}, params.delay);
 		} else {
-			setTimeout(function() {
+			setTimeout(function () {
 				$(tg).animate(
 					{
 						scrollTop: params.scrollY,
@@ -4647,7 +4475,7 @@ function startScroll(params) {
 					{
 						duration: params.duration,
 						queue: false,
-						complete: function() {
+						complete: function () {
 							if (params.repeatForever != null && params.repeatForever == "Y") {
 								params.delay = params.delay - params.startTime;
 								params.startTime = 0;
@@ -4674,14 +4502,14 @@ function CurveAnimator(from) {
 	this.updatePath();
 	CurveAnimator.lastCreated = this;
 }
-CurveAnimator.prototype.animate = function(params, duration, callback, delay) {
+CurveAnimator.prototype.animate = function (params, duration, callback, delay) {
 	var curveAnim = this;
 	// TODO: Use requestAnimationFrame if a delay isn't passed
 	if (!delay) delay = 1 / 40;
 	clearInterval(curveAnim.animTimer);
 
 	var startTime = new Date();
-	curveAnim.animTimer = setInterval(function() {
+	curveAnim.animTimer = setInterval(function () {
 		var now = new Date();
 		var elapsed = (now - startTime) / 1000;
 		var percent = elapsed / duration;
@@ -4734,23 +4562,23 @@ CurveAnimator.prototype.animate = function(params, duration, callback, delay) {
 		);
 	}, delay * 1000);
 };
-CurveAnimator.prototype.stop = function() {
+CurveAnimator.prototype.stop = function () {
 	clearInterval(this.animTimer);
 };
-CurveAnimator.prototype.pointAt = function(percent) {
+CurveAnimator.prototype.pointAt = function (percent) {
 	return this.path.getPointAtLength(this.len * percent);
 };
-CurveAnimator.prototype.updatePath = function() {
+CurveAnimator.prototype.updatePath = function () {
 	this.len = this.path.getTotalLength();
 };
-CurveAnimator.prototype.setStart = function(x, y) {
+CurveAnimator.prototype.setStart = function (x, y) {
 	var M = this.path.pathSegList.getItem(0);
 	M.x = x;
 	M.y = y;
 	this.updatePath();
 	return this;
 };
-CurveAnimator.prototype.setEnd = function(x, y) {
+CurveAnimator.prototype.setEnd = function (x, y) {
 	var C = this.path.pathSegList.getItem(1);
 	C.x = x;
 	C.y = y;
@@ -4758,14 +4586,14 @@ CurveAnimator.prototype.setEnd = function(x, y) {
 
 	return this;
 };
-CurveAnimator.prototype.setStartDirection = function(x, y) {
+CurveAnimator.prototype.setStartDirection = function (x, y) {
 	var C = this.path.pathSegList.getItem(1);
 	C.x1 = x;
 	C.y1 = y;
 	this.updatePath();
 	return this;
 };
-CurveAnimator.prototype.setEndDirection = function(x, y) {
+CurveAnimator.prototype.setEndDirection = function (x, y) {
 	var C = this.path.pathSegList.getItem(1);
 	C.x2 = x;
 	C.y2 = y;
@@ -4788,12 +4616,9 @@ function reload(params) {
 
 function shuffleRandom(beforeNo, n) {
 	var randNo;
-	/* t(randNo); */
 	while (true) {
 		randNo = Math.floor(Math.random() * n);
-		//console.log(beforeNo + "//" + randNo);
 		if (beforeNo != randNo) {
-			//console.log("�좎럩伊숋옙罐由곤옙�뚯굲�좎럥肉�옙類앸쐻占쎈뜄荑뗰옙�먯삕." + randNo);
 			break;
 		}
 	}
@@ -4804,7 +4629,6 @@ function checkBrowser(params) {
 	var b = "";
 	var ua = window.navigator.userAgent;
 	if (!(ua.indexOf("Chrome") != -1 && ua.indexOf("Safari") != -1)) {
-		//console.log("Sfari�좎럩伊숋옙館�쇿뜝�덉탮占썬굩�숋옙�⑹맶占쎌쥜�� Flip�좎럩伊숋옙�논렭癰귘뫗�뺡쪛�껉뺨占썬굩�숅뇡癒�뮡占쎌뼚짹占쎌빢�숋옙占쎄퐷占쎌쥙猷욑옙占� 占쎌쥙�εㅇ紐뚯삕�좎럩伊숋옙琯�앾옙�덈�占쎌쥙�ο옙蹂잙쐻�좑옙 �좎럩伊숋옙菅嫄∽옙紐꾩굲�좎럥梨뤄옙類앸쐻占쎈뜄�욑옙�듭삕. �좎럩伊숋옙��숋옙占쎌돪占쎌쥙�η븰�놁삕�좎럩�뺝뜝�덉챺占쎈벨�숋옙��占썹쳥��쐻占쎈슢痢먨뜝�숈삕 �좎럩伊숋옙��숋옙�⑹툤�좎럩伊숋옙�대き�룐뫖鍮앾옙醫롫윪占쎈벨�숅넫臾믪굲.");
 		return "safari";
 	}
 	return "normal";
@@ -4821,7 +4645,7 @@ function reDraw(target, context, image, scaleW, scaleH, timer) {
 }
 
 function scaleInterval(target, context, image, scaleW, scaleH) {
-	var timer = setInterval(function() {
+	var timer = setInterval(function () {
 		reDraw(target, context, image, scaleW, scaleH, timer);
 	}, 80);
 }
@@ -4855,7 +4679,7 @@ function startLoadData(params) {
 		strParam += propertyName + "/" + propertyValue + "**";
 	}
 	//console.log("loaddata~~" + strParam);
-	$.post(preUrl, postParmas, function(data, status) {
+	$.post(preUrl, postParmas, function (data, status) {
 		var tempData = data.split("<body>")[1];
 		//console.log(tempData);
 		tempData = tempData.split("</body>")[0];
@@ -4874,7 +4698,7 @@ function startLoadData(params) {
 				mArrJsonData = jsonData;
 			}
 			//var soundPath = jsonObj.sound;
-		} catch (err) {}
+		} catch (err) { }
 		distributeNextAction(params.nextAction);
 
 		//console.log("arrJsonDta init OK");
@@ -4882,7 +4706,7 @@ function startLoadData(params) {
 }
 
 function parseLoginData(data) {
-	$.each(data, function(k, v) {
+	$.each(data, function (k, v) {
 		if (k == "error") {
 			alert(v);
 			return;
@@ -4894,12 +4718,12 @@ function parseLoginData(data) {
 		changeDisplayedText(target, text);
 		try {
 			jQuery.data(jQuery.data(TargetTable, k), "text", text);
-		} catch (err) {}
+		} catch (err) { }
 	});
 }
 
 function parseData(data) {
-	$.each(data, function(k, v) {
+	$.each(data, function (k, v) {
 		//console.log(k + ' is ' + v);
 		var text = v.text;
 		var tag = v.tag;
@@ -4911,7 +4735,7 @@ function parseData(data) {
 		changeDisplayedText(target, text);
 		try {
 			jQuery.data(jQuery.data(TargetTable, k), "text", text);
-		} catch (err) {}
+		} catch (err) { }
 
 		if (imgPath != null) {
 			var img = jQuery.data(target, "img");
@@ -4929,14 +4753,14 @@ function parseData(data) {
 
 function startChangeData(params) {
 	//console.log("startChangeData");
-	setTimeout(function() {
+	setTimeout(function () {
 		try {
 			if (mDataIndex >= mArrJsonData.length) {
 				mDataIndex = 0;
 			}
 			if (mArrJsonData != null && mDataIndex < mArrJsonData.length) {
 				var data = mArrJsonData[mDataIndex];
-				$.each(data, function(k, v) {
+				$.each(data, function (k, v) {
 					//console.log(k + ' is ' + v);
 					var text = v.text;
 					var tag = v.tag;
@@ -4948,11 +4772,11 @@ function startChangeData(params) {
 					changeDisplayedText(target, text);
 					try {
 						jQuery.data(jQuery.data(TargetTable, k), "text", text);
-					} catch (err) {}
+					} catch (err) { }
 
 					try {
 						jQuery.data(jQuery.data(TargetTable, k), "tag", tag);
-					} catch (err) {}
+					} catch (err) { }
 					if (imgPath != null) {
 						var img = jQuery.data(target, "img");
 						if (img != null) img.src = imgPath;
@@ -4980,7 +4804,7 @@ function startChangeData(params) {
 				});
 			}
 			mDataIndex++;
-		} catch (err) {}
+		} catch (err) { }
 
 		distributeNextAction(params.nextAction);
 	}, params.delay);
@@ -4988,7 +4812,7 @@ function startChangeData(params) {
 
 function startTimer(params) {
 	//console.log("startTimer");
-	setTimeout(function() {
+	setTimeout(function () {
 		for (var i = 0; i < params.target.length; i++) {
 			var tg = params.target[i];
 			var timerStartAction = params.TimerStartAction;
@@ -5068,7 +4892,7 @@ function startTimer(params) {
 				jQuery.data(tg, "secTime") - timerScheduleTime
 			);
 
-			var timer = setInterval(function() {
+			var timer = setInterval(function () {
 				var strTime = jQuery.data(tg, "currentTime");
 				var secTime = jQuery.data(tg, "secTime");
 				// $(tg).val(getDurationString(Number(strTime) - 1, secTime ));
@@ -5162,7 +4986,7 @@ function startTimer(params) {
 
 function stopTimer(params) {
 	//console.log("startTimer");
-	setTimeout(function() {
+	setTimeout(function () {
 		for (var i = 0; i < params.target.length; i++) {
 			var tg = params.target[i];
 			var timer = jQuery.data(tg, "timer");
@@ -5248,7 +5072,7 @@ function twoDigitString(number) {
 	return number;
 }
 
-Array.prototype.remove = function(value) {
+Array.prototype.remove = function (value) {
 	var idx = this.indexOf(value);
 	if (idx != -1) {
 		return this.splice(idx, 1); // The second parameter is the number of elements to remove.
@@ -5292,7 +5116,7 @@ function convertToMyLevel(course, level, month) {
 	return course + " " + level + month;
 }
 
-$.urlParam = function(name) {
+$.urlParam = function (name) {
 	var results = new RegExp("[?&]" + name + "=([^&#]*)").exec(
 		window.location.href
 	);
@@ -5309,7 +5133,7 @@ function changeTextByParam(k, text) {
 	changeDisplayedText(target, text);
 	try {
 		jQuery.data(jQuery.data(TargetTable, k), "text", text);
-	} catch (err) {}
+	} catch (err) { }
 }
 
 function saveLoginInfo() {
@@ -5440,14 +5264,12 @@ function RotatePoint(
 			tr == null
 				? null
 				: tr
-						.split("(")[1]
-						.split(")")[0]
-						.split(",");
+					.split("(")[1]
+					.split(")")[0]
+					.split(",");
 
 		var a = values[0];
 		var b = values[1];
-		var c = values[2];
-		var d = values[3];
 
 		var scale = Math.sqrt(a * a + b * b);
 		sin = b / scale;
@@ -5477,8 +5299,6 @@ function RotatePoint(
 	if (pointCenterX != null) {
 		x = pointCenterX;
 		y = pointCenterY;
-		//cx = left;
-		//cy = top;
 	} else {
 		x = left + width * (anchorX / 100);
 		y = top + height * (anchorY / 100);
@@ -5494,25 +5314,24 @@ function RotatePoint(
 }
 
 function RotatePointByPoint(x, y, cx, cy, nowAngle, reverse) {
-	var radians = (Math.PI / 180) * nowAngle * reverse;
-	var cos = Math.cos(-radians);
-	var sin = Math.sin(-radians);
-	var nx = cos * (x - cx) + sin * (y - cy) + cx;
-	var ny = cos * (y - cy) - sin * (x - cx) + cy;
+	const radians = (Math.PI / 180) * nowAngle * reverse;
+	const cos = Math.cos(-radians);
+	const sin = Math.sin(-radians);
+	const nx = cos * (x - cx) + sin * (y - cy) + cx;
+	const ny = cos * (y - cy) - sin * (x - cx) + cy;
 
 	return [nx, ny, cx, cy, x, y, nowAngle];
 }
 
 function GroupResizing(group) {
 	var unionRectPoints = null;
-	for (i = 0; i < group.children[0].children.length; i++) {
-		var child = group.children[0].children[i];
-		var st = window.getComputedStyle(child, null);
-		var nowAngle = GetAngle(child);
-		var left = parseFloat(st.getPropertyValue("left").split("px")[0]);
-		var top = parseFloat(st.getPropertyValue("top").split("px")[0]);
-		var width = parseFloat(st.getPropertyValue("width").split("px")[0]);
-		var height = parseFloat(st.getPropertyValue("height").split("px")[0]);
+	for (let child of group.children[0].children){
+		const st = window.getComputedStyle(child, null);
+		const nowAngle = GetAngle(child);
+		const left = parseFloat(st.getPropertyValue("left").split("px")[0]);
+		const top = parseFloat(st.getPropertyValue("top").split("px")[0]);
+		const width = parseFloat(st.getPropertyValue("width").split("px")[0]);
+		const height = parseFloat(st.getPropertyValue("height").split("px")[0]);
 
 		// 개체가 회전했다면 회전한 곳의 position을 계산해야한다. 기존의 position은 회전하기 전의 position
 		if (nowAngle != 0) {
@@ -5540,13 +5359,13 @@ function GroupResizing(group) {
 		}
 	}
 
-	var gSt = window.getComputedStyle(group, null);
-	var tr = gSt.getPropertyValue("transform-origin").split("px");
-	var gLeft = parseFloat(gSt.getPropertyValue("left").split("px")[0]);
-	var gTop = parseFloat(gSt.getPropertyValue("top").split("px")[0]);
+	const gSt = window.getComputedStyle(group, null);
+	const tr = gSt.getPropertyValue("transform-origin").split("px");
+	const gLeft = parseFloat(gSt.getPropertyValue("left").split("px")[0]);
+	const gTop = parseFloat(gSt.getPropertyValue("top").split("px")[0]);
 
-	var anchorPoint = [parseFloat(tr[0]) + gLeft, parseFloat(tr[1]) + gTop];
-	var unionRect = [
+	const anchorPoint = [parseFloat(tr[0]) + gLeft, parseFloat(tr[1]) + gTop];
+	const unionRect = [
 		unionRectPoints[0],
 		unionRectPoints[2],
 		unionRectPoints[1] - unionRectPoints[0],
@@ -5560,17 +5379,15 @@ function GroupResizing(group) {
 	$(group).css("top", gTop + unionRect[1]);
 
 	//group의 child1인 container도 변경해줘야한다.
-	var container = document.getElementById($(group).attr("id") + "_container");
+	const container = document.getElementById($(group).attr("id") + "_container");
 	$(container).css("width", unionRect[2]);
 	$(container).css("height", unionRect[3]);
-	//$(container).css("left", gLeft + unionRect[0]);
-	//$(container).css("top", gTop + unionRect[1]);
 
 	for (i = 0; i < group.children[0].children.length; i++) {
-		var child = group.children[0].children[i];
-		var st = window.getComputedStyle(child, null);
-		var left = parseFloat(st.getPropertyValue("left").split("px")[0]);
-		var top = parseFloat(st.getPropertyValue("top").split("px")[0]);
+		const child = group.children[0].children[i];
+		const st = window.getComputedStyle(child, null);
+		const left = parseFloat(st.getPropertyValue("left").split("px")[0]);
+		const top = parseFloat(st.getPropertyValue("top").split("px")[0]);
 
 		$(child).css("left", left - unionRect[0]);
 		$(child).css("top", top - unionRect[1]);
@@ -5602,14 +5419,14 @@ function UnionPointsByRect(point1, point2) {
 // 개체의 이전 anchorPoint로 돌리기 위해 anchorRate를 다시 계산하는 함수
 // tg = 변경할 타겟, wantPoint = array[이전 anchorPoint pointX, pointY]
 function ChangeAnchorPoint(tg, wantPoint) {
-	var st = window.getComputedStyle(tg, null);
-	var left = parseFloat(st.getPropertyValue("left").split("px")[0]);
-	var top = parseFloat(st.getPropertyValue("top").split("px")[0]);
-	var width = parseFloat(st.getPropertyValue("width").split("px")[0]);
-	var height = parseFloat(st.getPropertyValue("height").split("px")[0]);
+	const st = window.getComputedStyle(tg, null);
+	const left = parseFloat(st.getPropertyValue("left").split("px")[0]);
+	const top = parseFloat(st.getPropertyValue("top").split("px")[0]);
+	const width = parseFloat(st.getPropertyValue("width").split("px")[0]);
+	const height = parseFloat(st.getPropertyValue("height").split("px")[0]);
 
-	var anchorRateX = ((wantPoint[0] - left) / width) * 100;
-	var anchorRateY = ((wantPoint[1] - top) / height) * 100;
+	const anchorRateX = ((wantPoint[0] - left) / width) * 100;
+	const anchorRateY = ((wantPoint[1] - top) / height) * 100;
 
 	$(tg).css("transform-origin", anchorRateX + "% " + anchorRateY + "%");
 }
@@ -5617,7 +5434,7 @@ function ChangeAnchorPoint(tg, wantPoint) {
 // 회전한 개체의 AnchorRate를 변경하기 위해 개체의 position을 같이 바꿔주는 함수
 // tg = 변경할 타겟, wantRate = array[원하는 백분율% rateX, rateY]
 function ChangeAnchorRate(tg, wantRate) {
-	var xy = RotatePoint(tg, wantRate[0], wantRate[1], null, null, 1);
+	const xy = RotatePoint(tg, wantRate[0], wantRate[1], null, null, 1);
 
 	// xy = [nx, ny, width, height, left, top cx, cy, x, y];
 	$(tg).css("left", xy[0] - (xy[2] * wantRate[0]) / 100);
