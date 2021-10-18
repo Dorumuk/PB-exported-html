@@ -382,27 +382,20 @@ function IsGroup(target) {
 function makeCurve(params) {
 	for (const tg of params.target) {
 		const startCurveTimer = setTimeout(function () {
-			var path = params.elements;
-			if (jQuery.data($(params.target[0]).get(0), "reverse") == "Y") {
+			let path = params.elements;
+			if (jQuery.data($(params.target[0]).get(0), "reverse") === "Y") {
 				path = params.reverselements;
 			} else {
 				path = params.elements;
 			}
 
-			var lastCurve;
-
 			(function updateFromCode(doNotUpdatePath) {
-				if (lastCurve) lastCurve.stop();
-				var curve = new CurveAnimator(path);
-
-				var o = tg;
-				o.style.position = "absolute";
-
+				const curve = new CurveAnimator(path);
+				tg.style.position = "absolute";
 				curve.animate(params, params.duration / 1000, function (point, angle) {
-					o.style.left = point.x - $(o).width() / 2 + "px";
-					o.style.top = point.y - $(o).height() / 2 + "px";
+					tg.style.left = point.x - $(tg).width() / 2 + "px";
+					tg.style.top = point.y - $(tg).height() / 2 + "px";
 				});
-				lastCurve = CurveAnimator.lastCreated;
 				if (!doNotUpdatePath) {
 					fireEvent(path, "updated");
 				}
@@ -421,10 +414,9 @@ function makeCurve(params) {
 }
 /**start scale move */
 function startScaleMove(params) {
-	console.log("startScaleMove");
-	var startScaleMoveTimer;
-	for (var i = 0; i < params.target.length; i++) {
-		var tg = params.target[i];
+	let startScaleMoveTimer;
+	// for (let i = 0; i < params.target.length; i++) {
+	for (const tg of params.target) {
 		var absX = $(tg)
 			.css("left")
 			.replace("px", "");
