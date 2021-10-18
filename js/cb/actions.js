@@ -62,8 +62,6 @@ function startStopAll(params) {
 }
 /** start hide show */
 function startHideShow(params) {
-	//console.log("hide");
-
 	var startHideShowTimer;
 	for (var i = 0; i < params.target.length; i++) {
 		var tg = params.target[i];
@@ -100,52 +98,31 @@ function startHideShow(params) {
 }
 /** start fade */
 function startFade(params) {
-	var startFadeTimer;
-	//    console.log("startFade");
-	for (var i = 0; i < params.target.length; i++) {
-		var tg = params.target[i];
+	for (const tg of params.target) {
+		const originOpacity = $(tg).css("opacity");
 
-		//console.log(tg);
-
-		var tagValue = jQuery.data($(tg).get(0), "tag");
-		/*        console.log("tagValue is " + tagValue); */
-
-		var originOpacity = $(tg).css("opacity");
-		/*         console.log(originOpacity); */
-
-		var easingVar = "";
-
+		let easingVar = "";
 		switch (params.aniTiming) {
-			case 0:
-				easingVar = "linear";
-				break;
-			case 1:
-				easingVar = "easeInCubic";
-				break;
-			case 2:
-				easingVar = "easeOutCubic";
-				break;
-			case 3:
-				easingVar = "easeInOutCubic";
-				break;
+			case 0: easingVar = "linear"; break;
+			case 1: easingVar = "easeInCubic"; break;
+			case 2: easingVar = "easeOutCubic"; break;
+			case 3: easingVar = "easeInOutCubic"; break;
 		}
 
 		$(tg).show();
-		if (params.reverse == "Y") {
-			startFadeTimer = setTimeout(function () {
-				$(tg).animate(
-					{
-						opacity: params.opacity
-					},
-					{
-						duration: params.duration,
-						easing: easingVar,
-						queue: false,
-						complete: function () {
-							//if ($(tg).css("opacity") == 0) {
-							//    $(tg).hide();
-							//}
-							setTimeout(function () {
+		const startFadeTimer = setTimeout(function () {
+			console.log(params);
+			$(tg).animate(
+				{
+					opacity: params.opacity
+				},
+				{
+					duration: params.duration,
+					easing: easingVar,
+					queue: params.reverse === "Y" ? false : true,
+					complete: () => {
+						if (params.reverse === "Y") {
+							setTimeout(() => {
 								$(tg).animate(
 									{
 										opacity: originOpacity
@@ -155,28 +132,22 @@ function startFade(params) {
 										easing: easingVar,
 										queue: false,
 										complete: function () {
-											//alert("originOpacity // " + originOpacity);
-											if (params.opacity == 1) {
+											if (params.opacity === 1) {
 												$(tg).hide();
-												if (jQuery.data($(tg).get(0), "touch") == "y") {
+												if (jQuery.data($(tg).get(0), "touch") === "y") {
 													$(tg).css("pointerEvents", "none");
 												}
 											} else {
-												if (jQuery.data($(tg).get(0), "touch") == "y") {
+												if (jQuery.data($(tg).get(0), "touch") === "y") {
 													$(tg).css("pointerEvents", "auto");
 												}
 											}
-											if (
-												params.repeatForever != null &&
-												params.repeatForever == "Y"
-											) {
-												params.delay = params.delay - params.startTime;
-												params.startTime = 0;
+											if (params.repeatForever === "Y") {
+												params.delay -= params.startTime;
 												params.startTime = 0;
 												startFade(params);
 											} else if (params.repeatCount > 0) {
-												params.delay = params.delay - params.startTime;
-												params.startTime = 0;
+												params.delay -= params.startTime;
 												params.startTime = 0;
 												startFade(params);
 												params.repeatCount -= 1;
@@ -187,50 +158,32 @@ function startFade(params) {
 									}
 								);
 							}, params.waitingTime);
-						}
-					}
-				);
-			}, params.delay);
-		} else {
-			startFadeTimer = setTimeout(function () {
-				$(tg).animate(
-					{
-						opacity: params.opacity
-					},
-					{
-						duration: params.duration,
-						easing: easingVar,
-						complete: function () {
-							if ($(tg).css("opacity") == 0) {
+						} else {
+							if ($(tg).css("opacity") === 0) {
 								$(tg).hide();
 							}
-
-							if (params.repeatForever != null && params.repeatForever == "Y") {
-								params.delay = params.delay - params.startTime;
+							if (params.repeatForever === "Y") {
+								params.delay -= params.startTime;
 								params.startTime = 0;
 								$(tg).css("opacity", originOpacity);
 								startFade(params);
 							} else {
-								if (
-									params.opacity > 0 &&
-									jQuery.data($(tg).get(0), "touch") == "y"
-								) {
-									$(tg).show();
-									$(tg).css("pointerEvents", "auto");
-								} else if (
-									params.opacity == 0 &&
-									jQuery.data($(tg).get(0), "touch") == "y"
-								) {
-									$(tg).hide();
-									$(tg).css("pointerEvents", "none");
+								if (jQuery.data($(tg).get(0), "touch") === "y"){
+									if (params.opacity > 0) {
+										$(tg).show();
+										$(tg).css("pointerEvents", "auto");
+									} else if (params.opacity === 0) {
+										$(tg).hide();
+										$(tg).css("pointerEvents", "none");
+									}
 								}
 								distributeNextAction(params.nextAction);
 							}
 						}
 					}
-				);
-			}, params.delay);
-		}
+				}
+			);
+		}, params.delay);
 
 		jQuery.data(tg, "startFade", startFadeTimer);
 	}
