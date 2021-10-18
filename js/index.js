@@ -106,7 +106,7 @@ if (isHide) {
 if ($("#cvs_0002").css('visibility').toLowerCase() != 'visible') { return; } 
 } 
 e.stopPropagation();
-distributeAction(cvs_0002, 'down', 'N', [[{actType:2, actSubType:'Fade Out', aniTiming:0, target:[cvs_0004], opacity:0.00, startTime:0, delay:0, duration:1000 }]]);
+distributeAction(cvs_0002, 'down', 'N', [[{actType:4, actSubType:'', aniTiming:0, target:[cvs_0004], toX:500, toY:130, scaleWidth: '200px', scaleHeight: '200px', originWidth: '0px', originHeight: '0px', startTime:0, delay:0, duration:1000 }]]);
 });
 });
 $(document).ready(function(){
