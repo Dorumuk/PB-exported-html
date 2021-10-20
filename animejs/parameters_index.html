@@ -11,12 +11,18 @@
     <script defer src="./js/parameters.js"></script>
 </head>
 <body>
-    <div id="div_main">
-        <p class="battery-log"></p>
+    <div id="div_main" style="display: flex; flex-direction: column; gap: 10px;">
         <div class="css-demo" style="width: 100%; height: 100%;" onclick="hi()">
             <div class="el1" style="position: absolute; background-color: cadetblue; width: 50px; height: 50px;"></div>
             <div class="el2" style="position: absolute; top: 100px; background-color: cadetblue; width: 50px; height: 50px;"></div>
+            <p class="round-log" style="position: absolute; top: 150px;"></p>
+            <div class="el3" style="position: absolute; top: 200px; background-color: cadetblue; width: 50px; height: 50px;"></div>
         </div>
-    </div>    
+        <div class="function-based-params-demo" style="position: relative; width: 100%; height: 100%;">
+            <div class="el" style="position: absolute; background-color: cadetblue; width: 50px; height: 50px;"></div>
+            <div class="el" style="position: absolute; top: 50px; background-color: cadetblue; width: 50px; height: 50px;"></div>
+            <div class="el" style="position: absolute; top: 100px; background-color: cadetblue; width: 50px; height: 50px;"></div>
+        </div>
+    </div>
 </body>
 </html>
