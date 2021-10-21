@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="index.css" />
+    <!-- <script src="./node_modules/animejs/lib/anime.es.js"></script> -->
+    <!-- <script src="./node_modules/animejs/lib/anime.js"></script> -->
+    <script src="./node_modules/animejs/lib/anime.min.js"></script>
+    <script defer src="./js/staggering.js"></script>
+</head>
+<body>
+    <div id="div_main" style="display: flex; flex-direction: column; gap: 10px;">
+        <div class="css-demo" style="width: 100%; height: 100%;" onclick="hi()">
+            <div class="el" style="position: absolute; background-color: cadetblue; width: 50px; height: 50px;"></div>
+            <div class="el" style="position: absolute; top: 50px; background-color: cadetblue; width: 50px; height: 50px;"></div>
+            <div class="el" style="position: absolute; top: 100px; background-color: cadetblue; width: 50px; height: 50px;"></div>
+        </div>
+        <div class="range-value-staggering-demo" style="position: relative; width: 100%; height: 100%;">
+            <div data-x="170" class="el" style="background-color: cadetblue; width: 30px; height: 30px;"></div>
+            <div data-x="80" class="el" style="background-color: cadetblue; width: 30px; height: 30px;"></div>
+            <div data-x="270" class="el" style="background-color: cadetblue; width: 30px; height: 30px;"></div>
+        </div>
+        <div class="staggering-grid-demo" style="position: relative; width: 200px; height: 100%;">
+            <div class="grid" style="display: flex; flex-wrap: wrap; gap: 1px;">
+                <div class="el" style="background-color: cadetblue; width: 30px; height: 30px;"></div>
+                <div class="el" style="background-color: cadetblue; width: 30px; height: 30px;"></div>
+                <div class="el" style="background-color: cadetblue; width: 30px; height: 30px;"></div>
+                <div class="el" style="background-color: cadetblue; width: 30px; height: 30px;"></div>
+                <div class="el" style="background-color: cadetblue; width: 30px; height: 30px;"></div>
+                <div class="el" style="background-color: cadetblue; width: 30px; height: 30px;"></div>
+                <div class="el" style="background-color: cadetblue; width: 30px; height: 30px;"></div>
+                <div class="el" style="background-color: cadetblue; width: 30px; height: 30px;"></div>
+                <div class="el" style="background-color: cadetblue; width: 30px; height: 30px;"></div>
+                <div class="el" style="background-color: cadetblue; width: 30px; height: 30px;"></div>
+                <div class="el" style="background-color: cadetblue; width: 30px; height: 30px;"></div>
+                <div class="el" style="background-color: cadetblue; width: 30px; height: 30px;"></div>
+                <div class="el" style="background-color: cadetblue; width: 30px; height: 30px;"></div>
+                <div class="el" style="background-color: cadetblue; width: 30px; height: 30px;"></div>
+                <div class="el" style="background-color: cadetblue; width: 30px; height: 30px;"></div>
+                <div class="el" style="background-color: cadetblue; width: 30px; height: 30px;"></div>
+                <div class="el" style="background-color: cadetblue; width: 30px; height: 30px;"></div>
+                <div class="el" style="background-color: cadetblue; width: 30px; height: 30px;"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
