@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="index.css" />
+    <!-- <script src="./node_modules/animejs/lib/anime.es.js"></script> -->
+    <!-- <script src="./node_modules/animejs/lib/anime.js"></script> -->
+    <script src="./node_modules/animejs/lib/anime.min.js"></script>
+    <script defer src="./js/controls.js"></script>
+</head>
+<body>
+    <div id="div_main" style="display: flex; flex-direction: column; gap: 10px;">
+        <div class="play-pause-demo" style="width: 100%; height: 100%;">
+            <div class="el" style="position: absolute; background-color: cadetblue; width: 50px; height: 50px;"></div>
+            <div class="el" style="position: absolute; top: 50px; background-color: cadetblue; width: 50px; height: 50px;"></div>
+            <div class="el" style="position: absolute; top: 100px; background-color: cadetblue; width: 50px; height: 50px;"></div>
+            <button class="play" style="position: absolute; top: 150px;"></button>
+            <button class="pause" style="position: absolute; top: 160px;"></button>
+            <button class="restart" style="position: absolute; top: 170px;"></button>
+            <button class="reverse" style="position: absolute; top: 180px;"></button>
+            <input class="progress" step=".001" type="range" min="0" max="100" value="0" style="position: absolute; top: 190px; user-select: auto;">
+        </div>
+        <div class="offsets-demo" style="position: relative; width: 100%; height: 100%;" onclick="hi()">
+            <div class="el1" style="position: absolute; background-color: cadetblue; width: 50px; height: 50px;"></div>
+            <div class="el2" style="position: absolute; top: 50px; background-color: cadetblue; width: 50px; height: 50px;"></div>
+            <div class="el3" style="position: absolute; top: 100px; background-color: cadetblue; width: 50px; height: 50px;"></div>
+        </div>
+    </div>
+</body>
+</html>
