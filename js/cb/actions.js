@@ -1,20 +1,17 @@
 // start stop all
 function startStopAll(params) {
 	setTimeout(function () {
-		for (var i = 0; i < params.target.length; i++) {
-			var tg = params.target[i];
+		for (let tg of params.target) {
 
-			//console.log("startStopAll is loaded!!");
-			var startHideShow = jQuery.data(tg, "startHideShow");
-			var startMove = jQuery.data(tg, "startMove");
-			var startScaleMove = jQuery.data(tg, "startScaleMove");
-			var startRotate = jQuery.data(tg, "startRotate");
-			//console.log(startRotate)
-			var startFlip = jQuery.data(tg, "startFlip");
-			var startCurve = jQuery.data(tg, "startCurve");
-			var startFade = jQuery.data(tg, "startFade");
-			var blinkTimer = jQuery.data(tg, "blink_timer");
-			var blinkSetTimer = jQuery.data(tg, "blink_setTimer");
+			const startHideShow = jQuery.data(tg, "startHideShow");
+			const startMove = jQuery.data(tg, "startMove");
+			const startScaleMove = jQuery.data(tg, "startScaleMove");
+			const startRotate = jQuery.data(tg, "startRotate");
+			const startFlip = jQuery.data(tg, "startFlip");
+			const startCurve = jQuery.data(tg, "startCurve");
+			const startFade = jQuery.data(tg, "startFade");
+			const blinkSetTimer = jQuery.data(tg, "blink_setTimer");
+			const blinkTimer = jQuery.data(tg, "blink_timer");
 
 			clearTimeout(startHideShow);
 			clearTimeout(startMove);
@@ -23,7 +20,6 @@ function startStopAll(params) {
 			clearTimeout(startFlip);
 			clearTimeout(startCurve);
 			clearTimeout(startFade);
-
 			clearTimeout(blinkSetTimer);
 
 			clearInterval(blinkTimer);
@@ -37,8 +33,6 @@ function startStopAll(params) {
 
 				if (typeof curveTimer == "undefined") {
 					curveTimer = jQuery.data(tg, "curveTimer");
-					//console.log(tg);
-					//console.log(curveTimer);
 				}
 				clearInterval(curveTimer);
 			} catch (err) {

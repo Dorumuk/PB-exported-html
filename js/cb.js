@@ -12,9 +12,6 @@ const mode1Contents1X = "640px";
 const mode2Contents1X = "171px";
 
 let functionS;
-// const minHeight = 1470;
-// const originContentsWidth = 918;
-// const originContentsHeight = 1470;
 
 window.receiveMessage = function (event) {
 	// event.data로 결과가 전달됨.
@@ -52,8 +49,6 @@ function changePageShowMode() {
 	if (parseInt(arrContents1Src[0]) % 2 == 0) {
 		contents2Src = contents1Src;
 		contents1Src = parseInt(arrContents1Src[0]) - 1 + ".html";
-
-		//console.log(contents1Src + " // " + contents2Src);
 	} else {
 		contents2Src = parseInt(arrContents1Src[0]) + 1 + ".html";
 	}
@@ -65,7 +60,6 @@ function changePageShowMode() {
 		$("#contents2").show();
 		$("#contents").css("left", mode2Contents1X);
 		setCurrentPageCountBox();
-		/*        setTotalPageCountBox(); */
 	} else {
 		countPerPage = 1;
 		$("#contents2").hide();
@@ -73,8 +67,6 @@ function changePageShowMode() {
 		setCurrentPageCountBox();
 		setTotalPageCountBox();
 	}
-
-	//console.log("changePageShowMode => //" + countPerPage);
 }
 
 function shapeBlink(target) {
@@ -116,9 +108,7 @@ function contentsZoomIn() {
 
 function contentsZoomOut() {
 	if ($("#contents").height() <= 1470) {
-		alert(
-			"占쎌쥙�ο옙袁ъ삕�ル쵐�뺧옙醫묒삕 �좎럡�↑린�쎌삕占쎌럩�뺧옙醫묒삕 占쎌쥙猷욑옙占� 占쎌쥙�ο옙源띿삕占쎈챷�뺝뜝�덈쐞�됵옙."
-		);
+		alert("line 111) contents height <= 1470");
 		return;
 	}
 	var scale = $("#contents").width() / $("#contents").height();
@@ -148,7 +138,6 @@ function setCurrentPageCountBox() {
 	let iframeSrc = $("#contents").attr("src");
 
 	if (iframeSrc == null) {
-		// if (countPerPage === 2)
 		iframeSrc = $("#contents", parent.document).attr("src");
 		isInnerFrame = true;
 	}
@@ -162,80 +151,15 @@ function setCurrentPageCountBox() {
 }
 
 function makeObj(ori, alt) {
-	var cvs = new Object();
-	cvs.state = false;
-	cvs.originImage = ori;
-	cvs.altImage = alt;
-	cvs.changeToggleState = function () {
-		changeToggleState(cvs);
-	};
-	return cvs;
-}
-
-function change(params, s) {
-	var a = document.getElementsByTagName("font");
-
-	for (var i = 0; i < a.length; i++) {
-		var fontPx = a[i].style.fontSize;
-		var ls = a[i].style.letterSpacing;
-		if (fontPx.length > 0) {
-			fontPx = fontPx.replace("px", "");
-			var point = Number(fontPx) * s;
-			a[i].style.fontSize = point + "px";
-		}
-		if (ls.length > 0) {
-			ls = ls.replace("px", "");
-			var point = Number(ls) * s;
-			a[i].style.letterSpacing = point + "px";
-		}
+	return {
+		state : false,
+		originImage : ori,
+		altImage : alt,
+		changeToggleState : () => changeToggleState(cvs)
 	}
-
-	var b = document.getElementsByTagName("p");
-
-	for (var i = 0; i < b.length; i++) {
-		var lh = b[i].style.lineHeight;
-		if (lh.length > 0) {
-			lh = lh.replace("px", "");
-			var point = Number(lh) * s;
-			b[i].style.lineHeight = point + "px";
-		}
-		lh = b[i].style.textIndent;
-		if (lh.length > 0) {
-			lh = lh.replace("px", "");
-			var point = Number(lh) * s;
-			b[i].style.textIndent = point + "px";
-		}
-		var lh = b[i].style.marginTop;
-		if (lh.length > 0) {
-			lh = lh.replace("px", "");
-			var point = Number(lh) * s;
-			b[i].style.marginTop = point + "px";
-		}
-		var lh = b[i].style.marginBottom;
-		if (lh.length > 0) {
-			lh = lh.replace("px", "");
-			var point = Number(lh) * s;
-			b[i].style.marginBottom = point + "px";
-		}
-		var lh = b[i].style.marginLeft;
-		if (lh.length > 0) {
-			lh = lh.replace("px", "");
-			var point = Number(lh) * s;
-			b[i].style.marginLeft = point + "px";
-		}
-		var lh = b[i].style.marginRight;
-		if (lh.length > 0) {
-			lh = lh.replace("px", "");
-			var point = Number(lh) * s;
-			b[i].style.marginRight = point + "px";
-		}
-	}
-	distributeNextAction(params.nextAction);
 }
 
 function changeBy(params, s) {
-	console.log($(params.target[0]).find("font"));
-	console.log($(params.target[0]).length);
 	setTimeout(function () {
 		for (var i = 0; i < params.target.length; i++) {
 			var tg = params.target[i];
@@ -319,10 +243,6 @@ function changeBy(params, s) {
 	}, params.delay);
 }
 
-function fixFont(s) {
-	change(s / window.devicePixelRatio);
-}
-
 function bigger(params) {
 	console.log("bigger");
 	changeBy(params, 0.5);
@@ -332,8 +252,6 @@ function smaller(params) {
 	console.log("smaller");
 	changeBy(params, -0.5);
 }
-
-//var mTouchedObject;
 
 function distributeAction(touchedObject, touchID, rand, arrActions) {
 	if (arrActions == null) {
@@ -597,7 +515,6 @@ function distributeAction(touchedObject, touchID, rand, arrActions) {
 								window.pb_custom_recode.stop();
 								distributeNextAction(arrActions[0][0].nextAction);
 							} else if (contentsType == "recodelisten") {
-								//alert("url :: "+window.pb_custom_recode.url.substring(0,100));
 								sound1 = new Audio(window.pb_custom_recode.url);
 								sound1.play();
 								distributeNextAction(arrActions[0][0].nextAction);
@@ -774,10 +691,6 @@ function distributeNextAction(arrActionParams) {
 			console.log("My ErrorLog : " + err);
 		}
 
-		var isGroup = false;
-		if (params.target != null && params.target[0].parentElement != null) {
-		}
-
 		if (firstTarget == "Conditional") {
 			startConditionalAction(params);
 		}
@@ -871,7 +784,6 @@ function distributeNextAction(arrActionParams) {
 								window.pb_custom_recode.stop();
 								distributeNextAction(arrActions[0][0].nextAction);
 							} else if (contentsType == "recodelisten") {
-								//alert("url :: "+window.pb_custom_recode.url.substring(0,100));
 								sound1 = new Audio(window.pb_custom_recode.url);
 								sound1.play();
 								distributeNextAction(arrActions[0][0].nextAction);
@@ -1088,17 +1000,8 @@ function quickSort(arr, left, right) {
 // 효과박스 처리
 function pagingViewControl(params) {
 	console.log("pagingViewControl");
-	//console.log("params : " + params.duration)
 	setTimeout(function () {
 		var tg = params.target[0];
-		//var tgArray = $(tg).find('canvas');
-		//var ctx = tg.getContext("2d");
-		var width = tg.width;
-		var height = tg.height;
-		var left = tg.style.left;
-		var top = tg.style.top;
-		var tempImage = new Image();
-		var imageArray = jQuery.data(tg, "imageArray");
 		var imageCnt = jQuery.data(tg, "imageCnt");
 
 		var tgArray = jQuery.data(tg, "arraySort");
@@ -1122,8 +1025,6 @@ function pagingViewControl(params) {
 			if (score[i] < min) min = score[i];
 		}
 
-		//console.log("max : " + max + ", min : " + min);
-
 		switch (params.actSubType) {
 			case "Go Next":
 				console.log("Go Next : " + imageCnt);
@@ -1142,10 +1043,6 @@ function pagingViewControl(params) {
 				}
 
 				isAnimated = true;
-
-				//console.log(params.Direction)
-
-				//if(params.paramValue[0].Direction)
 				console.log("params.useAnimation :: " + params.useAnimation);
 				if (params.useAnimation == "Y") {
 					//Effect 분기처리-----------------------------------------------
@@ -1189,7 +1086,6 @@ function pagingViewControl(params) {
 								$(tgArray[0]).css("z-index", max - 1);
 							}
 
-							//console.log(params.duration)
 							$(tgArray[1]).animate(properties1, {
 								duration: params.duration / 2,
 								easing: "linear",
@@ -1211,8 +1107,6 @@ function pagingViewControl(params) {
 											easing: "linear",
 											queue: false,
 											complete: function () {
-												//console.log("complete!!!!!");
-
 												isAnimated = false;
 												for (var i = 0; i < tgArray.length; i++) {
 													switch (i) {
@@ -1236,10 +1130,6 @@ function pagingViewControl(params) {
 
 												tgArray = quickSort(tgArray, 0, tgArray.length - 1);
 
-												for (var j = 0; j < tgArray.length; j++) {
-													//console.log('[AFTER] : ' + $(tgArray[j]).attr('id') +' : ' + $(tgArray[j]).css('z-index'));
-												}
-
 												jQuery.data(tg, "arraySort", tgArray);
 												jQuery.data(tg, "imageCnt", imageCnt);
 
@@ -1256,9 +1146,6 @@ function pagingViewControl(params) {
 
 						// 페이드
 						case 1:
-							console.log(
-								"fade================================================"
-							);
 							if (params.Direction == "Horiz") {
 								properties1 = {
 									opacity: 0
@@ -1442,8 +1329,6 @@ function pagingViewControl(params) {
 										easing: "linear",
 										queue: false,
 										complete: function () {
-											/*$(tgArray[0]).css('left', 0);
-																						 $(tgArray[0]).css('left', 0);*/
 											console.log("complete");
 											isAnimated = false;
 											for (var i = 0; i < tgArray.length; i++) {
@@ -1467,11 +1352,6 @@ function pagingViewControl(params) {
 											}
 
 											tgArray = quickSort(tgArray, 0, tgArray.length - 1);
-
-											for (var j = 0; j < tgArray.length; j++) {
-												//console.log('[AFTER] : ' + $(tgArray[j]).attr('id') +' : ' + $(tgArray[j]).css('z-index'));
-											}
-
 											jQuery.data(tg, "arraySort", tgArray);
 											jQuery.data(tg, "imageCnt", imageCnt);
 										}
@@ -1511,10 +1391,6 @@ function pagingViewControl(params) {
 
 					tgArray = quickSort(tgArray, 0, tgArray.length - 1);
 
-					for (var j = 0; j < tgArray.length; j++) {
-						//console.log('[AFTER] : ' + $(tgArray[j]).attr('id') +' : ' + $(tgArray[j]).css('z-index'));
-					}
-
 					jQuery.data(tg, "arraySort", tgArray);
 					jQuery.data(tg, "imageCnt", imageCnt);
 				}
@@ -1536,8 +1412,6 @@ function pagingViewControl(params) {
 				}
 
 				isAnimated = true;
-				//$(tgArray[0]).css('pointerEvents','none');
-
 				if (params.useAnimation == "Y") {
 					//Effect 분기처리-----------------------------------------------
 					switch (params.effect) {
@@ -1601,11 +1475,6 @@ function pagingViewControl(params) {
 										easing: "linear",
 										complete: function () {
 											tgArray = quickSort(tgArray, 0, tgArray.length - 1);
-
-											for (var j = 0; j < tgArray.length; j++) {
-												//console.log('[AFTER] : ' + $(tgArray[j]).attr('id') +' : ' + $(tgArray[j]).css('z-index'));
-											}
-
 											jQuery.data(tg, "arraySort", tgArray);
 											jQuery.data(tg, "imageCnt", imageCnt);
 
@@ -1652,8 +1521,6 @@ function pagingViewControl(params) {
 
 									jQuery.data(tg, "arraySort", tgArray);
 									jQuery.data(tg, "imageCnt", imageCnt);
-
-									//console.log(tgArray);
 								}
 							});
 
@@ -1808,11 +1675,6 @@ function pagingViewControl(params) {
 											}
 
 											tgArray = quickSort(tgArray, 0, tgArray.length - 1);
-
-											for (var j = 0; j < tgArray.length; j++) {
-												//console.log('[AFTER] : ' + $(tgArray[j]).attr('id') +' : ' + $(tgArray[j]).css('z-index'));
-											}
-
 											jQuery.data(tg, "arraySort", tgArray);
 											jQuery.data(tg, "imageCnt", imageCnt);
 										}
@@ -1846,47 +1708,11 @@ function pagingViewControl(params) {
 					}
 
 					tgArray = quickSort(tgArray, 0, tgArray.length - 1);
-
-					for (var j = 0; j < tgArray.length; j++) {
-						//console.log('[AFTER] : ' + $(tgArray[j]).attr('id') +' : ' + $(tgArray[j]).css('z-index'));
-					}
-
 					jQuery.data(tg, "arraySort", tgArray);
 					jQuery.data(tg, "imageCnt", imageCnt);
 				}
 				break;
 		}
-
-		/*switch (params.actSubType){
-				 case 'Go Next' :
-				 if(imageCnt < imageArray.length - 1 )
-				 imageCnt ++;
-	  
-				 tempImage.src = imageArray[imageCnt];
-				 tempImage.onload = function(){
-				 ctx.clearRect(0,0,width,height);
-				 //ctx.save();
-				 drawImage(ctx, tempImage, 0,0,width,height,0);
-				 //ctx.restore();
-				 }
-	  
-				 jQuery.data(tg, 'imageCnt', imageCnt);
-				 break;
-	  
-				 case 'Go Prev' :
-				 if(imageCnt > 0 )
-				 imageCnt --;
-				 tempImage.src = imageArray[imageCnt];
-				 tempImage.onload = function(){
-				 ctx.clearRect(left,top,width,height);
-				 //ctx.save();
-				 drawImage(ctx, tempImage, 0,0,width,height,0);
-				 //ctx.restore();
-				 }
-				 jQuery.data(tg, 'imageCnt', imageCnt);
-				 break;
-				 }*/
-		//distributeNextAction(params.nextAction);
 	}, params.delay);
 }
 
@@ -1913,7 +1739,6 @@ function replaceContent(params) {
 			var target = params.target[0];
 			var videoSource = params.content;
 			if (params.actSubType == "Stop") {
-				//console.log("playMovie11");
 				target.pause();
 				videobox = null;
 			} else {
@@ -1938,8 +1763,6 @@ function replaceContent(params) {
 			try {
 				$(element).attr("src", params.content);
 			} catch (err) { }
-
-			//distributeNextAction(params.nextAction);
 		}
 	}, params.delay);
 }
@@ -1968,7 +1791,6 @@ function drawImage(ctx, image, x, y, w, h, r) {
 }
 
 function startAppend(params) {
-	//console.log("startAppend");
 	setTimeout(function () {
 		for (var i = 0; i < params.target.length; i++) {
 			var tg = params.target[i];
@@ -1988,7 +1810,6 @@ function startAppend(params) {
 			} else {
 				toValue = jQuery.data($(tg).get(0), "text");
 			}
-			//console.log("toValue is " + toValue);
 			if (UserInput == null || UserInput == 0) {
 				if (ConditionAttribute == "Tag") {
 					fromValue = jQuery.data($(ConditionTarget).get(0), "tag");
@@ -2005,7 +1826,6 @@ function startAppend(params) {
 				} else {
 					fromValue = jQuery.data($(ConditionTarget).get(0), "text");
 				}
-				//console.log("fromValue is " + fromValue);
 				toValue = toValue.concat(fromValue);
 			} else {
 				fromValue = InputValue;
@@ -2018,7 +1838,6 @@ function startAppend(params) {
 			} else {
 				changeDisplayedText(tg, toValue);
 			}
-			//console.log("Append Result value is " + jQuery.data($(tg).get(0), "text"));
 		}
 
 		distributeNextAction(params.nextAction);
@@ -2026,7 +1845,6 @@ function startAppend(params) {
 }
 
 function startRemove(params) {
-	//console.log("startRemove");
 	setTimeout(function () {
 		for (var i = 0; i < params.target.length; i++) {
 			var tg = params.target[i];
@@ -2046,20 +1864,17 @@ function startRemove(params) {
 			} else {
 				toValue = jQuery.data($(tg).get(0), "text");
 			}
-			//console.log("toValue is " + toValue);
 			if (UserInput == null || UserInput == 0) {
 				if (ConditionAttribute == "Tag") {
 					fromValue = jQuery.data($(ConditionTarget).get(0), "tag");
 				} else {
 					fromValue = jQuery.data($(ConditionTarget).get(0), "text");
 				}
-				//console.log("fromValue is " + fromValue);
 				for (var i = 0; i < fromValue.length; i++) {
 					toValue.remove(fromValue[i]);
 				}
 			} else {
 				fromValue = InputValue;
-				//console.log("fromValue is " + fromValue);
 				toValue.remove(fromValue);
 			}
 
@@ -2068,7 +1883,6 @@ function startRemove(params) {
 			} else {
 				changeDisplayedText(tg, toValue);
 			}
-			//console.log("Remove Result value is " + jQuery.data($(tg).get(0), "tag"));
 		}
 
 		distributeNextAction(params.nextAction);
@@ -2282,7 +2096,6 @@ function startRemoveAll(params) {
 }
 
 function startAdd(params) {
-	//console.log("startAdd");
 	setTimeout(function () {
 		for (var i = 0; i < params.target.length; i++) {
 			var tg = params.target[i];
@@ -2301,7 +2114,6 @@ function startAdd(params) {
 				toValue = jQuery.data($(tg).get(0), "tag");
 			} else {
 				toValue = jQuery.data($(tg).get(0), "text");
-				//toValue = $(tg).val();
 			}
 			if (toValue == null || toValue == undefined || toValue == "") {
 				toValue = 0;
@@ -2312,7 +2124,6 @@ function startAdd(params) {
 					fromValue = jQuery.data($(ConditionTarget).get(0), "tag");
 				} else {
 					fromValue = jQuery.data($(ConditionTarget).get(0), "text");
-					//fromValue = [$(ConditionTarget).val()];
 				}
 			} else {
 				fromValue = [String(InputValue)];
@@ -2341,19 +2152,14 @@ function startAdd(params) {
 				jQuery.data($(tg).get(0), "tag", [strResult]);
 			} else {
 				jQuery.data($(tg).get(0), "text", [strResult]);
-				//$(tg).val(s);
 				changeDisplayedText(tg, s);
 			}
-			//console.log("startAdd Result value is " + jQuery.data($(tg).get(0), "tag"));
-			//console.log("startAdd Result value is " + jQuery.data($(tg).get(0), "text"));
 		}
-
 		distributeNextAction(params.nextAction);
 	}, params.delay);
 }
 
 function startSubtract(params) {
-	//console.log("startSubtract");
 	setTimeout(function () {
 		for (var i = 0; i < params.target.length; i++) {
 			var tg = params.target[i];
@@ -2372,7 +2178,6 @@ function startSubtract(params) {
 				toValue = jQuery.data($(tg).get(0), "tag");
 			} else {
 				toValue = jQuery.data($(tg).get(0), "text");
-				//toValue = $(tg).val();
 			}
 			if (toValue == null || toValue == undefined || toValue == "") {
 				toValue = 0;
@@ -2383,7 +2188,6 @@ function startSubtract(params) {
 					fromValue = jQuery.data($(ConditionTarget).get(0), "tag");
 				} else {
 					fromValue = jQuery.data($(ConditionTarget).get(0), "text");
-					//fromValue = [$(ConditionTarget).val()];
 				}
 			} else {
 				fromValue = [String(InputValue)];
@@ -2421,18 +2225,14 @@ function startSubtract(params) {
 				jQuery.data($(tg).get(0), "tag", [strResult]);
 			} else {
 				jQuery.data($(tg).get(0), "text", [strResult]);
-				//  $(tg).val(s);
 				changeDisplayedText(tg, s);
 			}
-			//console.log("startSubtract Result value is " + jQuery.data($(tg).get(0), "tag"));
 		}
-
 		distributeNextAction(params.nextAction);
 	}, params.delay);
 }
 
 function startMultiply(params) {
-	//console.log("startMultiply");
 	setTimeout(function () {
 		for (var i = 0; i < params.target.length; i++) {
 			var tg = params.target[i];
@@ -2451,7 +2251,6 @@ function startMultiply(params) {
 				toValue = jQuery.data($(tg).get(0), "tag");
 			} else {
 				toValue = jQuery.data($(tg).get(0), "text");
-				//toValue = $(tg).val();
 			}
 			if (toValue == null || toValue == undefined || toValue == "") {
 				toValue = 0;
@@ -2462,7 +2261,6 @@ function startMultiply(params) {
 					fromValue = jQuery.data($(ConditionTarget).get(0), "tag");
 				} else {
 					fromValue = jQuery.data($(ConditionTarget).get(0), "text");
-					//fromValue = [$(ConditionTarget).val()];
 				}
 			} else {
 				fromValue = [String(InputValue)];
@@ -2500,10 +2298,8 @@ function startMultiply(params) {
 				jQuery.data($(tg).get(0), "tag", [strResult]);
 			} else {
 				jQuery.data($(tg).get(0), "text", [strResult]);
-				// $(tg).val(s);
 				changeDisplayedText(tg, s);
 			}
-			//console.log("startMultiply Result value is " + jQuery.data($(tg).get(0), "tag"));
 		}
 
 		distributeNextAction(params.nextAction);
@@ -2511,7 +2307,6 @@ function startMultiply(params) {
 }
 
 function startDivide(params) {
-	//console.log("startDivide");
 	setTimeout(function () {
 		for (var i = 0; i < params.target.length; i++) {
 			var tg = params.target[i];
@@ -2530,7 +2325,6 @@ function startDivide(params) {
 				toValue = jQuery.data($(tg).get(0), "tag");
 			} else {
 				toValue = jQuery.data($(tg).get(0), "text");
-				//toValue = $(tg).val();
 			}
 			if (toValue == null || toValue == undefined || toValue == "") {
 				toValue = 0;
@@ -2541,7 +2335,6 @@ function startDivide(params) {
 					fromValue = jQuery.data($(ConditionTarget).get(0), "tag");
 				} else {
 					fromValue = jQuery.data($(ConditionTarget).get(0), "text");
-					//fromValue = [$(ConditionTarget).val()];
 				}
 			} else {
 				fromValue = [String(InputValue)];
@@ -2579,10 +2372,8 @@ function startDivide(params) {
 				jQuery.data($(tg).get(0), "tag", [strResult]);
 			} else {
 				jQuery.data($(tg).get(0), "text", [strResult]);
-				// $(tg).val(s);
 				changeDisplayedText(tg, s);
 			}
-			//console.log("startDivide Result value is " + jQuery.data($(tg).get(0), "tag"));
 		}
 
 		distributeNextAction(params.nextAction);
@@ -2590,18 +2381,15 @@ function startDivide(params) {
 } ////////////////////////////////////
 
 function playMovie(params) {
-	//console.log("playMovie");
 	var target = params.target[0];
 	var videoSource = params.videoSrc;
 	if (params.actSubType == "Stop") {
-		//console.log("playMovie11");
 		jQuery.data(target, "state", "stop");
 		target.pause();
 		target.currentTime = 0;
 		videobox = null;
 	} else if (params.actSubType == "Pause") {
 		jQuery.data(target, "state", "pause");
-		//console.log("playMovie11");
 		target.pause();
 	} else {
 		videobox = target;
@@ -2635,12 +2423,10 @@ function playMovie(params) {
 }
 
 function soundPause() {
-	//console.log("cb.js - soundPause()");
 	sound1.pause();
 }
 
 function soundResume() {
-	//console.log("cb.js - soundResume()");
 	sound1.play();
 }
 
@@ -2679,7 +2465,6 @@ function playSound(params) {
 
 			if (params.ReadyPlayer == "NO") {
 				SoundPromisePlay(target);
-				//console.log("repeatCount : "+ params.repeatCount + ", soundPath : " + soundPath);
 				if (params.useSectionPlay == "YES") {
 					target.addEventListener("loadeddata", function () {
 						target.currentTime = params.secStartTime / 1000.0;
@@ -2712,7 +2497,6 @@ function playSound(params) {
 					target.addEventListener(
 						"ended",
 						(functionS = function () {
-							// target.removeEventListener("ended", functionS, null);
 							if (target.currentTime > params.secEndTime / 1000.0) {
 								target.pause();
 								target.currentTime = 0;
@@ -2742,9 +2526,6 @@ function playSound(params) {
 
 function SoundPromisePlay(media) {
 	const playPromise = media.play();
-	//if (playPromise !== null) {
-	//    playPromise.catch(() => { media.play(); })
-	//}
 	if (playPromise !== null) {
 		playPromise.catch(function () {
 			media.play();
@@ -2753,22 +2534,18 @@ function SoundPromisePlay(media) {
 }
 
 function finish() {
-	//console.log("finish");
 	onFinish();
 }
 
 function willStart(name) {
-	//console.log("willStart:" + name);
 	onWillStart(name);
 }
 
 function didFinish(name) {
-	//console.log("didFinish:" + name);
 	onDidFinish(name);
 }
 
 function contentsClick() {
-	//console.log("contentsClick");
 	onContentsClick();
 }
 
@@ -2821,8 +2598,6 @@ function gotoPage(params) {
 		}
 	} catch (e) { }
 
-	//console.log("gotoPage : " + params.goto);
-	//console.log("gotoPage : SubType " + params.actSubType);
 	setTimeout(function () {
 		if (params.target != null && params.target.length == 1) {
 			$("#contents").attr("src", params.goto);
@@ -2895,12 +2670,10 @@ function nextPage() {
 }
 
 function startAnimation(params) {
-	//console.log("startAnimation");
 	var cvs = new Object();
 	cvs.aniImages = params.aniImages;
 	params.obj = cvs;
 	for (var i = 0; i < params.target.length; i++) {
-		//console.log(params.obj.aniImages.length);
 		var interval = params.duration / params.obj.aniImages.length;
 		var tg = params.target[i];
 		var aniImages = params.obj.aniImages;
@@ -2929,7 +2702,6 @@ function startAnimation(params) {
 						$(tg).attr("src", aniImages[aniIndex]);
 						aniIndex = aniIndex + 1;
 						if (aniIndex == aniImages.length) {
-							//console.log("aniIndex equal");
 							aniImages = null;
 							window.clearInterval(aniTimer);
 							if (params.repeatForever != null && params.repeatForever == "Y") {
@@ -2959,7 +2731,6 @@ function startAnimation(params) {
 							aniIndex = aniIndex + 1;
 
 							if (aniIndex == aniImages.length) {
-								//console.log("aniIndex equal");
 								window.clearInterval(aniTimer);
 								if (
 									params.repeatForever != null &&
@@ -2986,10 +2757,7 @@ function startAnimation(params) {
 function startToggle(params) {
 	for (var i = 0; i < params.target.length; i++) {
 		var tg = params.target[i];
-
-		var subType = params.actSubType;
 		var imageRes = null;
-
 
 		if (params.actSubType == "Show") {
 			if (params.obj.hidden == true) {
@@ -3007,11 +2775,8 @@ function startToggle(params) {
 			} else {
 				imageRes = params.obj.originImage;
 			}
-
 		} else {
-
 			var curState = params.obj.state;
-
 			var nextState = params.actSubType == "Off" ? false : true;
 
 			if (curState == nextState) {
@@ -3026,8 +2791,6 @@ function startToggle(params) {
 				params.obj.state = false;
 				imageRes = params.obj.originImage;
 			}
-
-
 		}
 		if (imageRes != "") {
 			if ($(tg).attr('xlink:href') != undefined) $(tg).attr("xlink:href", imageRes);
@@ -3037,9 +2800,7 @@ function startToggle(params) {
 		} else {
 			$(tg).hide();
 		}
-
 		distributeNextAction(params.nextAction);
-
 	}
 }
 
@@ -3062,8 +2823,6 @@ function playEffectSound(effectSound, delay) {
 	}
 }
 
-//////////占쎈툕�쀯옙��쨨�븐눊猿�좑옙 占쎌쥙��옙占쎌삕�좑옙 �좎럡�∽옙�뀀쐻�좑옙///////////////
-
 function startConditionalAction(params) {
 	setTimeout(function () {
 		for (var i = 0; i < params.target.length; i++) {
@@ -3071,7 +2830,6 @@ function startConditionalAction(params) {
 			var conditionalName = params.actType;
 			var actionConditinalNode = jQuery.data(ConditionalTable, conditionalName);
 			var cloneActionConditinalNode = new Object();
-			//console.log("tag:conditional/" + "conditionalName => " + conditionalName);
 			$.extend(true, cloneActionConditinalNode, actionConditinalNode);
 			var targetA = cloneActionConditinalNode.conditionTargetA;
 			var targetB = cloneActionConditinalNode.conditionTargetB;
@@ -3082,32 +2840,18 @@ function startConditionalAction(params) {
 
 			var isIgnoreCase =
 				cloneActionConditinalNode.caseSensitive == "Y" ? "N" : "Y";
-
-			//console.log("tag:conditional/" + targetA_attribute);
-			//console.log("tag:conditional/" + targetB_attribute);
-			//console.log("tag:conditional/" + compareType);
-
-			//console.log("tag:conditional/" + isIgnoreCase);
-
 			var compareValueA = getCompareValue(targetA, targetA_attribute);
 
 			if (compareValueA == undefined || compareValueA == null) {
 				compareValueA = "sdafadsfsadfsdfasfasfsa";
 			}
-			//console.log("tag:conditional/" + "compareValueA->" + compareValueA);
 			var compareValueB = getCompareValue(targetB, targetB_attribute);
 			if (compareValueB == undefined || compareValueB == null) {
 				compareValueB = "sadfasdfasdfasdfsadfasdfs";
 			}
-			//console.log("tag:conditional/" + "compareValueB->" + compareValueB);
-
-			if (conditionalName == "�뺣떟泥댄겕") {
-				//alert(compareValueA + "//" + compareValueB +"//" + targetA_attribute + "//" + targetA);
-			}
 			var result = false;
 			if (targetA_attribute == "Area" || targetA_attribute == "Area") {
 				result = getCompareResultByRect(targetA, targetB, compareType);
-				//console.log("tag:conditional/" + "compare getCompareResultByRect=>" + result);
 			} else if (
 				compareType == "==" ||
 				compareType == "!=" ||
@@ -3122,7 +2866,6 @@ function startConditionalAction(params) {
 					compareType,
 					isIgnoreCase
 				);
-				//console.log("tag:conditional/" + "compare ResultByString=>" + result);
 			} else {
 				result = getCompareResultByNumber(
 					compareValueA,
@@ -3130,16 +2873,13 @@ function startConditionalAction(params) {
 					compareType,
 					isIgnoreCase
 				);
-				//console.log("tag:conditional/" + "compare ResultByNumber=>" + result);
 			}
 
 			var action = null;
 			if (result == true) {
 				action = cloneActionConditinalNode.trueAction;
-				//console.log("tag:conditional/" + "start True Action");
 			} else {
 				action = cloneActionConditinalNode.falseAction;
-				//console.log("tag:conditional/" + "start False Action");
 			}
 
 			if (action != null) {
@@ -3152,7 +2892,6 @@ function startConditionalAction(params) {
 
 function getCompareResultByRect(rectA, rectB, compareType) {
 	var result = false;
-	// �좎룞�숋옙�⑥삕�좑옙 占쎌쥙�⑵짆�쏆삕�좑옙.
 	if (compareType == "==") {
 	} else if (compareType == "!=") {
 	} else if (compareType == "ContainsAll") {
@@ -3163,7 +2902,6 @@ function getCompareResultByRect(rectA, rectB, compareType) {
 			rectB.y + rectB.h <= rectA.y + rectA.h
 		) {
 			result = true;
-			//console.log("占쎌쥙�ワ옙�㏃젂疫뀀９苡몌옙釉먮폇�됵옙~~~");
 		} else {
 			result = false;
 		}
@@ -3201,11 +2939,9 @@ function getCompareResultByString(
 	var a = [];
 	var b = [];
 
-	//蒻븍슢�꾤땟��꾬옙�� 占쎈씈猷녶뜝�숈삕�좑옙 Array占싸뀀뙔占쏙옙 占쎄퀗�좑옙占쎌쥙猷욑옙占�.
 	if (compareValueA instanceof Array && compareValueB instanceof Array) {
 		a = compareValueA;
 		b = compareValueB;
-		//console.log(a + "//" + b);
 	} else if (
 		compareValueA instanceof Array &&
 		typeof compareValueB === "string"
@@ -3215,9 +2951,6 @@ function getCompareResultByString(
 		for (var i = 0; i < arrB.length; i++) {
 			b.push(arrB[i].trim());
 		}
-		for (var i = 0; i < b.length; i++) {
-			//console.log(b[i]);
-		}
 	} else if (
 		compareValueB instanceof Array &&
 		typeof compareValueA === "string"
@@ -3225,9 +2958,6 @@ function getCompareResultByString(
 		var arrA = compareValueA.split(",");
 		for (var i = 0; i < arrA.length; i++) {
 			a.push(arrA[i].trim());
-		}
-		for (var i = 0; i < a.length; i++) {
-			//console.log(a[i]);
 		}
 		b = compareValueB;
 	} else if (
@@ -3243,14 +2973,11 @@ function getCompareResultByString(
 			b.push(arrB[i].trim());
 		}
 		for (var i = 0; i < a.length; i++) {
-			//console.log(a[i]);
 		}
 		for (var i = 0; i < b.length; i++) {
-			//console.log(b[i]);
 		}
 	}
 
-	//�좎룞�숋옙�⑥삕�좑옙 占쎌쥙�⑵짆�쏆삕�좑옙.
 	if (compareType == "==") {
 		if (a.length == b.length) {
 			var matchCount = 0;
@@ -3421,13 +3148,10 @@ function getCompareValue(target, attribute) {
 		compareValue = textCount + "";
 	} else if (attribute == "Text") {
 		compareValue = jQuery.data($(target).get(0), "text");
-		//$(target).val(compareValue);
 		changeDisplayedText(target, compareValue);
 	} else if (attribute == "Text Count") {
 		compareValue = jQuery.data($(target).get(0), "text").length;
 	} else if (attribute == "Alpha") {
-		// compareValue =
-		// String.valueOf(target.getmTargetView().getAlpha());
 		var targetRect = {
 			x: $(target).css("left"),
 			y: $(target).css("top"),
@@ -3454,9 +3178,7 @@ function cloneObject(obj) {
 	return temp;
 }
 
-//占쎌쥙�⑼옙�볦삕�ル뜄��좎룞�숋옙濡녹삕繹먮씮�� 占쎌쥙��옙占쎌삕�좑옙 �좎럡�∽옙�뀀쐻�좑옙
 function startLibraryAction(params) {
-	//console.debug("[startLibraryAction] params.actType = " + params.actType);
 	setTimeout(function () {
 		for (var i = 0; i < params.target.length; i++) {
 			var tg = params.target[i];
@@ -3516,35 +3238,27 @@ function targetNotFound(target, count) {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//占쎌쥙�⑵짆�듭삕�좎뜴�앾옙�덉굲 �좎떥�녹맃占쎄퉫�占쎌눨�앭뜝占� 占쎌쥙��옙占쎌삕占쎌럩�뺧옙醫묒삕.
-
 function startResetBeginSequence(params) {
-	//console.log("startResetBeginSequence");
 	setTimeout(function () {
 		for (var i = 0; i < params.target.length; i++) {
 			var tg = params.target[i];
 			var ResetIndex = params.ResetIndex;
 			jQuery.data($(tg).get(0), "actionDownIndex", ResetIndex - 1);
-			//console.log("BeginSeq is " + jQuery.data($(tg).get(0), "actionDownIndex"));
 		}
 	}, params.delay);
 }
 
 function startResetEndSequence(params) {
-	//console.log("startResetEndSequence");
 	setTimeout(function () {
 		for (var i = 0; i < params.target.length; i++) {
 			var tg = params.target[i];
 			var ResetIndex = params.ResetIndex;
 			jQuery.data($(tg).get(0), "actionUpIndex", ResetIndex - 1);
-
-			//console.log("EndSeq is " + jQuery.data($(tg).get(0), "actionUpIndex"));
 		}
 	}, params.delay);
 }
 
 function startResetInRectSequence(params) {
-	//console.log("startResetInRectSequence");
 	setTimeout(function () {
 		for (var i = 0; i < params.target.length; i++) {
 			var tg = params.target[i];
@@ -3560,7 +3274,6 @@ function startResetInRectSequence(params) {
 				"N",
 				actionLibraryNode.action
 			);
-			/*                distributeNextAction(params.nextAction); */
 		}
 	}, params.delay);
 }
@@ -3630,7 +3343,6 @@ function falsefunc(e) {
 	isMousedown = true;
 	firstX = e.offsetX || e.touches[0].clientX;
 	firstY = e.offsetY || e.touches[0].clientY;
-	//console.log("falsefunc : " + firstX)
 	if (paramsobj.objectType == "scrollBox") {
 		if (paramsobj.pagingScroll == "Y") {
 			switch (paramsobj.paramValue[0].Direction) {
@@ -3794,7 +3506,6 @@ function out(e) {
 										parseInt(e.offsetX || e.touches[0].clientX) +
 										(paramsobj.cropValue -
 											(localOffsetX % paramsobj.cropValue));
-									//console.log("[DROP] complete : " + firstX);
 									deltaX = 0;
 									isScrollAnimate = false;
 								}
@@ -3814,9 +3525,7 @@ function out(e) {
 										parseInt(e.offsetX || e.touches[0].clientX) -
 										(paramsobj.cropValue -
 											(localOffsetX % paramsobj.cropValue));
-									//console.log("[DROP] complete : " + firstX);
 									deltaX = 0;
-									//console.log("animateComplete : " + firstX);
 									isScrollAnimate = false;
 								}
 							}
@@ -3840,7 +3549,6 @@ function out(e) {
 										parseInt(e.offsetY || e.touches[0].clientY) +
 										(paramsobj.cropValue -
 											(localOffsetY % paramsobj.cropValue));
-									//console.log("[DROP] complete : " + firstX);
 									deltaY = 0;
 									isScrollAnimate = false;
 								}
@@ -3860,9 +3568,7 @@ function out(e) {
 										parseInt(e.offsetY || e.touches[0].clientY) -
 										(paramsobj.cropValue -
 											(localOffsetY % paramsobj.cropValue));
-									//console.log("[DROP] complete : " + firstX);
 									deltaY = 0;
-									//console.log("animateComplete : " + firstX);
 									isScrollAnimate = false;
 								}
 							}
@@ -3872,41 +3578,9 @@ function out(e) {
 			}
 		}
 	}
-
-	/*if(isMousedown){
-		 //console.log("triggerAction")
-		 isMousedown = false;
-		 if(paramsobj.paramValue[0].Direction == 'Vert'){
-		 if(deltaY > 0){
-		 firstY = canvasY;
-		 distributeAction(this, 'down', 'N', [[{actType:13, actSubType: 'Go Next', effect : paramsobj.effect, useAnimation : paramsobj.useAnimation, target:[dragobj], Direction : paramsobj.paramValue[0].Direction, startTime:0, delay:0, duration: paramsobj.duration }]])
-		 isActed = true;
-		 return;
-		 }
-		 if(deltaY < 0){
-		 firstY = canvasY;
-		 distributeAction(this, 'down', 'N', [[{actType:13, actSubType: 'Go Prev', effect : paramsobj.effect, useAnimation : paramsobj.useAnimation, target:[dragobj], Direction : paramsobj.paramValue[0].Direction, startTime:0, delay:0, duration: paramsobj.duration }]])
-		 return;
-		 }
-		 }else{
-		 if(deltaX > 0){
-		 firstX = canvasX;
-		 distributeAction(this, 'down', 'N', [[{actType:13, actSubType: 'Go Next', effect : paramsobj.effect, useAnimation : paramsobj.useAnimation, target:[dragobj], Direction : paramsobj.paramValue[0].Direction, startTime:0, delay:0, duration: paramsobj.duration }]])
-		 isActed = true;
-		 return;
-		 }
-		 if(deltaX < 0){
-		 firstX = canvasX;
-		 distributeAction(this, 'down', 'N', [[{actType:13, actSubType: 'Go Prev', effect : paramsobj.effect, useAnimation : paramsobj.useAnimation, target:[dragobj], Direction : paramsobj.paramValue[0].Direction,startTime:0, delay:0, duration: paramsobj.duration }]])
-		 isActed = true;
-		 return;
-		 }
-		 }
-		 }*/
 }
 
 function drop(e) {
-	console.log("마우스 업sdfsdfads이라고???");
 	e.preventDefault();
 	if (paramsobj.isSwipe == "Y") {
 		isMousedown = false;
@@ -3930,7 +3604,6 @@ function drop(e) {
 						if (deltaX > 0) {
 							localOffsetX +=
 								paramsobj.cropValue - (scrollOffsetX % paramsobj.cropValue);
-							//console.log("[DROP] localOffsetX : " + localOffsetX)
 							$(dragobj).animate(
 								{
 									scrollLeft: localOffsetX
@@ -3938,12 +3611,10 @@ function drop(e) {
 								{
 									duration: 400,
 									complete: function () {
-										//console.log("complete")
 										firstX =
 											parseInt(e.offsetX || e.touches[0].clientX) +
 											(paramsobj.cropValue -
 												(localOffsetX % paramsobj.cropValue));
-										//console.log("[DROP] complete : " + firstX);
 										deltaX = 0;
 										isScrollAnimate = false;
 									}
@@ -3951,7 +3622,6 @@ function drop(e) {
 							);
 						} else {
 							localOffsetX -= scrollOffsetX % paramsobj.cropValue;
-							//console.log("[DROP] localOffsetX : " + localOffsetX)
 							$(dragobj).animate(
 								{
 									scrollLeft: localOffsetX
@@ -3963,9 +3633,7 @@ function drop(e) {
 											parseInt(e.offsetX || e.touches[0].clientX) -
 											(paramsobj.cropValue -
 												(localOffsetX % paramsobj.cropValue));
-										//console.log("[DROP] complete : " + firstX);
 										deltaX = 0;
-										//console.log("animateComplete : " + firstX);
 										isScrollAnimate = false;
 									}
 								}
@@ -3976,7 +3644,6 @@ function drop(e) {
 						if (deltaY > 0) {
 							localOffsetY +=
 								paramsobj.cropValue - (scrollOffsetY % paramsobj.cropValue);
-							//console.log("[DROP] localOffsetY : " + localOffsetY)
 							$(dragobj).animate(
 								{
 									scrollTop: localOffsetY
@@ -3984,12 +3651,10 @@ function drop(e) {
 								{
 									duration: 400,
 									complete: function () {
-										//console.log("complete")
 										firstY =
 											parseInt(e.offsetY || e.targetTouches[0].clientY) +
 											(paramsobj.cropValue -
 												(localOffsetY % paramsobj.cropValue));
-										//console.log("[DROP] complete : " + firstX);
 										deltaY = 0;
 										isScrollAnimate = false;
 									}
@@ -3997,7 +3662,6 @@ function drop(e) {
 							);
 						} else {
 							localOffsetY -= scrollOffsetY % paramsobj.cropValue;
-							//console.log("[DROP] localOffsetY : " + localOffsetY)
 							$(dragobj).animate(
 								{
 									scrollTop: localOffsetY
@@ -4009,9 +3673,7 @@ function drop(e) {
 											parseInt(e.offsetY || e.targetTouches[0].clientY) -
 											(paramsobj.cropValue -
 												(localOffsetY % paramsobj.cropValue));
-										//console.log("[DROP] complete : " + firstX);
 										deltaY = 0;
-										//console.log("animateComplete : " + firstX);
 										isScrollAnimate = false;
 									}
 								}
@@ -4022,9 +3684,7 @@ function drop(e) {
 			}
 		}
 	} else {
-		//console.log("drop");
 		if (dragobj) {
-			/*         dragobj.style.zIndex = 0; */
 			dragobj = null;
 		}
 		update(e);
@@ -4088,7 +3748,6 @@ function drag(e) {
 		canvasY = e.offsetY || e.touches[0].clientY;
 		deltaX = firstX - canvasX;
 		deltaY = firstY - canvasY;
-		//console.log("[DRAG] firstX : " + firstX + " e.offsetX : " + e.offsetX + " canvasX : " + canvasX);
 		if (paramsobj.isSwipe == "Y") {
 			if (paramsobj.objectType == "scrollBox") {
 				if (paramsobj.pagingScroll == "Y") {
@@ -4104,7 +3763,6 @@ function drag(e) {
 							if (scrollOffsetX < 0) scrollOffsetX = 0;
 
 							$(dragobj).stop();
-							//console.log("[Activated] scrollOffsetX : " + scrollOffsetX + ", deltaX : " + deltaX);
 							$(dragobj).scrollLeft(Math.abs(scrollOffsetX));
 							break;
 
@@ -4117,14 +3775,10 @@ function drag(e) {
 							}
 
 							if (scrollOffsetY < 0) scrollOffsetY = 0;
-
 							$(dragobj).stop();
-							//console.log("[Activated] scrollOffsetY : " + scrollOffsetY + ", deltaY : " + deltaY);
 							$(dragobj).scrollTop(Math.abs(scrollOffsetY));
 							break;
 					}
-
-					//$(dragobj).scrollLeft(Math.abs(scrollOffsetX));
 				} else {
 					$(dragobj).scrollLeft(Math.abs(deltaX));
 				}
@@ -4134,7 +3788,6 @@ function drag(e) {
 						firstY = canvasY;
 						console.log("drag1  : " + firstY);
 						deltaY = 0;
-						//pagingViewControl(params);
 						distributeAction(null, null, "N", [
 							[
 								{
@@ -4157,7 +3810,6 @@ function drag(e) {
 						firstY = canvasY;
 						deltaY = 0;
 						console.log("drag2  : " + firstY);
-						//pagingViewControl(params);
 						distributeAction(null, null, "N", [
 							[
 								{
@@ -4181,7 +3833,6 @@ function drag(e) {
 						console.log("drag3  : " + firstX);
 						console.log("effecty : " + paramsobj.effect);
 						deltaX = 0;
-						//pagingViewControl(params);
 						distributeAction(null, null, "N", [
 							[
 								{
@@ -4204,7 +3855,6 @@ function drag(e) {
 						firstX = canvasX;
 						deltaX = 0;
 						console.log("drag4  : " + firstX);
-						//pagingViewControl(params);
 						distributeAction(null, null, "N", [
 							[
 								{
@@ -4226,12 +3876,6 @@ function drag(e) {
 				}
 			}
 		} else {
-			// if(dragobj.tagName = "SVG") {
-			//
-			// }else{
-			//
-			// }
-
 			dragobj.style.left = afterDragX + "px";
 			dragobj.style.top = afterDragY + "px";
 
@@ -4249,7 +3893,6 @@ function drag(e) {
 						jQuery.data($(dragobj).get(0), "startedInRect") == "N"
 					) {
 						jQuery.data($(dragobj).get(0), "startedInRect", "Y");
-						//$(dragobj).css("pointerEvents", "none");
 						if (randForDrag == "Y")
 							distributeAction(dragobj, "inRect", "Y", inRectAction);
 						else distributeAction(dragobj, "inRect", "N", inRectAction);
@@ -4257,7 +3900,6 @@ function drag(e) {
 					}
 				}
 			} else {
-				//console.log("dragAreaLeftLimit : " + dragAreaLeftLimit + ", dragobj.style.left : " + dragobj.style.left +", dragAreaRightLimit : " + dragAreaRightLimit)
 				for (var j = 0; j < paramsobj.paramValue.length; j++) {
 					if (paramsobj.paramValue[j].Direction == "Vert") {
 						percentRate =
@@ -4307,7 +3949,6 @@ function drag(e) {
 								console.log("minus1");
 								curPoint.x = curPoint.x - percentRate * diffPoint.x;
 							} else {
-								//console.log("plus1")
 								console.log("value : " + percentRate * diffPoint.x);
 								curPoint.x = curPoint.x + percentRate * diffPoint.x;
 							}
@@ -4316,7 +3957,6 @@ function drag(e) {
 								console.log("minus2");
 								curPoint.y = curPoint.y - percentRate * diffPoint.y;
 							} else {
-								//console.log("plus2")
 								curPoint.y = curPoint.y + percentRate * diffPoint.y;
 							}
 
@@ -4365,15 +4005,11 @@ function drag(e) {
 								maxSize.height - minSize.height
 							);
 
-							var curSize = minSize;
-
 							maxSize.width = minSize.width + percentRate * diffSize.width;
 							maxSize.height = minSize.height + percentRate * diffSize.height;
 
 							var widthScale = maxSize.width / minSize.width;
 							var heightScale = maxSize.height / minSize.height;
-
-							//$(paramsobj.controlObj).css({'transform-origin': 'scale('+widthScale+', ' +heightScale+')'});
 
 							for (var i = 0; i < paramsobj.paramValue[j].target.length; i++) {
 								console.log(
@@ -4388,22 +4024,11 @@ function drag(e) {
 									"scale(" + widthScale + ", " + heightScale + ")"
 								);
 							}
-
-							//$(paramsobj.controlObj).css({'transform': 'scale('+widthScale+', ' +heightScale+')'});                 }
-
-							/*ctx.save();
-														 ctx.translate(x + w / 2, y + h / 2);
-														 ctx.rotate(r * Math.PI / 180);
-														 ctx.drawImage(image, -w / 2, -h / 2, w, h);
-														 ctx.restore();*/
 							break;
 					}
 				}
 			}
 		}
-		console.log("drsdfsdfasdag :: " + afterDragX);
-
-		/*             console.log("drag =>" + afterDragX + "//" + afterDragY); */
 	}
 	update(e);
 	return false; // in IE this prevents cascading of events, thus text selection is disabled
@@ -4412,11 +4037,9 @@ function drag(e) {
 function startScroll(params) {
 	for (var i = 0; i < params.target.length; i++) {
 		var tg = params.target[i];
-
 		var nowScrollX = $(tg).scrollLeft();
 		var nowScrollY = $(tg).scrollTop();
 
-		//console.log("scrollX => " + nowScrollX + "scrollY => " + nowScrollY);
 		if (params.reverse == "Y") {
 			setTimeout(function () {
 				$(tg).animate(
@@ -4635,7 +4258,6 @@ function checkBrowser(params) {
 }
 
 function reDraw(target, context, image, scaleW, scaleH, timer) {
-	/* console.log(scaleW + "//" +$(target).width()); */
 	$(target).get(0).width = $(target).width();
 	$(target).get(0).height = $(target).height();
 	context.drawImage(image, 0, 0, $(target).width(), $(target).height());
@@ -4652,8 +4274,6 @@ function scaleInterval(target, context, image, scaleW, scaleH) {
 
 function startLoadData(params) {
 	var url = params.content;
-
-	//console.log("loaddata~~" + url);
 	var qIndex = url.indexOf("?");
 	var preUrl = url.substring(0, qIndex);
 	var strParams = url.substring(qIndex + 1, url.length);
@@ -4669,7 +4289,6 @@ function startLoadData(params) {
 		if (propertyValue != null && propertyValue.startsWith("#")) {
 			propertyValue = replaceAll(propertyValue, "#", "");
 			var target = jQuery.data(TargetTable, propertyValue);
-			//propertyValue = $(target).val();
 			propertyValue = jQuery.data(target, "text");
 		}
 		if (propertyValue != null) {
@@ -4678,15 +4297,11 @@ function startLoadData(params) {
 
 		strParam += propertyName + "/" + propertyValue + "**";
 	}
-	//console.log("loaddata~~" + strParam);
 	$.post(preUrl, postParmas, function (data, status) {
 		var tempData = data.split("<body>")[1];
-		//console.log(tempData);
 		tempData = tempData.split("</body>")[0];
-		//console.log(tempData);
 		try {
 			var jsonData = JSON.parse(tempData);
-			//console.log(jsonData);
 
 			if (preUrl == "http://m.englisheye.co.kr/game/login.asp") {
 				parseLoginData(jsonData);
@@ -4694,14 +4309,10 @@ function startLoadData(params) {
 				parseData(jsonData);
 				distributeNextAction(params.nextAction);
 			} else {
-				//var jsonObj = mArrJsonData[0];
 				mArrJsonData = jsonData;
 			}
-			//var soundPath = jsonObj.sound;
 		} catch (err) { }
 		distributeNextAction(params.nextAction);
-
-		//console.log("arrJsonDta init OK");
 	});
 }
 
@@ -4711,10 +4322,8 @@ function parseLoginData(data) {
 			alert(v);
 			return;
 		}
-		//console.log(k + ' is ' + v);
 		var text = v;
 		var target = jQuery.data(TargetTable, k);
-		//$(target).val(text);
 		changeDisplayedText(target, text);
 		try {
 			jQuery.data(jQuery.data(TargetTable, k), "text", text);
@@ -4724,14 +4333,12 @@ function parseLoginData(data) {
 
 function parseData(data) {
 	$.each(data, function (k, v) {
-		//console.log(k + ' is ' + v);
 		var text = v.text;
 		var tag = v.tag;
 		var imgPath = v.path;
 		var soundPath = v.sound;
 
 		var target = jQuery.data(TargetTable, k);
-		//$(target).val(text);
 		changeDisplayedText(target, text);
 		try {
 			jQuery.data(jQuery.data(TargetTable, k), "text", text);
@@ -4747,12 +4354,10 @@ function parseData(data) {
 		} else {
 			soundPath = v.sound;
 		}
-		//sound1.src = soundPath;
 	});
 }
 
 function startChangeData(params) {
-	//console.log("startChangeData");
 	setTimeout(function () {
 		try {
 			if (mDataIndex >= mArrJsonData.length) {
@@ -4761,14 +4366,12 @@ function startChangeData(params) {
 			if (mArrJsonData != null && mDataIndex < mArrJsonData.length) {
 				var data = mArrJsonData[mDataIndex];
 				$.each(data, function (k, v) {
-					//console.log(k + ' is ' + v);
 					var text = v.text;
 					var tag = v.tag;
 					var imgPath = null;
 					var soundPath = null;
 
 					var target = jQuery.data(TargetTable, k);
-					//$(target).val(text);
 					changeDisplayedText(target, text);
 					try {
 						jQuery.data(jQuery.data(TargetTable, k), "text", text);
@@ -4796,10 +4399,8 @@ function startChangeData(params) {
 							);
 						}
 					}
-					//console.log("soundPath //  " + soundPath);
 					if (soundPath != null) {
 						sound1.src = soundPath;
-						//console.log("sound1.src = soundPath : " + sound1.src);
 					}
 				});
 			}
@@ -4811,14 +4412,13 @@ function startChangeData(params) {
 }
 
 function startTimer(params) {
-	//console.log("startTimer");
 	setTimeout(function () {
 		for (var i = 0; i < params.target.length; i++) {
 			var tg = params.target[i];
 			var timerStartAction = params.TimerStartAction;
 			var timerEndAction = params.TimerEndAction;
 			var timerScheduleAction = params.TimerScheduleAction;
-			var timerScheduleRepeat = params.TimerScheduleRepeat; //1占쎈��� �귐뗫를.
+			var timerScheduleRepeat = params.TimerScheduleRepeat;
 			var timerScheduleTime = params.TimerScheduleTime;
 
 			var startActionNode = null;
@@ -4895,7 +4495,6 @@ function startTimer(params) {
 			var timer = setInterval(function () {
 				var strTime = jQuery.data(tg, "currentTime");
 				var secTime = jQuery.data(tg, "secTime");
-				// $(tg).val(getDurationString(Number(strTime) - 1, secTime ));
 
 				changeDisplayedText(
 					tg,
@@ -4985,7 +4584,6 @@ function startTimer(params) {
 }
 
 function stopTimer(params) {
-	//console.log("startTimer");
 	setTimeout(function () {
 		for (var i = 0; i < params.target.length; i++) {
 			var tg = params.target[i];
@@ -5056,7 +4654,6 @@ function getDurationString(seconds, initCount) {
 		sb += twoDigitString(":");
 		sb += twoDigitString(seconds);
 	}
-	//console.log(sb);
 	return sb;
 }
 
