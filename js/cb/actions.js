@@ -182,141 +182,6 @@ function startFade(params) {
 		jQuery.data(tg, "startFade", startFadeTimer);
 	}
 }
-// /**start Move */
-// function startMove(params) {
-// 	console.log(params);
-// 	if (params.actSubType === "Curve To") {
-// 		makeCurve(params);
-// 		return;
-// 	}
-// 	let easingVar = "";
-// 	switch (params.aniTiming) {
-// 		case 0: easingVar = "linear"; break;
-// 		case 1: easingVar = "easeInCubic"; break;
-// 		case 2: easingVar = "easeOutCubic"; break;
-// 		case 3: easingVar = "easeInOutCubic"; break;
-// 	}
-
-// 	for (const tg of params.target) {
-// 		const groupCheck = IsGroup(tg);
-// 		const absX = Number($(tg).css("left").replace("px", ""));
-// 		const absY = Number($(tg).css("top").replace("px", ""));
-// 		const relX = tg.clientLeft;
-// 		const relY = tg.clientTop;
-// 		let absToX = params.toX; // absoulte destination X
-// 		let absToY = params.toY;
-
-// 		if (groupCheck === "Group") {
-// 			const groupRect = GroupResizing(tg);
-// 		} else if (groupCheck === "GroupChild") {
-// 			const groupTg = tg.parentElement.parentElement;
-// 			const st = window.getComputedStyle(tg, null);
-// 			const tr = st.getPropertyValue("transform-origin").split("px");
-// 			const width = parseFloat(st.getPropertyValue("width").split("px")[0]);
-// 			const height = parseFloat(st.getPropertyValue("height").split("px")[0]);
-// 			const left = parseFloat(st.getPropertyValue("left").split("px")[0]);
-// 			const top = parseFloat(st.getPropertyValue("top").split("px")[0]);
-
-// 			const gSt = window.getComputedStyle(groupTg, null);
-// 			const gLeft = parseFloat(gSt.getPropertyValue("left").split("px")[0]);
-// 			const gTop = parseFloat(gSt.getPropertyValue("top").split("px")[0]);
-
-// 			const xy = RotatePoint(
-// 				groupTg,
-// 				null,
-// 				null,
-// 				absToX + width / 2,
-// 				absToY + height / 2,
-// 				-1
-// 			);
-// 			xy[0] -= gLeft;
-// 			xy[1] -= gTop;
-// 			absToX = xy[0] - width / 2;
-// 			absToY = xy[1] - height / 2;
-
-// 			const leftTopCenter = RotatePoint(
-// 				tg,
-// 				null,
-// 				null,
-// 				left + width / 2,
-// 				top + height / 2,
-// 				1
-// 			);
-// 			$(tg).css("left", leftTopCenter[0] - width / 2); //nx, width
-// 			$(tg).css("top", leftTopCenter[1] - height / 2); // ny, height
-// 			$(tg).css("transform-origin", "50% " + "50%");
-// 		}
-
-// 		if (params.actSubType === "Move By") {
-// 			absToX = params.toX + absX;
-// 			absToY = params.toY + absY;
-// 		}
-
-// 		const startMoveTimer = setTimeout(function () {
-// 			$(tg).animate(
-// 				{
-// 					left: absToX,
-// 					top: absToY
-// 				},
-// 				{
-// 					duration: params.duration,
-// 					easing: easingVar,
-// 					queue: false,
-// 					complete: function () {
-// 						if (params.reverse == "Y") {
-// 							setTimeout(function () {
-// 								$(tg).animate(
-// 									{
-// 										left: absX,
-// 										top: absY
-// 									},
-// 									{
-// 										duration: params.revDuration,
-// 										easing: easingVar,
-// 										queue: false,
-// 										complete: function () {
-// 											if (
-// 												params.repeatForever != null &&
-// 												params.repeatForever == "Y"
-// 											) {
-// 												params.delay -= params.startTime;
-// 												params.startTime = 0;
-// 												startMove(params);
-// 											} else if (params.repeatCount > 0) {
-// 												params.delay -= params.startTime;
-// 												params.startTime = 0;
-// 												startMove(params);
-// 												params.repeatCount -= 1;
-// 											} else {
-// 												if (params.nextAction != null) {
-// 													distributeNextAction(params.nextAction);
-// 												}
-// 											}
-// 										}
-// 									}
-// 								);
-// 							}, params.waitingTime);
-// 						} else {
-// 							if (params.repeatForever != null && params.repeatForever == "Y") {
-// 								params.delay = params.delay - params.startTime;
-// 								params.startTime = 0;
-// 								startMove(params);
-// 							} else if (params.repeatCount > 0) {
-// 								params.delay -= params.startTime;
-// 								params.startTime = 0;
-// 								startMove(params);
-// 								params.repeatCount -= 1;
-// 							} else {
-// 								distributeNextAction(params.nextAction);
-// 							}
-// 						}
-// 					}
-// 				}
-// 			);
-// 		}, params.delay);
-// 		jQuery.data(tg, "startMove", startMoveTimer);
-// 	}
-// }
 /**start Move */
 function startMove(params) {
 	if (params.actSubType === "Curve To") {
@@ -395,8 +260,8 @@ function startMove(params) {
 			loop: params.repeatForever === "Y" || loopCount,
 			duration: params.duration,
 			easing: easingVar,
-			direction: params.reverse === "Y"? "alternate" : "normal", // reverse 옵션은 아님
-			delay: params.delay,
+			direction: params.reverse === "Y"? "alternate" : "normal",
+			delay: params.delay, // delay도 loop에 적용되는지 확인필요
 			complete: function (anim) {
 				if (params.repeatForever === "Y" || params.repeatCount > 0) return;
 
@@ -409,7 +274,6 @@ function startMove(params) {
 		});
 	}
 }
-
 /**
  * @returns "NonGroup" or "GroupChild" or "Group"
  */
@@ -939,11 +803,6 @@ function startRotate(params) {
 	for (var i = 0; i < params.target.length; i++) {
 		var tg = params.target[i];
 		var groupCheck = IsGroup(tg);
-		var anchorPoint = "'" + params.anchorX + "% " + params.anchorY + "%'";
-
-		if (groupCheck === "Group") {
-			var groupRect = GroupResizing(tg);
-		}
 
 		var st = window.getComputedStyle(tg, null);
 		var tr =
@@ -964,8 +823,8 @@ function startRotate(params) {
 
 			var a = values[0];
 			var b = values[1];
-			var c = values[2];
-			var d = values[3];
+			// var c = values[2];
+			// var d = values[3];
 
 			var scale = Math.sqrt(a * a + b * b);
 			sin = b / scale;
@@ -976,172 +835,58 @@ function startRotate(params) {
 		var tr = st.getPropertyValue("transform-origin");
 
 		var xy = RotatePoint(tg, params.anchorX, params.anchorY, null, null, 1);
-		//if (!(params.anchorX == 50 && params.anchorY == 50)) {
 		$(tg).css("left", xy[0] - xy[2] * (params.anchorX / 100)); //nx, width
 		$(tg).css("top", xy[1] - xy[3] * (params.anchorY / 100)); // ny, height
-		//}
-
 		$(tg).css("transform-origin", params.anchorX + "% " + params.anchorY + "%");
 
-		if (params.reverse == "Y") {
-			startRotateTimer = setTimeout(function () {
-				var revAngle = GetAngle(tg);
-				var aniAngle = params.angle;
+		// ----------------------------------------------------------------
+		let loopCount = params.repeatCount + 1;
+		let initialRotate = $(tg).css("rotate");
+		let aniAngle = params.angle;
+		// reverse일 경우 loopCount를 2배 곱해줘야 terget이 왕복을 한다.
+		if (params.reverse === "Y") {
+			loopCount = loopCount * 2;
+			// 
+			aniAngle = params.angle;
+			revAngle = GetAngle(tg);
 
-				if (params.actSubType == "Rotate By") {
-					aniAngle = aniAngle + nowAngle;
-					revAngle = nowAngle;
-				}
-
-				if (groupCheck === "GroupChild")
-					aniAngle -= GetAngle(tg.parentElement.parentElement);
-				var graphicSpacing;
-				if (!tg.nodeName == "X-TEXTBOX") graphicSpacing = "borderSpacing";
-
-				$(tg).animate(
-					{
-						graphicSpacing: aniAngle
-						//rotate: aniAngle
-					},
-					{
-						duration: params.duration,
-						easing: easingVar,
-						step: function (now, fx) {
-							$(this).css(
-								"-webkit-transform",
-								"rotate(" + (parseInt(nowAngle) + parseInt(now)) + "deg)"
-							);
-							$(this).css(
-								"-moz-transform",
-								"rotate(" + (parseInt(nowAngle) + parseInt(now)) + "deg)"
-							);
-							$(this).css(
-								"transform",
-								"rotate(" + (parseInt(nowAngle) + parseInt(now)) + "deg)"
-							);
-						},
-						complete: function () {
-							setTimeout(function () {
-								$(tg).animate(
-									{
-										graphicSpacing: revAngle
-									},
-									{
-										duration: params.revDuration,
-										easing: easingVar,
-										step: function (now, fx) {
-											$(this).css(
-												"-webkit-transform",
-												"rotate(" +
-												(parseInt(nowAngle) + parseInt(now)) +
-												"deg)"
-											);
-											$(this).css(
-												"-moz-transform",
-												"rotate(" +
-												(parseInt(nowAngle) + parseInt(now)) +
-												"deg)"
-											);
-											$(this).css(
-												"transform",
-												"rotate(" +
-												(parseInt(nowAngle) + parseInt(now)) +
-												"deg)"
-											);
-										},
-										complete: function () {
-											if (
-												params.repeatForever != null &&
-												params.repeatForever == "Y"
-											) {
-												$(tg).css("borderSpacing", 0);
-												params.delay = params.delay - params.startTime;
-												params.startTime = 0;
-												startRotate(params);
-											} else if (params.repeatCount > 0) {
-												$(tg).css("borderSpacing", 0);
-												params.delay = params.delay - params.startTime;
-												params.startTime = 0;
-												startRotate(params);
-												params.repeatCount -= 1;
-											} else {
-												$(tg).css("borderSpacing", 0);
-												if (params.nextAction != null) {
-													distributeNextAction(params.nextAction);
-												}
-											}
-										}
-									}
-								);
-							}, params.waitingTime);
-						}
-					}
-				);
-			}, params.delay);
+			if (groupCheck === "GroupChild"){
+				aniAngle -= GetAngle(tg.parentElement.parentElement);
+			}
 		} else {
-			var initialRotate = $(tg).css("rotate");
-			if (typeof initialRotate == "string" || initialRotate instanceof String)
+			if (typeof initialRotate == "string" || initialRotate instanceof String){
 				initialRotate = initialRotate.replace("deg", "");
-			startRotateTimer = null;
-			startRotateTimer = setTimeout(function () {
-				//initialRotate = nowAngle;
-				var aniAngle = params.angle;
-
-				if (params.actSubType != "Rotate By") {
-					//aniAngle = aniAngle - nowAngle;
-					if (aniAngle == nowAngle) return;
-				} else {
-					aniAngle += parseFloat(initialRotate);
-				}
-				nowAngle = 0;
-
-				if (groupCheck === "GroupChild")
-					aniAngle -= GetAngle(tg.parentElement.parentElement);
-				var graphicSpacing;
-				if (!(tg.nodeName == "X-TEXTBOX")) graphicSpacing = "borderSpacing";
-
-				$(tg).animate(
-					{
-						graphicSpacing: aniAngle
-					},
-					{
-						duration: params.duration,
-						easing: easingVar,
-						step: function (now, fx) {
-							$(this).css(
-								"-webkit-transform",
-								"rotate(" + (parseFloat(nowAngle) + parseFloat(now)) + "deg)"
-							);
-							$(this).css(
-								"-moz-transform",
-								"rotate(" + (parseFloat(nowAngle) + parseFloat(now)) + "deg)"
-							);
-							$(this).css(
-								"transform",
-								"rotate(" + (parseFloat(nowAngle) + parseFloat(now)) + "deg)"
-							);
-						},
-						complete: function () {
-							if (params.repeatForever != null && params.repeatForever == "Y") {
-								$(tg).css("borderSpacing", 0);
-								$(tg).css("transform", "rotate(" + initialRotate + ")");
-								startRotate(params);
-							} else if (params.repeatCount > 0) {
-								$(tg).css("borderSpacing", 0);
-								$(tg).css("transform", "rotate(" + initialRotate + ")");
-								params.delay = params.delay - params.startTime;
-								params.startTime = 0;
-								startRotate(params);
-								params.repeatCount -= 1;
-							} else {
-								$(tg).css("borderSpacing", 0);
-								distributeNextAction(params.nextAction);
-							}
-						}
-					}
-				);
-			}, params.delay);
+			}
+			if (params.actSubType != "Rotate By") {
+				if (aniAngle == nowAngle) return;
+			} else {
+				aniAngle += parseFloat(initialRotate);
+			}
 		}
+
+		anime({
+			targets : tg,
+			rotate : aniAngle,
+			loop: params.repeatForever === "Y" || loopCount,
+			duration: params.duration,
+			easing : easingVar,
+			direction : params.reverse === "Y"? "alternate" : "normal",
+			delay : params.delay,
+			complete: function (anim) {
+				if (params.repeatForever === "Y" || params.repeatCount) return;
+				console.log(anim);
+
+				if (params.reverse === "Y") {
+					setTimeout(() => {
+						if (params.nextAction != null) {
+							distributeNextAction(params.nextAction);
+						}
+					}, params.waitingTime);
+				} else {
+					distributeNextAction(params.nextAction);
+				}
+			}
+		})
 		jQuery.data(tg, "startRotate", startRotateTimer);
 	}
 }
