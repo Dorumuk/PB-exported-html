@@ -182,9 +182,143 @@ function startFade(params) {
 		jQuery.data(tg, "startFade", startFadeTimer);
 	}
 }
+// /**start Move */
+// function startMove(params) {
+// 	console.log(params);
+// 	if (params.actSubType === "Curve To") {
+// 		makeCurve(params);
+// 		return;
+// 	}
+// 	let easingVar = "";
+// 	switch (params.aniTiming) {
+// 		case 0: easingVar = "linear"; break;
+// 		case 1: easingVar = "easeInCubic"; break;
+// 		case 2: easingVar = "easeOutCubic"; break;
+// 		case 3: easingVar = "easeInOutCubic"; break;
+// 	}
+
+// 	for (const tg of params.target) {
+// 		const groupCheck = IsGroup(tg);
+// 		const absX = Number($(tg).css("left").replace("px", ""));
+// 		const absY = Number($(tg).css("top").replace("px", ""));
+// 		const relX = tg.clientLeft;
+// 		const relY = tg.clientTop;
+// 		let absToX = params.toX; // absoulte destination X
+// 		let absToY = params.toY;
+
+// 		if (groupCheck === "Group") {
+// 			const groupRect = GroupResizing(tg);
+// 		} else if (groupCheck === "GroupChild") {
+// 			const groupTg = tg.parentElement.parentElement;
+// 			const st = window.getComputedStyle(tg, null);
+// 			const tr = st.getPropertyValue("transform-origin").split("px");
+// 			const width = parseFloat(st.getPropertyValue("width").split("px")[0]);
+// 			const height = parseFloat(st.getPropertyValue("height").split("px")[0]);
+// 			const left = parseFloat(st.getPropertyValue("left").split("px")[0]);
+// 			const top = parseFloat(st.getPropertyValue("top").split("px")[0]);
+
+// 			const gSt = window.getComputedStyle(groupTg, null);
+// 			const gLeft = parseFloat(gSt.getPropertyValue("left").split("px")[0]);
+// 			const gTop = parseFloat(gSt.getPropertyValue("top").split("px")[0]);
+
+// 			const xy = RotatePoint(
+// 				groupTg,
+// 				null,
+// 				null,
+// 				absToX + width / 2,
+// 				absToY + height / 2,
+// 				-1
+// 			);
+// 			xy[0] -= gLeft;
+// 			xy[1] -= gTop;
+// 			absToX = xy[0] - width / 2;
+// 			absToY = xy[1] - height / 2;
+
+// 			const leftTopCenter = RotatePoint(
+// 				tg,
+// 				null,
+// 				null,
+// 				left + width / 2,
+// 				top + height / 2,
+// 				1
+// 			);
+// 			$(tg).css("left", leftTopCenter[0] - width / 2); //nx, width
+// 			$(tg).css("top", leftTopCenter[1] - height / 2); // ny, height
+// 			$(tg).css("transform-origin", "50% " + "50%");
+// 		}
+
+// 		if (params.actSubType === "Move By") {
+// 			absToX = params.toX + absX;
+// 			absToY = params.toY + absY;
+// 		}
+
+// 		const startMoveTimer = setTimeout(function () {
+// 			$(tg).animate(
+// 				{
+// 					left: absToX,
+// 					top: absToY
+// 				},
+// 				{
+// 					duration: params.duration,
+// 					easing: easingVar,
+// 					queue: false,
+// 					complete: function () {
+// 						if (params.reverse == "Y") {
+// 							setTimeout(function () {
+// 								$(tg).animate(
+// 									{
+// 										left: absX,
+// 										top: absY
+// 									},
+// 									{
+// 										duration: params.revDuration,
+// 										easing: easingVar,
+// 										queue: false,
+// 										complete: function () {
+// 											if (
+// 												params.repeatForever != null &&
+// 												params.repeatForever == "Y"
+// 											) {
+// 												params.delay -= params.startTime;
+// 												params.startTime = 0;
+// 												startMove(params);
+// 											} else if (params.repeatCount > 0) {
+// 												params.delay -= params.startTime;
+// 												params.startTime = 0;
+// 												startMove(params);
+// 												params.repeatCount -= 1;
+// 											} else {
+// 												if (params.nextAction != null) {
+// 													distributeNextAction(params.nextAction);
+// 												}
+// 											}
+// 										}
+// 									}
+// 								);
+// 							}, params.waitingTime);
+// 						} else {
+// 							if (params.repeatForever != null && params.repeatForever == "Y") {
+// 								params.delay = params.delay - params.startTime;
+// 								params.startTime = 0;
+// 								startMove(params);
+// 							} else if (params.repeatCount > 0) {
+// 								params.delay -= params.startTime;
+// 								params.startTime = 0;
+// 								startMove(params);
+// 								params.repeatCount -= 1;
+// 							} else {
+// 								distributeNextAction(params.nextAction);
+// 							}
+// 						}
+// 					}
+// 				}
+// 			);
+// 		}, params.delay);
+// 		jQuery.data(tg, "startMove", startMoveTimer);
+// 	}
+// }
 /**start Move */
 function startMove(params) {
-	console.log(params);
 	if (params.actSubType === "Curve To") {
 		makeCurve(params);
 		return;
@@ -201,17 +335,14 @@ function startMove(params) {
 		const groupCheck = IsGroup(tg);
 		const absX = Number($(tg).css("left").replace("px", ""));
 		const absY = Number($(tg).css("top").replace("px", ""));
-		const relX = tg.clientLeft;
-		const relY = tg.clientTop;
 		let absToX = params.toX; // absoulte destination X
 		let absToY = params.toY;
 
 		if (groupCheck === "Group") {
-			const groupRect = GroupResizing(tg);
+			// const groupRect = GroupResizing(tg); // 확인 필요
 		} else if (groupCheck === "GroupChild") {
 			const groupTg = tg.parentElement.parentElement;
 			const st = window.getComputedStyle(tg, null);
-			const tr = st.getPropertyValue("transform-origin").split("px");
 			const width = parseFloat(st.getPropertyValue("width").split("px")[0]);
 			const height = parseFloat(st.getPropertyValue("height").split("px")[0]);
 			const left = parseFloat(st.getPropertyValue("left").split("px")[0]);
@@ -251,74 +382,35 @@ function startMove(params) {
 			absToX = params.toX + absX;
 			absToY = params.toY + absY;
 		}
+		let loopCount = params.repeatCount + 1;
+		// reverse일 경우 loopCount를 2배 곱해줘야 terget이 왕복을 한다.
+		if (params.reverse === "Y") {
+			loopCount = loopCount * 2;
+		}
 
-		const startMoveTimer = setTimeout(function () {
-			$(tg).animate(
-				{
-					left: absToX,
-					top: absToY
-				},
-				{
-					duration: params.duration,
-					easing: easingVar,
-					queue: false,
-					complete: function () {
-						if (params.reverse == "Y") {
-							setTimeout(function () {
-								$(tg).animate(
-									{
-										left: absX,
-										top: absY
-									},
-									{
-										duration: params.revDuration,
-										easing: easingVar,
-										queue: false,
-										complete: function () {
-											if (
-												params.repeatForever != null &&
-												params.repeatForever == "Y"
-											) {
-												params.delay -= params.startTime;
-												params.startTime = 0;
-												startMove(params);
-											} else if (params.repeatCount > 0) {
-												params.delay -= params.startTime;
-												params.startTime = 0;
-												startMove(params);
-												params.repeatCount -= 1;
-											} else {
-												if (params.nextAction != null) {
-													distributeNextAction(params.nextAction);
-												}
-											}
-										}
-									}
-								);
-							}, params.waitingTime);
-						} else {
-							//console.log("after" + "/" + tg.offsetLeft + "/" + absY);
-							if (params.repeatForever != null && params.repeatForever == "Y") {
-								params.delay = params.delay - params.startTime;
-								params.startTime = 0;
-								startMove(params);
-							} else if (params.repeatCount > 0) {
-								params.delay -= params.startTime;
-								params.startTime = 0;
-								startMove(params);
-								params.repeatCount -= 1;
-							} else {
-								distributeNextAction(params.nextAction);
-							}
-						}
-					}
+		anime({
+			targets: tg,
+			left: absToX,
+			top: absToY,
+			loop: params.repeatForever === "Y" || loopCount,
+			duration: params.duration,
+			easing: easingVar,
+			direction: params.reverse === "Y"? "alternate" : "normal", // reverse 옵션은 아님
+			delay: params.delay,
+			complete: function (anim) {
+				if (params.repeatForever === "Y" || params.repeatCount > 0) return;
+
+				if (params.reverse === "Y") {
+					setTimeout(() => distributeNextAction(params.nextAction), params.waitingTime);
+				} else {
+					distributeNextAction(params.nextAction);
 				}
-			);
-		}, params.delay);
-		jQuery.data(tg, "startMove", startMoveTimer);
+			}
+		});
 	}
 }
-/** ❗👇Will change the function name to 
+
+/**
  * @returns "NonGroup" or "GroupChild" or "Group"
  */
 function IsGroup(target) {
@@ -836,20 +928,12 @@ function startScaleMove(params) {
 function startRotate(params) {
 	//console.log("startRotate");
 	var startRotateTimer;
-	var easingVar = "";
+	let easingVar = "";
 	switch (params.aniTiming) {
-		case 0:
-			easingVar = "linear";
-			break;
-		case 1:
-			easingVar = "easeInCubic";
-			break;
-		case 2:
-			easingVar = "easeOutCubic";
-			break;
-		case 3:
-			easingVar = "easeInOutCubic";
-			break;
+		case 0: easingVar = "linear"; break;
+		case 1: easingVar = "easeInCubic"; break;
+		case 2: easingVar = "easeOutCubic"; break;
+		case 3: easingVar = "easeInOutCubic"; break;
 	}
 
 	for (var i = 0; i < params.target.length; i++) {
