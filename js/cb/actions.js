@@ -791,7 +791,7 @@ function startScaleMove(params) {
 /**start rotate */
 function startRotate(params) {
 	//console.log("startRotate");
-	var startRotateTimer;
+	var startRotateTimer = null;
 	let easingVar = "";
 	switch (params.aniTiming) {
 		case 0: easingVar = "linear"; break;
@@ -814,12 +814,9 @@ function startRotate(params) {
 
 		if (tr != null && tr != "none") {
 			var values =
-				tr == null
-					? null
-					: tr
-						.split("(")[1]
-						.split(")")[0]
-						.split(",");
+				tr.split("(")[1]
+					.split(")")[0]
+					.split(",");
 
 			var a = values[0];
 			var b = values[1];
@@ -833,20 +830,17 @@ function startRotate(params) {
 		}
 
 		var tr = st.getPropertyValue("transform-origin");
+		console.log(tr);
 
 		var xy = RotatePoint(tg, params.anchorX, params.anchorY, null, null, 1);
 		$(tg).css("left", xy[0] - xy[2] * (params.anchorX / 100)); //nx, width
 		$(tg).css("top", xy[1] - xy[3] * (params.anchorY / 100)); // ny, height
 		$(tg).css("transform-origin", params.anchorX + "% " + params.anchorY + "%");
 
-		// ----------------------------------------------------------------
 		let loopCount = params.repeatCount + 1;
 		let initialRotate = $(tg).css("rotate");
 		let aniAngle = params.angle;
-		// reverse일 경우 loopCount를 2배 곱해줘야 terget이 왕복을 한다.
 		if (params.reverse === "Y") {
-			loopCount = loopCount * 2;
-			// 
 			aniAngle = params.angle;
 			revAngle = GetAngle(tg);
 
@@ -864,29 +858,28 @@ function startRotate(params) {
 			}
 		}
 
-		anime({
+		const tl = anime.timeline({
 			targets : tg,
-			rotate : aniAngle,
 			loop: params.repeatForever === "Y" || loopCount,
 			duration: params.duration,
 			easing : easingVar,
-			direction : params.reverse === "Y"? "alternate" : "normal",
 			delay : params.delay,
 			complete: function (anim) {
 				if (params.repeatForever === "Y" || params.repeatCount) return;
-				console.log(anim);
-
-				if (params.reverse === "Y") {
-					setTimeout(() => {
-						if (params.nextAction != null) {
-							distributeNextAction(params.nextAction);
-						}
-					}, params.waitingTime);
-				} else {
-					distributeNextAction(params.nextAction);
-				}
-			}
+				setTimeout(() => {
+					if (params.nextAction != null) {
+						distributeNextAction(params.nextAction);
+					}
+				}, params.waitingTime);
+			},
 		})
+		if (params.reverse === "Y") {
+			tl
+			.add ({rotate : aniAngle})
+			.add ({rotate : 0})
+		} else {
+			tl.add ({rotate : aniAngle})
+		}
 		jQuery.data(tg, "startRotate", startRotateTimer);
 	}
 }
@@ -897,13 +890,38 @@ function startFlip(params) {
 	var startFlipTimer;
 	for (var i = 0; i < params.target.length; i++) {
 		var tg = params.target[i];
+
+		var aniAngle = -180;
+		var easingVar = "";
+
+		switch (params.aniTiming) {
+			case 0: easingVar = "linear"; break;
+			case 1: easingVar = "easeInCubic"; break;
+			case 2: easingVar = "easeOutCubic"; break;
+			case 3: easingVar = "easeInOutCubic";break;
+		}
 		startFlipTimer = setTimeout(function () {
 			if (params.actSubType == "Flip X") {
 				$(tg).css(
-					"-webkit-transform",
-					"translateZ(" + $(tg).height() / 2 + ")"
-				);
-				flipY(params, tg);
+					"-webkit-transform", "translateZ(" + $(tg).height() / 2 + ")");
+				// flipY(params, tg);
+				console.log('----');
+				anime({
+					targets : tg,
+					loop: params.repeatForever === "Y" ,
+					duration: params.duration,
+					rotateY: aniAngle,
+					easing : 'linear',
+					delay : params.delay,
+					complete: function (anim) {
+						if (params.repeatForever === "Y" || params.repeatCount) return;
+						setTimeout(() => {
+							if (params.nextAction != null) {
+								distributeNextAction(params.nextAction);
+							}
+						}, params.waitingTime);
+					},
+				})
 			} else {
 				$(tg).css("-webkit-transform", "translateZ(" + $(tg).width() / 2 + ")");
 				flipX(params, tg);
@@ -953,7 +971,7 @@ function flipX(params, tg) {
 
 	var aniAngle = -180;
 
-	if (xAngle != 0) {
+	if (xAngle !== 0) {
 		aniAngle = 0;
 	} else {
 		aniAngle = -180;

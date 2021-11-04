@@ -106,7 +106,7 @@ if (isHide) {
 if ($("#cvs_0002").css('visibility').toLowerCase() != 'visible') { return; } 
 } 
 e.stopPropagation();
-distributeAction(cvs_0002, 'down', 'N', [[{actType:6, actSubType:'Rotate To', aniTiming:2, target:[cvs_0004], angle:-1080.00, anchorX:50.0, anchorY:50.0, revAngle:.00, poX:15, poY:130, startTime:0, delay:0, duration:2000,repeatCount:3, reverse:'Y', aniTiming:2, revDuration:2000, waitingTime:0, repeatForever:'N' }]]);
+distributeAction(cvs_0002, 'down', 'N', [[{actType:8, actSubType:'Flip X', aniTiming:-1, target:[cvs_0004], toX:0, toY:0, scaleWidth: '0px', scaleHeight: '0px', originWidth: '0px', originHeight: '0px', startTime:0, delay:0, duration:2000 }]]);
 });
 });
 $(document).ready(function(){

@@ -1,0 +1,23 @@
+{
+  "name": "pb-exported-html",
+  "version": "1.0.0",
+  "description": "refactoring js action code",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^8.1.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dorumuk/PB-exported-html.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dorumuk/PB-exported-html/issues"
+  },
+  "homepage": "https://github.com/Dorumuk/PB-exported-html#readme"
+}

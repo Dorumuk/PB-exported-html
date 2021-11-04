@@ -152,10 +152,10 @@ function setCurrentPageCountBox() {
 
 function makeObj(ori, alt) {
 	return {
-		state : false,
-		originImage : ori,
-		altImage : alt,
-		changeToggleState : () => changeToggleState(cvs)
+		state: false,
+		originImage: ori,
+		altImage: alt,
+		changeToggleState: () => changeToggleState(cvs)
 	}
 }
 
@@ -311,20 +311,20 @@ function distributeAction(touchedObject, touchID, rand, arrActions) {
 
 				if (rand == "Y") {
 					const beforeNo = jQuery.data($(touchedObject).get(0), "beforeRand") ?? 0;
-					const randNo = arrActions.length > 1? shuffleRandom(beforeNo, arrActions.length) : 0;
+					const randNo = arrActions.length > 1 ? shuffleRandom(beforeNo, arrActions.length) : 0;
 
 					jQuery.data($(touchedObject).get(0), "beforeRand", randNo);
 					arrActionParams = arrActions[randNo];
 				} else {
 					arrActionParams = arrActions[(jQuery.data($(touchedObject).get(0), "actionUpIndex"))];
-				}				
+				}
 			} else if (touchID == "down") {
 				if (jQuery.data($(touchedObject).get(0), "actionDownIndex") >= arrActions.length) {
 					jQuery.data($(touchedObject).get(0), "actionDownIndex", 0);
 				}
 				if (rand == "Y") {
 					const beforeNo = jQuery.data($(touchedObject).get(0), "beforeRand") ?? 0;
-					const randNo = arrActions.length > 1? shuffleRandom(beforeNo, arrActions.length) : 0;
+					const randNo = arrActions.length > 1 ? shuffleRandom(beforeNo, arrActions.length) : 0;
 
 					jQuery.data($(touchedObject).get(0), "beforeRand", randNo);
 					arrActionParams = arrActions[randNo];
@@ -944,7 +944,7 @@ function distributeNextAction(arrActionParams) {
 				case 25: startResetEndSequence(params); break;
 				case 26: startResetInRectSequence(params); break;
 				case 27: startAppend(params); break;
-				case 28: startRemove(params);	break;
+				case 28: startRemove(params); break;
 				case 29: startReplace(params); break;
 				case 30: startRemoveAll(params); break;
 				case 31: startAdd(params); break;
@@ -964,7 +964,7 @@ function distributeNextAction(arrActionParams) {
 						startChangeData(params);
 					}
 					break;
-				case 50: startlink(params);	break;
+				case 50: startlink(params); break;
 			}
 		}
 	}
@@ -2619,7 +2619,7 @@ function gotoPage(params) {
 					var temp = window.location.toString().split("/");
 					temp[temp.length - 1] = params.goto;
 					if (params.goto == "Backward") {
-						javascript: history.go(-1);
+						history.go(-1);
 					} else {
 						window.location = temp.join("/");
 					}
@@ -4919,7 +4919,7 @@ function RotatePointByPoint(x, y, cx, cy, nowAngle, reverse) {
 
 function GroupResizing(group) {
 	var unionRectPoints = null;
-	for (let child of group.children[0].children){
+	for (let child of group.children[0].children) {
 		const st = window.getComputedStyle(child, null);
 		const nowAngle = GetAngle(child);
 		const left = parseFloat(st.getPropertyValue("left").split("px")[0]);
