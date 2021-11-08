@@ -790,8 +790,7 @@ function startScaleMove(params) {
 }
 /**start rotate */
 function startRotate(params) {
-	//console.log("startRotate");
-	var startRotateTimer = null;
+	// let startRotateTimer = null; // setTimeout의 ID
 	let easingVar = "";
 	switch (params.aniTiming) {
 		case 0: easingVar = "linear"; break;
@@ -806,11 +805,11 @@ function startRotate(params) {
 
 		var st = window.getComputedStyle(tg, null);
 		var tr =
+			st.getPropertyValue("transform") ||
 			st.getPropertyValue("-webkit-transform") ||
 			st.getPropertyValue("-moz-transform") ||
 			st.getPropertyValue("-ms-transform") ||
-			st.getPropertyValue("-o-transform") ||
-			st.getPropertyValue("transform");
+			st.getPropertyValue("-o-transform");
 
 		if (tr != null && tr != "none") {
 			var values =
@@ -865,7 +864,7 @@ function startRotate(params) {
 			easing : easingVar,
 			delay : params.delay,
 			complete: function (anim) {
-				if (params.repeatForever === "Y" || params.repeatCount) return;
+				if (params.repeatForever === "Y" || params.repeatCount > 0) return;
 				setTimeout(() => {
 					if (params.nextAction != null) {
 						distributeNextAction(params.nextAction);
@@ -880,283 +879,55 @@ function startRotate(params) {
 		} else {
 			tl.add ({rotate : aniAngle})
 		}
-		jQuery.data(tg, "startRotate", startRotateTimer);
+		// jQuery.data(tg, "startRotate", startRotateTimer);
 	}
 }
 /**start flip */
 function startFlip(params) {
-	// 20160628 - hyukin
-	// 사파리 flipX, flipY 버그 수정
-	var startFlipTimer;
+	// var startFlipTimer;
 	for (var i = 0; i < params.target.length; i++) {
 		var tg = params.target[i];
 
 		var aniAngle = -180;
-		var easingVar = "";
+		// Flip에서는 aniTiming이 늘 -1로 적용되는 문제가 있어, 
+		// easingVar를 아래와 같이 임시처리함.
+		var easingVar = "linear";
 
-		switch (params.aniTiming) {
-			case 0: easingVar = "linear"; break;
-			case 1: easingVar = "easeInCubic"; break;
-			case 2: easingVar = "easeOutCubic"; break;
-			case 3: easingVar = "easeInOutCubic";break;
+		$(tg).css("-webkit-transform",
+			`translateZ(${params.actSubType == "Flip X" ? $(tg).height() / 2 : $(tg).width() / 2})`);
+		const tl = anime.timeline({
+			targets : tg,
+			loop: params.repeatForever === "Y" || params.repeatCount + 1,
+			duration: params.duration,
+			easing : easingVar,
+			complete: function (anim) {
+				if (params.repeatForever === "Y" || params.repeatCount > 0) return;
+				setTimeout(() => {
+					if (params.nextAction != null) {
+						distributeNextAction(params.nextAction);
+					}
+				}, params.waitingTime);
+			},
+		})
+		if (params.reverse === "Y") {
+			tl
+			.add ({delay : params.delay + 1})
+			.add ({
+				rotateY: params.actSubType === "Flip X" ? aniAngle : 0,
+				rotateX: params.actSubType === "Flip Y" ? aniAngle : 0
+			})
+			.add ({
+				rotateY: 0,
+				rotateX: 0
+			})
+		} else {
+			tl
+			.add ({delay : params.delay + 1})
+			.add ({
+				rotateY: params.actSubType === "Flip X" ? aniAngle : 0,
+				rotateX: params.actSubType === "Flip Y" ? aniAngle : 0
+			})
 		}
-		startFlipTimer = setTimeout(function () {
-			if (params.actSubType == "Flip X") {
-				$(tg).css(
-					"-webkit-transform", "translateZ(" + $(tg).height() / 2 + ")");
-				// flipY(params, tg);
-				console.log('----');
-				anime({
-					targets : tg,
-					loop: params.repeatForever === "Y" ,
-					duration: params.duration,
-					rotateY: aniAngle,
-					easing : 'linear',
-					delay : params.delay,
-					complete: function (anim) {
-						if (params.repeatForever === "Y" || params.repeatCount) return;
-						setTimeout(() => {
-							if (params.nextAction != null) {
-								distributeNextAction(params.nextAction);
-							}
-						}, params.waitingTime);
-					},
-				})
-			} else {
-				$(tg).css("-webkit-transform", "translateZ(" + $(tg).width() / 2 + ")");
-				flipX(params, tg);
-			}
-		}, params.delay);
-		jQuery.data(tg, "startFlip", startFlipTimer);
-	}
-}
-function flipX(params, tg) {
-	var oriAngle = $(tg)[0].style.transform;
-	var xAngle = parseFloat(
-		oriAngle.indexOf("rotateX") > -1
-			? oriAngle
-				.split("rotateX(")[1]
-				.split(")")[0]
-				.split("d")[0]
-			: "0"
-	);
-	var yAngle = parseFloat(
-		oriAngle.indexOf("rotateY") > -1
-			? oriAngle
-				.split("rotateY(")[1]
-				.split(")")[0]
-				.split("d")[0]
-			: "0"
-	);
-
-	if (xAngle != undefined) $(tg).css("rotateX", xAngle);
-	if (yAngle != undefined) $(tg).css("rotateY", yAngle);
-
-	var easingVar = "";
-
-	switch (params.aniTiming) {
-		case 0:
-			easingVar = "linear";
-			break;
-		case 1:
-			easingVar = "easeInCubic";
-			break;
-		case 2:
-			easingVar = "easeOutCubic";
-			break;
-		case 3:
-			easingVar = "easeInOutCubic";
-			break;
-	}
-
-	var aniAngle = -180;
-
-	if (xAngle !== 0) {
-		aniAngle = 0;
-	} else {
-		aniAngle = -180;
-	}
-
-	if (params.reverse == "Y") {
-		$(tg).animate(
-			{
-				rotateX: aniAngle,
-				rotateY: yAngle
-			},
-			{
-				duration: params.duration,
-				easing: easingVar,
-				complete: function () {
-					setTimeout(function () {
-						$(tg).animate(
-							{
-								rotateX: xAngle,
-								rotateY: yAngle
-							},
-							{
-								duration: params.revDuration,
-								easing: easingVar,
-								complete: function () {
-									if (
-										params.repeatForever != null &&
-										params.repeatForever == "Y"
-									) {
-										params.delay = params.delay - params.startTime;
-										params.startTime = 0;
-										startFlip(params);
-									} else if (params.repeatCount > 0) {
-										params.delay = params.delay - params.startTime;
-										params.startTime = 0;
-										startFlip(params);
-										params.repeatCount -= 1;
-									} else {
-										if (params.nextAction != null) {
-											distributeNextAction(params.nextAction);
-										}
-									}
-								}
-							}
-						);
-					}, params.waitingTime);
-				}
-			}
-		);
-	} else {
-		$(tg).animate(
-			{
-				rotateX: aniAngle,
-				rotateY: yAngle
-			},
-			{
-				duration: params.duration,
-				easing: easingVar,
-				complete: function () {
-					if (params.repeatForever != null && params.repeatForever == "Y") {
-						startFlip(params);
-					} else if (params.repeatCount > 0) {
-						params.delay = params.delay - params.startTime;
-						params.startTime = 0;
-						startFlip(params);
-						params.repeatCount -= 1;
-					} else {
-						distributeNextAction(params.nextAction);
-					}
-				}
-			}
-		);
-	}
-}
-function flipY(params, tg) {
-	var oriAngle = $(tg)[0].style.transform;
-	var xAngle = parseFloat(
-		oriAngle.indexOf("rotateX") > -1
-			? oriAngle
-				.split("rotateX(")[1]
-				.split(")")[0]
-				.split("d")[0]
-			: "0"
-	);
-	var yAngle = parseFloat(
-		oriAngle.indexOf("rotateY") > -1
-			? oriAngle
-				.split("rotateY(")[1]
-				.split(")")[0]
-				.split("d")[0]
-			: "0"
-	);
-
-	if (xAngle != undefined) $(tg).css("rotateX", xAngle);
-	if (yAngle != undefined) $(tg).css("rotateY", yAngle);
-
-	if (yAngle != 0) {
-		aniAngle = 0;
-	} else {
-		aniAngle = -180;
-	}
-
-	var easingVar = "";
-
-	switch (params.aniTiming) {
-		case 0:
-			easingVar = "linear";
-			break;
-		case 1:
-			easingVar = "easeInCubic";
-			break;
-		case 2:
-			easingVar = "easeOutCubic";
-			break;
-		case 3:
-			easingVar = "easeInOutCubic";
-			break;
-	}
-
-	if (params.reverse == "Y") {
-		$(tg).animate(
-			{
-				rotateY: aniAngle,
-				rotateX: xAngle
-			},
-			{
-				duration: params.duration,
-				easing: easingVar,
-				complete: function () {
-					setTimeout(function () {
-						$(tg).animate(
-							{
-								rotateX: xAngle,
-								rotateY: yAngle
-							},
-							{
-								duration: params.revDuration,
-								easing: easingVar,
-								complete: function () {
-									if (
-										params.repeatForever != null &&
-										params.repeatForever == "Y"
-									) {
-										params.delay = params.delay - params.startTime;
-										params.startTime = 0;
-										startFlip(params);
-									} else if (params.repeatCount > 0) {
-										params.delay = params.delay - params.startTime;
-										params.startTime = 0;
-										startFlip(params);
-										params.repeatCount -= 1;
-									} else {
-										if (params.nextAction != null) {
-											distributeNextAction(params.nextAction);
-										}
-									}
-								}
-							}
-						);
-					}, params.waitingTime);
-				}
-			}
-		);
-	} else {
-		$(tg).animate(
-			{
-				rotateY: aniAngle,
-				rotateX: xAngle
-			},
-			{
-				duration: params.duration,
-				easing: easingVar,
-				complete: function () {
-					if (params.repeatForever != null && params.repeatForever == "Y") {
-						startFlip(params);
-					} else if (params.repeatCount > 0) {
-						params.delay = params.delay - params.startTime;
-						params.startTime = 0;
-						startFlip(params);
-						params.repeatCount -= 1;
-					} else {
-						distributeNextAction(params.nextAction);
-					}
-				}
-			}
-		);
+		// jQuery.data(tg, "startFlip", startFlipTimer);
 	}
 }
