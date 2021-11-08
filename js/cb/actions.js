@@ -29,7 +29,7 @@ function startStopAll(params) {
 			$(tg).stop();
 
 			try {
-				var curveTimer = jQuery.data($(params.target[0]).get(0), "curveTimer");
+				let curveTimer = jQuery.data($(params.target[0]).get(0), "curveTimer");
 
 				if (typeof curveTimer == "undefined") {
 					curveTimer = jQuery.data(tg, "curveTimer");
@@ -40,7 +40,7 @@ function startStopAll(params) {
 			}
 
 			try {
-				var aniTimer = jQuery.data($(tg).get(0), "animation_Timer");
+				let aniTimer = jQuery.data($(tg).get(0), "animation_Timer");
 				if (typeof curveTimer == "undefined") {
 					aniTimer = jQuery.data(tg, "animation_Timer");
 				}
@@ -56,15 +56,14 @@ function startStopAll(params) {
 }
 /** start hide show */
 function startHideShow(params) {
-	var startHideShowTimer;
-	for (var i = 0; i < params.target.length; i++) {
-		var tg = params.target[i];
+	let startHideShowTimer;
+	for (const tg of params.target) {
 		if (tg == null) alert("null box");
 		try {
-			var blink_timer =
+			const blink_timer =
 				"clearInterval(" + replaceAll(tg.id, "cvs", "blink_timer") + ")";
 			eval(blink_timer);
-			var blink_setTimer =
+			const blink_setTimer =
 				"clearInterval(" + replaceAll(tg.id, "cvs", "blink_setTimer") + ")";
 			eval(blink_setTimer);
 			eval(blink_setTimer);
@@ -80,8 +79,8 @@ function startHideShow(params) {
 				$(tg).removeClass("collapse");
 
 				if (params.callfunc) {
-					var fnstring = params.callfunc;
-					var fn = window[fnstring];
+					const fnstring = params.callfunc;
+					const fn = window[fnstring];
 					if (typeof fn === "function") fn();
 				}
 			}
@@ -361,7 +360,6 @@ function startScaleMove(params) {
 			);
 			xy[0] -= gLeft;
 			xy[1] -= gTop;
-
 			absToX = xy[0] - width / 2;
 			absToY = xy[1] - height / 2;
 
@@ -395,396 +393,56 @@ function startScaleMove(params) {
 			$(tg).css("transform-origin", "50% " + "50%");
 		}
 
-		startScaleMoveTimer = setTimeout(function () {
-			$(tg).animate(
-				{
-					width: params.scaleWidth,
-					height: params.scaleHeight,
-					left: absToX,
-					top: absToY
-				},
-				{
-					queue: false,
-					duration: params.duration,
-					easing: easingVar,
-					step: function () {
-						const child = document.getElementById($(tg).attr("id") +
-									(groupCheck === "Group"? "_container" : "_child1"));
-						if (child != null) {
-							// overflow를 visible로 넣어줘야한다.
-							$(child).css("overflow", "visible");
-							$(tg).css("overflow", "visible");
-							let scaleWidth = 1;
-							let scaleHeight = 1;
-							if (groupCheck !== "Group") {
-								scaleWidth = $(tg).width() / $(child)[0].getBBox().width;
-								scaleHeight = $(tg).height() / $(child)[0].getBBox().height;
-							} else {
-								var width = $(tg).width();
-								var height = $(tg).height();
-								var gWidth = $(child).width();
-								var gHeight = $(child).height();
-								var gcSt = window.getComputedStyle(child, null);
+		console.log(params);
+		var updates = 0;
+		const tl = anime.timeline({
+			targets: tg,			
+			loop: params.repeatForever === "Y" || params.repeatCount + 1,
+			easing: easingVar,
+			loopBegin: function (anim) {
+				console.log(anim);
+				updates ++;
+			},
+			complete: function (anim) {
+				if (params.repeatForever === "Y" || params.repeatCount > 0) return;
 
-								var groupCTrans = gcSt.getPropertyValue("transform");
-								if (groupCTrans != "none")
-									transInfo = gcSt
-										.getPropertyValue("transform")
-										.split("(")[1]
-										.split(",");
-								else transInfo = ["1", "0", "0", "1"];
-
-								scaleWidth = width / gWidth;
-								scaleHeight = height / gHeight;
-								for (i = 0; i < tg.children[0].children.length; i++) {
-									var groupChild = tg.children[0].children[i];
-									var child1 = document.getElementById(
-										$(groupChild).attr("id") + "_child1"
-									);
-									var cSt = window.getComputedStyle(groupChild, null);
-									var c1St = window.getComputedStyle(child1, null);
-
-									// 스텝 중의 이전 transform
-									var childTrans = c1St.getPropertyValue("transform");
-									if (childTrans != "none")
-										childTrans = c1St
-											.getPropertyValue("transform")
-											.split("(")[1]
-											.split(",");
-									else childTrans = ["1", "0", "0", "1"];
-									var transformX = parseFloat(childTrans[0]);
-									var transformY = parseFloat(childTrans[3]);
-
-									// 이전 액션의 transform
-									var childAttr = groupChild.attributes["transform"];
-									if (childAttr != null && childAttr != "none") {
-										childAttr = childAttr.value
-											.split("(")[1]
-											.split(")")[0]
-											.split(" ");
-									} else {
-										childAttr = ["1", " ", "1"];
-									}
-									const childScaleWidth = parseFloat(childAttr[0]);
-									const childScaleHeight = parseFloat(childAttr[childAttr.length - 1]);
-
-									var child1LeftRate =
-										(parseFloat(cSt.getPropertyValue("left").split("px")[0]) /
-											transformX) * childScaleWidth * scaleWidth;
-									var child1TopRate =
-										(parseFloat(cSt.getPropertyValue("top").split("px")[0]) /
-											transformY) * childScaleHeight * scaleHeight;
-									const {childWidth, childHeight} = $(groupChild);
-
-									// ellipse와 같은 경우에 child1 width가 아니므로 직접 계산해야한다.
-									$(groupChild).css("left", child1LeftRate);
-									$(groupChild).css("top", child1TopRate);
-									$(groupChild).css(
-										"width",
-										(childWidth / transformX) * childScaleWidth * scaleWidth +
-										"px"
-									);
-									$(groupChild).css(
-										"height",
-										(childHeight / transformY) *
-										childScaleHeight *
-										scaleHeight +
-										"px"
-									);
-
-									$(child1).attr(
-										"transform",
-										"scale(" +
-										childScaleWidth * scaleWidth +
-										" " +
-										childScaleHeight * scaleHeight +
-										")"
-									);
-								}
-							}
-							$(child).attr(
-								"transform",
-								"scale(" + scaleWidth + " " + scaleHeight + ")"
-							);
-						}
-					},
-					complete: function () {
-						if (params.reverse === "Y") {
-							setTimeout(function () {
-								$(tg).animate(
-									{
-										width: originWidth,
-										height: originHeight,
-										left: absX,
-										top: absY
-									},
-									{
-										duration: params.revDuration,
-										easing: easingVar,
-										queue: false,
-										step: function () {
-											var child = document.getElementById(
-												$(tg).attr("id") + "_child1"
-											);
-											if (groupCheck === "Group") {
-												child = document.getElementById(
-													$(tg).attr("id") + "_container"
-												);
-											}
-
-											if (child != null) {
-												// overflow를 visible로 넣어줘야한다.
-												$(child).css("overflow", "visible");
-												$(tg).css("overflow", "visible");
-												var scaleWidth = 1;
-												var scaleHeight = 1;
-												if (groupCheck !== "Group") {
-													scaleWidth =
-														$(tg).width() / $(child)[0].getBBox().width;
-													scaleHeight =
-														$(tg).height() / $(child)[0].getBBox().height;
-												} else {
-													var width = $(tg).width();
-													var height = $(tg).height();
-													var gWidth = $(child).width();
-													var gHeight = $(child).height();
-													var gcSt = window.getComputedStyle(child, null);
-
-													var groupCTrans = gcSt.getPropertyValue("transform");
-													if (groupCTrans != "none")
-														transInfo = gcSt
-															.getPropertyValue("transform")
-															.split("(")[1]
-															.split(",");
-													else transInfo = ["1", "0", "0", "1"];
-
-													scaleWidth = width / gWidth;
-													scaleHeight = height / gHeight;
-													for (i = 0; i < tg.children[0].children.length; i++) {
-														var groupChild = tg.children[0].children[i];
-														var child1 = document.getElementById(
-															$(groupChild).attr("id") + "_child1"
-														);
-														var cSt = window.getComputedStyle(groupChild, null);
-														var c1St = window.getComputedStyle(child1, null);
-
-														// 스텝 중의 이전 transform
-														var childTrans = c1St.getPropertyValue("transform");
-														if (childTrans != "none")
-															childTrans = c1St
-																.getPropertyValue("transform")
-																.split("(")[1]
-																.split(",");
-														else childTrans = ["1", "0", "0", "1"];
-														var transformX = parseFloat(childTrans[0]);
-														var transformY = parseFloat(childTrans[3]);
-
-														// 이전 액션의 transform
-														var childAttr = groupChild.attributes["transform"];
-														if (childAttr != null && childAttr != "none") {
-															childAttr = childAttr.value
-																.split("(")[1]
-																.split(")")[0]
-																.split(" ");
-														} else {
-															childAttr = ["1", " ", "1"];
-														}
-														var childScaleWidth = parseFloat(childAttr[0]);
-														var childScaleHeight = parseFloat(
-															childAttr[childAttr.length - 1]
-														);
-
-														var child1LeftRate =
-															(parseFloat(
-																cSt.getPropertyValue("left").split("px")[0]
-															) /
-																transformX) *
-															childScaleWidth *
-															scaleWidth;
-														var child1TopRate =
-															(parseFloat(
-																cSt.getPropertyValue("top").split("px")[0]
-															) /
-																transformY) *
-															childScaleHeight *
-															scaleHeight;
-														const {childWidth, childHeight} = $(groupChild);
-
-														// ellipse와 같은 경우에 child1 width가 아니므로 직접 계산해야한다.
-
-														$(groupChild).css("left", child1LeftRate);
-														$(groupChild).css("top", child1TopRate);
-														$(groupChild).css(
-															"width",
-															(childWidth / transformX) *
-															childScaleWidth *
-															scaleWidth +
-															"px"
-														);
-														$(groupChild).css(
-															"height",
-															(childHeight / transformY) *
-															childScaleHeight *
-															scaleHeight +
-															"px"
-														);
-
-														$(child1).attr(
-															"transform",
-															"scale(" +
-															childScaleWidth * scaleWidth +
-															" " +
-															childScaleHeight * scaleHeight +
-															")"
-														);
-													}
-												}
-												$(child).attr(
-													"transform",
-													"scale(" + scaleWidth + " " + scaleHeight + ")"
-												);
-											}
-										},
-										complete: function () {
-											if (
-												params.repeatForever != null &&
-												params.repeatForever == "Y"
-											) {
-												params.delay = params.delay - params.startTime;
-												params.startTime = 0;
-												startScaleMove(params);
-											} else if (params.repeatCount > 0) {
-												params.delay = params.delay - params.startTime;
-												params.startTime = 0;
-												startScaleMove(params);
-												params.repeatCount -= 1;
-											} else {
-												var child = document.getElementById(
-													$(tg).attr("id") + "_child1"
-												);
-												if (groupCheck === "Group") {
-													child = document.getElementById(
-														$(tg).attr("id") + "_container"
-													);
-												}
-
-												if (child != undefined) {
-													var c1St = window.getComputedStyle(child, null);
-													var child1Trans = ["1", "0", "0", "1"];
-
-													if (groupCheck !== "Group")
-														child1Trans = c1St
-															.getPropertyValue("transform")
-															.split("(")[1]
-															.split(",");
-													else {
-														for (
-															i = 0;
-															i < tg.children[0].children.length;
-															i++
-														) {
-															var groupChild = tg.children[0].children[i];
-															var child1 = document.getElementById(
-																$(groupChild).attr("id") + "_child1"
-															);
-															var c1St = window.getComputedStyle(child1, null);
-
-															var childTrans = c1St.getPropertyValue(
-																"transform"
-															);
-															if (childTrans != "none")
-																childTrans = c1St
-																	.getPropertyValue("transform")
-																	.split("(")[1]
-																	.split(",");
-															else childTrans = ["1", "0", "0", "1"];
-															var transformX = parseFloat(childTrans[0]);
-															var transformY = parseFloat(childTrans[3]);
-
-															$(groupChild).attr(
-																"transform",
-																"scale(" + transformX + " " + transformY + ")"
-															);
-														}
-													}
-
-													var scaleWidth = child1Trans[0];
-													var scaleHeight = child1Trans[3];
-													$(tg).attr(
-														"transform",
-														"(" + scaleWidth + " " + scaleHeight + ")"
-													);
-												}
-												distributeNextAction(params.nextAction);
-											}
-										}
-									}
-								);
-							}, params.waitingTime);
-						} else {
-							if (params.repeatForever != null && params.repeatForever == "Y") {
-								params.delay = params.delay - params.startTime;
-								params.startTime = 0;
-								startScaleMove(params);
-							} else {
-								var child = document.getElementById(
-									$(tg).attr("id") + "_child1"
-								);
-								if (groupCheck === "Group") {
-									child = document.getElementById(
-										$(tg).attr("id") + "_container"
-									);
-								}
-
-								if (child != undefined) {
-									var c1St = window.getComputedStyle(child, null);
-									var child1Trans = ["1", "0", "0", "1"];
-
-									if (groupCheck !== "Group")
-										child1Trans = c1St
-											.getPropertyValue("transform")
-											.split("(")[1]
-											.split(",");
-									else {
-										for (i = 0; i < tg.children[0].children.length; i++) {
-											var groupChild = tg.children[0].children[i];
-											var child1 = document.getElementById(
-												$(groupChild).attr("id") + "_child1"
-											);
-											var c1St = window.getComputedStyle(child1, null);
-
-											var childTrans = c1St.getPropertyValue("transform");
-											if (childTrans != "none")
-												childTrans = c1St
-													.getPropertyValue("transform")
-													.split("(")[1]
-													.split(",");
-											else childTrans = ["1", "0", "0", "1"];
-											var transformX = parseFloat(childTrans[0]);
-											var transformY = parseFloat(childTrans[3]);
-
-											$(groupChild).attr(
-												"transform",
-												"scale(" + transformX + " " + transformY + ")"
-											);
-										}
-									}
-
-									var scaleWidth = child1Trans[0];
-									var scaleHeight = child1Trans[3];
-									$(tg).attr(
-										"transform",
-										"(" + scaleWidth + " " + scaleHeight + ")"
-									);
-								}
-
-								distributeNextAction(params.nextAction);
-							}
-						}
-					}
+				if (params.reverse === "Y") {
+					setTimeout(() => distributeNextAction(params.nextAction), params.waitingTime);
+				} else {
+					distributeNextAction(params.nextAction);
 				}
-			);
-		}, params.delay);
+			}
+		});
+		//
+		//
+		//
+		const animDelay = params.delay - params.startTime;
+		tl
+		.add({
+			delay: function (el, i, l) {
+				console.log(updates);
+				return i * 100;
+			},
+		})
+		tl
+		.add ({
+			left: absToX,
+			top: absToY,
+			duration: params.duration,
+			scaleX: parseFloat(params.scaleWidth.split("px")[0]) / originWidth,
+			scaleY: parseFloat(params.scaleHeight.split("px")[0]) / originHeight
+		})
+		if (params.reverse === "Y") {
+			tl
+			.add ({delay : params.waitingTime})
+			.add ({
+				duration: params.revDuration,
+				left: absX,
+				top: absY,
+				scaleX: 1,
+				scaleY: 1
+			})
+		}
 		jQuery.data(tg, "startScaleMove", startScaleMoveTimer);
 	}
 }
@@ -885,13 +543,11 @@ function startRotate(params) {
 /**start flip */
 function startFlip(params) {
 	// var startFlipTimer;
-	for (var i = 0; i < params.target.length; i++) {
-		var tg = params.target[i];
-
-		var aniAngle = -180;
+	for (const tg of params.target) {
 		// Flip에서는 aniTiming이 늘 -1로 적용되는 문제가 있어, 
-		// easingVar를 아래와 같이 임시처리함.
-		var easingVar = "linear";
+		// easingVar를 아래와 같이 임시처리함. 2021.11.08
+		const easingVar = "linear"; // ❗
+		const aniAngle = -180;
 
 		$(tg).css("-webkit-transform",
 			`translateZ(${params.actSubType == "Flip X" ? $(tg).height() / 2 : $(tg).width() / 2})`);

@@ -106,7 +106,7 @@ if (isHide) {
 if ($("#cvs_0002").css('visibility').toLowerCase() != 'visible') { return; } 
 } 
 e.stopPropagation();
-distributeAction(cvs_0002, 'down', 'N', [[{actType:8, actSubType:'Flip Y', aniTiming:-1, target:[cvs_0004], toX:0, toY:0, scaleWidth: '0px', scaleHeight: '0px', originWidth: '0px', originHeight: '0px', startTime:0, delay:2000, duration:1000,repeatCount:3, reverse:'Y', aniTiming:-1, revDuration:1000, waitingTime:0, repeatForever:'N' }]]);
+distributeAction(cvs_0002, 'down', 'N', [[{actType:4, actSubType:'', aniTiming:3, target:[cvs_0004], toX:500, toY:250, scaleWidth: '200px', scaleHeight: '200px', originWidth: '0px', originHeight: '0px', startTime:0, delay:1000, duration:2000,repeatCount:3, reverse:'Y', aniTiming:3, revDuration:1000, waitingTime:0, repeatForever:'N' }]]);
 });
 });
 $(document).ready(function(){
