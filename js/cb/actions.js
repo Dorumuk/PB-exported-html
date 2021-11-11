@@ -316,13 +316,12 @@ function makeCurve(params) {
 }
 /**start scale move */
 function startScaleMove(params) {
-	let startScaleMoveTimer;
 	for (const tg of params.target) {
 		const absX = Number($(tg).css("left").replace("px", ""));
 		const absY = Number($(tg).css("top").replace("px", ""));
 		const originWidth = $(params.target).width();
 		const originHeight = $(params.target).height();
-		var groupCheck = IsGroup(tg);
+		const groupCheck = IsGroup(tg);
 
 		let easingVar = "";
 		switch (params.aniTiming) {
@@ -363,12 +362,12 @@ function startScaleMove(params) {
 			absToX = xy[0] - width / 2;
 			absToY = xy[1] - height / 2;
 
-			var scaleWidth = parseFloat(params.scaleWidth.split("px")[0]);
-			var scaleHeight = parseFloat(params.scaleHeight.split("px")[0]);
+			const scaleWidth = parseFloat(params.scaleWidth.split("px")[0]);
+			const scaleHeight = parseFloat(params.scaleHeight.split("px")[0]);
 
 			if (gNowAngle != 0) {
 				// 그룹이 회전한 각도에 따라 scale 방향이 바뀐다.
-				var scaleRotateXY = RotatePointByPoint(
+				const scaleRotateXY = RotatePointByPoint(
 					absToX + (scaleWidth * parseFloat(tr[0])) / width,
 					absToY + (scaleHeight * parseFloat(tr[1])) / height,
 					xy[0],
@@ -380,7 +379,7 @@ function startScaleMove(params) {
 				absToY = scaleRotateXY[1] - (scaleHeight * parseFloat(tr[1])) / height;
 			}
 
-			var leftTopCenter = RotatePoint(
+			const leftTopCenter = RotatePoint(
 				tg,
 				null,
 				null,
@@ -393,57 +392,45 @@ function startScaleMove(params) {
 			$(tg).css("transform-origin", "50% " + "50%");
 		}
 
-		console.log(params);
-		var updates = 0;
-		const tl = anime.timeline({
-			targets: tg,			
-			loop: params.repeatForever === "Y" || params.repeatCount + 1,
-			easing: easingVar,
-			loopBegin: function (anim) {
-				console.log(anim);
-				updates ++;
-			},
-			complete: function (anim) {
-				if (params.repeatForever === "Y" || params.repeatCount > 0) return;
-
-				if (params.reverse === "Y") {
-					setTimeout(() => distributeNextAction(params.nextAction), params.waitingTime);
-				} else {
-					distributeNextAction(params.nextAction);
-				}
-			}
-		});
-		//
-		//
-		//
 		const animDelay = params.delay - params.startTime;
-		tl
-		.add({
-			delay: function (el, i, l) {
-				console.log(updates);
-				return i * 100;
-			},
-		})
-		tl
-		.add ({
+		const work = {
+			duration: params.duration,
 			left: absToX,
 			top: absToY,
-			duration: params.duration,
 			scaleX: parseFloat(params.scaleWidth.split("px")[0]) / originWidth,
 			scaleY: parseFloat(params.scaleHeight.split("px")[0]) / originHeight
-		})
-		if (params.reverse === "Y") {
-			tl
-			.add ({delay : params.waitingTime})
-			.add ({
-				duration: params.revDuration,
-				left: absX,
-				top: absY,
-				scaleX: 1,
-				scaleY: 1
-			})
 		}
-		jQuery.data(tg, "startScaleMove", startScaleMoveTimer);
+		const startScaleMoveTimerId = setTimeout(() => {
+			const tl = anime.timeline({
+				targets: tg,
+				loop: params.repeatForever === "Y" || params.repeatCount + 1,
+				easing: easingVar,
+				complete: function (anim) {
+					if (params.repeatForever === "Y" || params.repeatCount > 0) return;
+					if (params.reverse === "Y") {
+						setTimeout(() => distributeNextAction(params.nextAction), params.waitingTime);
+					} else {
+						distributeNextAction(params.nextAction);
+					}
+				}
+			})
+			if (params.reverse !== "Y") {
+				tl.add ({...work, endDelay: animDelay})
+			} else {
+				tl
+				.add (work)
+				.add ({
+					duration: params.revDuration,
+					left: absX,
+					top: absY,
+					scaleX: 1,
+					scaleY: 1,
+					delay: params.waitingTime,
+					endDelay: animDelay
+				})
+			}
+		}, params.startTime);
+		jQuery.data(tg, "startScaleMove", startScaleMoveTimerId);
 	}
 }
 /**start rotate */
