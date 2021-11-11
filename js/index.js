@@ -106,7 +106,7 @@ if (isHide) {
 if ($("#cvs_0002").css('visibility').toLowerCase() != 'visible') { return; } 
 } 
 e.stopPropagation();
-distributeAction(cvs_0002, 'down', 'N', [[{actType:2, actSubType:'Fade Out', aniTiming:3, target:[cvs_0004], opacity:0.00, startTime:3000, delay:2000, duration:1000,repeatCount:3, reverse:'Y', aniTiming:3, revDuration:3000, waitingTime:1000, repeatForever:'N' }]]);
+distributeAction(cvs_0002, 'down', 'N', [[{actType:3, actSubType:'Curve To', aniTiming:0, target:[cvs_0004], elements:'M65, 180 C70, 360, 264, 543, 450, 423 ', startTime:0, delay:0, duration:1000 }]]);
 });
 });
 $(document).ready(function(){

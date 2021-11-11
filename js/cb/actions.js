@@ -239,29 +239,48 @@ function IsGroup(target) {
 }
 
 function makeCurve(params) {
+	console.log(params);
 	for (const tg of params.target) {
-		const startCurveTimer = setTimeout(function () {
-			let path = params.elements;
-			if (jQuery.data($(params.target[0]).get(0), "reverse") === "Y") {
-				path = params.reverselements;
-			} else {
-				path = params.elements;
+		let drawnAttr = params.elements; // d(drawn) attribute in path tag
+		if (jQuery.data($(params.target[0]).get(0), "reverse") === "Y") {
+			drawnAttr = params.reverselements;
+		} else {
+			drawnAttr = params.elements;
+		}
+		const curveObj = {
+			path : document.createElementNS("http://www.w3.org/2000/svg", "path"),
+			len : function () {
+				return this.path.getTotalLength();
 			}
-
+		}
+		const pathEl = document
+			.createElementNS("http://www.w3.org/2000/svg", "path")
+			.setAttribute("d", drawnAttr);
+		const path = anime.path("path");
+		const startCurveTimer = setTimeout(function () {
 			(function updateFromCode(doNotUpdatePath) {
-				const curve = new CurveAnimator(path);
 				tg.style.position = "absolute";
-				curve.animate(params, params.duration / 1000, function (point, angle) {
-					tg.style.left = point.x - $(tg).width() / 2 + "px";
-					tg.style.top = point.y - $(tg).height() / 2 + "px";
+				anime({
+					targets: tg,
+					translateX: path('x'),
+					translateY: path('y'),
+					// rotate: path('angle'),
+					easing: 'linear',
+					duration: 2000,
+					// loop: true
 				});
+				// curveObj.animate(params, params.duration / 1000, function (point, angle) {
+				// 	tg.style.left = point.x - $(tg).width() / 2 + "px";
+				// 	tg.style.top = point.y - $(tg).height() / 2 + "px";
+				// });
 				if (!doNotUpdatePath) {
-					fireEvent(path, "updated");
+					fireEvent(pathEl, "updated");
 				}
 			})();
 
 			function fireEvent(el, name) {
 				var e = document.createEvent("Event");
+				console.log(e);
 				e.initEvent(name, true, true);
 				try {
 					el.dispatchEvent(e);
