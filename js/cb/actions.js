@@ -93,6 +93,9 @@ function startHideShow(params) {
 function startFade(params) {
 	for (const tg of params.target) {
 		const originOpacity = $(tg).css("opacity");
+		const test = $(tg).css("display");
+		console.log(originOpacity, test);
+		console.log(params);
 
 		let easingVar = "";
 		switch (params.aniTiming) {
@@ -101,84 +104,40 @@ function startFade(params) {
 			case 2: easingVar = "easeOutCubic"; break;
 			case 3: easingVar = "easeInOutCubic"; break;
 		}
-
+		const animDelay = params.delay - params.startTime;
+		const work = {
+			duration: params.duration,
+			opacity: params.opacity
+		}
 		$(tg).show();
-		const startFadeTimer = setTimeout(function () {
-			console.log(params);
-			$(tg).animate(
-				{
-					opacity: params.opacity
-				},
-				{
-					duration: params.duration,
-					easing: easingVar,
-					queue: params.reverse === "Y" ? false : true,
-					complete: () => {
-						if (params.reverse === "Y") {
-							setTimeout(() => {
-								$(tg).animate(
-									{
-										opacity: originOpacity
-									},
-									{
-										duration: params.revDuration,
-										easing: easingVar,
-										queue: false,
-										complete: function () {
-											if (params.opacity === 1) {
-												$(tg).hide();
-												if (jQuery.data($(tg).get(0), "touch") === "y") {
-													$(tg).css("pointerEvents", "none");
-												}
-											} else {
-												if (jQuery.data($(tg).get(0), "touch") === "y") {
-													$(tg).css("pointerEvents", "auto");
-												}
-											}
-											if (params.repeatForever === "Y") {
-												params.delay -= params.startTime;
-												params.startTime = 0;
-												startFade(params);
-											} else if (params.repeatCount > 0) {
-												params.delay -= params.startTime;
-												params.startTime = 0;
-												startFade(params);
-												params.repeatCount -= 1;
-											} else {
-												distributeNextAction(params.nextAction);
-											}
-										}
-									}
-								);
-							}, params.waitingTime);
-						} else {
-							if ($(tg).css("opacity") === 0) {
-								$(tg).hide();
-							}
-							if (params.repeatForever === "Y") {
-								params.delay -= params.startTime;
-								params.startTime = 0;
-								$(tg).css("opacity", originOpacity);
-								startFade(params);
-							} else {
-								if (jQuery.data($(tg).get(0), "touch") === "y") {
-									if (params.opacity > 0) {
-										$(tg).show();
-										$(tg).css("pointerEvents", "auto");
-									} else if (params.opacity === 0) {
-										$(tg).hide();
-										$(tg).css("pointerEvents", "none");
-									}
-								}
-								distributeNextAction(params.nextAction);
-							}
-						}
+		const startFadeTimerId = setTimeout(() => {
+			const tl = anime.timeline({
+				targets: tg,
+				loop: params.repeatForever === "Y" || params.repeatCount + 1,
+				easing: easingVar,
+				complete: function (anim) {
+					if (params.repeatForever === "Y" || params.repeatCount > 0) return;
+					if (params.reverse === "Y") {
+						setTimeout(() => distributeNextAction(params.nextAction), params.waitingTime);
+					} else {
+						distributeNextAction(params.nextAction);
 					}
 				}
-			);
-		}, params.delay);
-
-		jQuery.data(tg, "startFade", startFadeTimer);
+			})
+			if (params.reverse !== "Y") {
+				tl.add ({...work, endDelay: animDelay})
+			} else {
+				tl
+				.add (work)
+				.add ({
+					duration: params.revDuration,
+					opacity: Math.abs(params.opacity - 1), // origin opacity
+					delay: params.waitingTime,
+					endDelay: animDelay
+				})
+			}
+		}, params.startTime);
+		jQuery.data(tg, "startFade", startFadeTimerId);
 	}
 }
 /**start Move */
@@ -202,9 +161,7 @@ function startMove(params) {
 		let absToX = params.toX; // absoulte destination X
 		let absToY = params.toY;
 
-		if (groupCheck === "Group") {
-			// const groupRect = GroupResizing(tg); // 확인 필요
-		} else if (groupCheck === "GroupChild") {
+		if (groupCheck === "GroupChild") {
 			const groupTg = tg.parentElement.parentElement;
 			const st = window.getComputedStyle(tg, null);
 			const width = parseFloat(st.getPropertyValue("width").split("px")[0]);
@@ -464,8 +421,6 @@ function startRotate(params) {
 
 			var a = values[0];
 			var b = values[1];
-			// var c = values[2];
-			// var d = values[3];
 
 			var scale = Math.sqrt(a * a + b * b);
 			sin = b / scale;
@@ -492,10 +447,10 @@ function startRotate(params) {
 				aniAngle -= GetAngle(tg.parentElement.parentElement);
 			}
 		} else {
-			if (typeof initialRotate == "string" || initialRotate instanceof String){
+			if (typeof initialRotate === "string" || initialRotate instanceof String){
 				initialRotate = initialRotate.replace("deg", "");
 			}
-			if (params.actSubType != "Rotate By") {
+			if (params.actSubType !== "Rotate By") {
 				if (aniAngle == nowAngle) return;
 			} else {
 				aniAngle += parseFloat(initialRotate);
