@@ -1,0 +1,64 @@
+#obj {
+  position: absolute;
+  left: 60px;
+  top: 400px;
+  width: 150px;
+  height: 235px;
+  /* opacity: 1; */
+}
+
+.comp {
+  /* border-radius: 0px; */
+  transform: rotate(0.0deg);
+  background-color: rgba(255, 255, 255, 0);
+  border: 1px solid transparent;
+  box-sizing: border-box;
+}
+
+.content {
+  display: block;
+  position: relative;
+}
+
+.border {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.img-wrapper {
+
+}
+
+.obj-container {
+
+}
+
+.scroll-box {
+  overflow-x: hidden;
+}
+
+.scroll-box-content {
+  position: absolute;
+  width: 363px;
+  height: 503px;
+  overflow: hidden;
+}
+
+.scroll-box-item {
+  
+}
+
+.video-control {
+
+}
+
+.bar {
+
+}
+
+.fill {
+
+}
