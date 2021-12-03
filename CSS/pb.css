@@ -1,4 +1,4 @@
-﻿@charset UTF-8;
+﻿@charset "UTF-8";
 body 
   {
     margin-left: 0px;
@@ -9,7 +9,7 @@ body
 div#div_main
   {
     z-index:1;
-    margin:0px auto	 
+    margin:0px auto	 ;
 	position:absolute;
 	overflow:hidden;
 	width:768px;
